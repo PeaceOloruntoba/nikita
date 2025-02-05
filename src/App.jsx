@@ -1,9 +1,15 @@
 import React from 'react'
+import { Route, Routes } from 'react-router';
 
 export default function App() {
   return (
-    <div className="w-screen h-screen flex items-center text-center justify-center bg-black text-white">
-      <p>Hello World</p>
-    </div>
+    <>
+      <Routes>
+        <Route element={<AuthLayout />}>
+          <Route path="login" element={<Login />} />
+          <Route path="register" element={<Register />} />
+        </Route>
+      </Routes>
+    </>
   );
 }
