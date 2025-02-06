@@ -122,7 +122,7 @@ export function AddDishCategory({ onClose }) {
           </li>
         </ul>
         <button className="cursor-pointer bg-[#4895E5] text-white p-3 rounded-lg w-full flex items-center text-center justify-center">
-          <MdOutlineCancel size={18} />
+          <MdCheckCircleOutline size={18} />
         </button>
       </div>
     </div>
@@ -173,7 +173,7 @@ export function EditDishCategory({ onClose }) {
           </li>
         </ul>
         <button className="cursor-pointer bg-[#4895E5] text-white p-3 rounded-lg w-full flex items-center text-center justify-center">
-          <MdOutlineCancel size={18} />
+          <MdCheckCircleOutline size={18} />
         </button>
       </div>
     </div>
