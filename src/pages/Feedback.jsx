@@ -1,8 +1,9 @@
 import React, { useState } from "react";
 import { negativeFeedback, positiveFeedback, totalFeedback } from "../assets";
+import { FeedbackTitleCard, FeedbackCard } from "../components/Feedback";
 
 export default function Feedback() {
-  const [feedbackStatus, setFeedbackStatus] = useState();
+  const [feedbackStatus, setFeedbackStatus] = useState(null);
 
   const feedbacks = [
     {
@@ -48,36 +49,51 @@ export default function Feedback() {
       id: 1,
       name: "Total Feedback",
       value: totalFeedbackCount,
+      status: null, // Shows all feedbacks
       icon: <img src={totalFeedback} alt="Total Feedback" />,
     },
     {
       id: 2,
       name: "Positive Feedback",
       value: positiveFeedbackCount,
+      status: "positive",
       icon: <img src={positiveFeedback} alt="Positive Feedback" />,
     },
     {
-      id: 3, // Fixed duplicate ID
+      id: 3,
       name: "Negative Feedback",
       value: negativeFeedbackCount,
+      status: "negative",
       icon: <img src={negativeFeedback} alt="Negative Feedback" />,
     },
   ];
 
+  // Filter feedbacks based on selected feedbackStatus
+  const displayFeedbacks =
+    feedbackStatus === null
+      ? feedbacks
+      : feedbacks.filter((fb) => fb.status === feedbackStatus);
+
   return (
-    <div>
-      {feedbackCard.map((card) => (
-        <div
-          key={card.id}
-          className="p-4 border rounded-lg shadow-md flex items-center gap-4"
-        >
-          {card.icon}
-          <div>
-            <h3 className="font-bold">{card.name}</h3>
-            <p className="text-lg">{card.value}</p>
-          </div>
-        </div>
-      ))}
+    <div className="p-6 text-[#3a3a3a] flex flex-col gap-12">
+      <div className="grid grid-cols-3 gap-12">
+        {feedbackCard.map((card) => (
+          <button
+            key={card.id}
+            onClick={() => setFeedbackStatus(card.status)}
+            className={`transition-all duration-200 ${
+              feedbackStatus === card.status ? "bg-gray-200" : ""
+            }`}
+          >
+            <FeedbackTitleCard card={card} />
+          </button>
+        ))}
+      </div>
+      <div className="grid grid-cols-3 gap-12">
+        {displayFeedbacks.map((card) => (
+          <FeedbackCard key={card.id} card={card} />
+        ))}
+      </div>
     </div>
   );
 }
