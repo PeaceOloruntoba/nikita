@@ -1,15 +1,22 @@
 import React from "react";
-import { Route, Routes } from "react-router";
+import { Navigate, Route, Routes } from "react-router";
 import RootLayout from "./layouts/RootLayout";
 import Login from "./pages/Login";
 import Feedback from "./pages/Feedback";
+import Settings from "./pages/Settings";
+import Subscription from "./pages/Subscription";
+import Menu from "./pages/Menu";
 
 export default function App() {
   return (
     <>
       <Routes>
         <Route element={<RootLayout />}>
-          <Route path="" element={<Feedback />} />
+          <Route path="" element={<Navigate to={'/login'} />} />
+          <Route path="feedback" element={<Feedback />} />
+          <Route path="menu" element={<Menu />} />
+          <Route path="subscription" element={<Subscription />} />
+          <Route path="settings" element={<Settings />} />
         </Route>
         <Route path="login" element={<Login />} />
       </Routes>
