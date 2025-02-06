@@ -1,7 +1,55 @@
-import React from 'react'
+import React from "react";
 
 export default function Feedback() {
-  return (
-    <div>Feedback</div>
-  )
+  const feedbackCard = [
+    {
+      id: 1,
+      name: "Total Feedback",
+      value: 200,
+      icon: <div className="p-2 rounded-full "></div>,
+    },
+    {
+      id: 2,
+      firstName: "Surename",
+      lastName: "Name",
+      stars: 5.0,
+      feedback:
+        "Feedback Feedback Feedback Feedback Feedback Feedback Feedback Feedback Feedback Feedback Feedback Feedback Feedback Feedback Feedback ",
+    },
+    {
+      id: 3,
+      firstName: "Surename",
+      lastName: "Name",
+      stars: 5.0,
+      feedback:
+        "Feedback Feedback Feedback Feedback Feedback Feedback Feedback Feedback Feedback Feedback Feedback Feedback Feedback Feedback Feedback ",
+    },
+  ];
+  const feedbacks = [
+    {
+      id: 1,
+      firstName: "Surename",
+      lastName: "Name",
+      stars: 5.0,
+      feedback:
+        "Feedback Feedback Feedback Feedback Feedback Feedback Feedback Feedback Feedback Feedback Feedback Feedback Feedback Feedback Feedback ",
+    },
+    {
+      id: 2,
+      firstName: "Surename",
+      lastName: "Name",
+      stars: 5.0,
+      feedback:
+        "Feedback Feedback Feedback Feedback Feedback Feedback Feedback Feedback Feedback Feedback Feedback Feedback Feedback Feedback Feedback ",
+    },
+    {
+      id: 3,
+      firstName: "Surename",
+      lastName: "Name",
+      stars: 5.0,
+      feedback:
+        "Feedback Feedback Feedback Feedback Feedback Feedback Feedback Feedback Feedback Feedback Feedback Feedback Feedback Feedback Feedback ",
+    },
+  ];
+  return <div>Feedback</div>;
 }
