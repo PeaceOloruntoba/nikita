@@ -1,9 +1,10 @@
 import React from "react";
 import { loginBg } from "../assets";
-import { NavLink } from "react-router";
+import { NavLink, useNavigate } from "react-router";
 import Button from "../components/shared/Button";
 
 export default function Login() {
+  const navigate = useNavigate();
   return (
     <div className="w-screen h-screen relative">
       <img src={loginBg} alt="" className="w-screen h-screen object-cover" />
@@ -30,7 +31,8 @@ export default function Login() {
             </div>
             <Button
               value={"Login"}
-              className="bg-secondary rounded-xl text-white text-2xl font-semibold py-4"
+              className="bg-secondary rounded-xl text-white text-2xl font-semibold py-4 hover:bg-primary cursor-pointer"
+              onClick={() => navigate("/feedback")}
             />
           </form>
         </div>
