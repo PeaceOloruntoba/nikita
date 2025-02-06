@@ -6,7 +6,7 @@ export default function Feedback() {
       id: 1,
       name: "Total Feedback",
       value: 200,
-      icon: <div className="p-2 rounded-full "></div>,
+      icon: <img src="" alt="" />,
     },
     {
       id: 2,
