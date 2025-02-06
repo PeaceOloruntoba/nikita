@@ -3,6 +3,7 @@ import { negativeFeedback, positiveFeedback, totalFeedback } from "../assets";
 
 export default function Feedback() {
   const [feedbackStatus, setFeedbackStatus] = useState();
+
   const feedbacks = [
     {
       id: 1,
@@ -32,25 +33,51 @@ export default function Feedback() {
         "Feedback Feedback Feedback Feedback Feedback Feedback Feedback Feedback Feedback Feedback Feedback Feedback Feedback Feedback Feedback ",
     },
   ];
+
+  // Calculate feedback counts dynamically
+  const totalFeedbackCount = feedbacks.length;
+  const positiveFeedbackCount = feedbacks.filter(
+    (fb) => fb.status === "positive"
+  ).length;
+  const negativeFeedbackCount = feedbacks.filter(
+    (fb) => fb.status === "negative"
+  ).length;
+
   const feedbackCard = [
     {
       id: 1,
       name: "Total Feedback",
-      value: feedbacks.length,
-      icon: <img src={totalFeedback} alt="" />,
+      value: totalFeedbackCount,
+      icon: <img src={totalFeedback} alt="Total Feedback" />,
     },
     {
       id: 2,
       name: "Positive Feedback",
-      value: 120,
-      icon: <img src={positiveFeedback} alt="" />,
+      value: positiveFeedbackCount,
+      icon: <img src={positiveFeedback} alt="Positive Feedback" />,
     },
     {
-      id: 2,
+      id: 3, // Fixed duplicate ID
       name: "Negative Feedback",
-      value: 80,
-      icon: <img src={negativeFeedback} alt="" />,
+      value: negativeFeedbackCount,
+      icon: <img src={negativeFeedback} alt="Negative Feedback" />,
     },
   ];
-  return <div>Feedback</div>;
+
+  return (
+    <div>
+      {feedbackCard.map((card) => (
+        <div
+          key={card.id}
+          className="p-4 border rounded-lg shadow-md flex items-center gap-4"
+        >
+          {card.icon}
+          <div>
+            <h3 className="font-bold">{card.name}</h3>
+            <p className="text-lg">{card.value}</p>
+          </div>
+        </div>
+      ))}
+    </div>
+  );
 }
