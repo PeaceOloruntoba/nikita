@@ -14,7 +14,7 @@ import Restaurant from "./pages/Restaurant";
 export default function App() {
   return (
     <>
-      <Toaster position="top-right" />
+      <Toaster position="top-right" richColors />
       <Routes>
         <Route element={<RootLayout />}>
           <Route path="" element={<Navigate to={"/login"} />} />
