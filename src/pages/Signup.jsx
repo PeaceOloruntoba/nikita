@@ -20,28 +20,32 @@ export default function Signup() {
           </span>
           <form className="flex flex-col gap-8">
             <input
+              required
               type="text"
               className="bg-white outline-none border-none p-4 py-2 rounded-xl"
               placeholder="Enter your email or username here"
             />
             <input
+              required
               type="password"
               className="bg-white outline-none border-none p-4 py-2 rounded-xl"
               placeholder="Enter your password here"
             />
             <input
+              required
               type="password"
               className="bg-white outline-none border-none p-4 py-2 rounded-xl"
               placeholder="Enter your password again"
             />
             <div className="flex items-center gap-2">
-            <input
-              type="checkbox"
-              className="bg-white outline-none border-none p-4 py-2 rounded-xl"
-              placeholder="Enter your password again"
+              <input
+                required
+                type="checkbox"
+                className="bg-white outline-none border-none p-4 py-2 rounded-xl"
+                placeholder="Enter your password again"
               />
               <span>I agree to terms and conditions.</span>
-              </div>
+            </div>
             <div className="w-full flex items-end justify-end text-md text-secondary font-semibold">
               <span className="">
                 Already have an account? <NavLink to={"/login"}>Login</NavLink>
