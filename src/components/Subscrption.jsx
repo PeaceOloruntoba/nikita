@@ -54,7 +54,7 @@ const TimePicker = ({ label, time, setTime }) => {
       <label>{label}</label>
       <button
         onClick={() => setShowPicker(true)}
-        className="border p-3 rounded-lg w-full text-left"
+        className="border border-[#4895E5]/25 p-3 rounded-lg w-full text-left"
       >
         {time || "Select Time"}
       </button>
@@ -71,7 +71,7 @@ const TimePicker = ({ label, time, setTime }) => {
                   setHour(Math.min(12, Math.max(1, e.target.value)))
                 }
                 placeholder="HH"
-                className="border p-2 rounded w-16 cursor-pointer text-center"
+                className="border border-[#4895E5]/25 p-2 rounded w-16 cursor-pointer text-center"
               />
               <span>:</span>
               <input
@@ -81,7 +81,7 @@ const TimePicker = ({ label, time, setTime }) => {
                   setMinute(Math.min(59, Math.max(0, e.target.value)))
                 }
                 placeholder="MM"
-                className="border p-2 rounded w-16 cursor-pointer text-center"
+                className="border border-[#4895E5]/25 p-2 rounded w-16 cursor-pointer text-center"
               />
               <div className="flex flex-col">
                 <button
@@ -142,9 +142,9 @@ export const EditSubscription = ({ onClose }) => {
   };
 
   return (
-    <div className="fixed inset-0 flex items-center justify-center bg-black/50">
+    <div className="fixed inset-0 flex items-center justify-center bg-black/50 text-[#3A3A3A]">
       <div className="bg-white rounded-lg p-6 text-2xl flex flex-col gap-6 w-[400px]">
-        <button onClick={onClose} className="self-end text-gray-600">
+        <button onClick={onClose} className="self-end">
           <MdOutlineCancel size={24} />
         </button>
 
@@ -195,9 +195,7 @@ export const EditSubscription = ({ onClose }) => {
           variant="contained"
           color="primary"
           startIcon={<MdCheckCircleOutline />}
-        >
-          Save
-        </Button>
+        ></Button>
       </div>
     </div>
   );
