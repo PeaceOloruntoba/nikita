@@ -8,18 +8,18 @@ import { CiCalendar } from "react-icons/ci";
 
 export default function Sidebar() {
   return (
-    <div className="bg-primary py-10 h-screen">
-      <div className="flex flex-col w-full gap-8 h-full">
+    <div className="bg-primary h-screen">
+      <div className="flex flex-col w-full gap-4 h-full">
         <div className="flex">
-          <img src={profilePic} className="rouded-full px-20 py-6" alt="" />
+          <img src={profilePic} className="rouded-full px-20 py-4" alt="" />
         </div>
-        <div className="flex flex-col items-center justify-between text-white text-lg font-semibold h-full">
+        <div className="flex flex-col items-center justify-between text-white text-md font-semibold h-full">
           <div className="flex flex-col w-full">
             <NavLink
               to={"/feedback"}
               className={({ isActive }) =>
                 isActive
-                  ? "bg-secondary w-full text-left p-4 px-6 flex gap-2 items-center"
+                  ? "bg-secondary w-full text-left p-3 px-6 flex gap-2 items-center"
                   : " w-full text-left p-4 flex gap-2 items-center"
               }
             >
