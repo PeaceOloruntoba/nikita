@@ -10,17 +10,17 @@ export default function Header() {
     setIsOpen(!isOpen);
   };
   return (
-    <div className="w-full flex p-12 items-center justify-end">
+    <div className="w-full flex p-4 items-center justify-end">
       <div className="relative hidden md:block">
         <div className="">
           <div
-            className={`group p-2 text-2xl flex flex-col gap-6 group:shadow-lg items-center text-[#3A3A3A] rounded-lg relative`}
+            className={`group p-2 text-lg flex flex-col gap-2 group:shadow-lg items-center text-[#3A3A3A] rounded-lg relative`}
             type="button"
             onClick={toggleDropdown}
           >
-            <div className="flex gap-3 items-center justify-between cursor-pointer w-44">
-              <span className="font-bold flex gap-2 items-center justify-center">
-                <PiUserBold size={20} />
+            <div className="flex gap-3 items-center justify-between cursor-pointer w-28">
+              <span className="font-medium flex gap-1 items-center justify-center">
+                <PiUserBold size={16} />
                 Profile
               </span>
               <svg
@@ -45,7 +45,7 @@ export default function Header() {
             {isOpen && (
               <div className="absolute top-full w-full group:shadow-lg rounded-lg mt-1">
                 <button
-                  className="rounded-lg w-full px-4 text-white cursor-pointer py-2 font-semibold text-nowrap flex items-center gap-2 justify-center bg-secondary"
+                  className="rounded-lg w-full px-4 text-sm text-white cursor-pointer py-2 font-semibold text-nowrap flex items-center gap-2 justify-center bg-secondary"
                   onClick={() => navigate("/login")}
                 >
                   <LuLogOut size={16} />
