@@ -2,9 +2,14 @@ import React from "react";
 import { loginBg } from "../assets";
 import { NavLink, useNavigate } from "react-router";
 import Button from "../components/shared/Button";
+import { toast } from "sonner";
 
 export default function Signup() {
   const navigate = useNavigate();
+  function handleSignup() {
+    navigate("/login");
+    toast.success("Signup Successful, Please Login!");
+  }
   return (
     <div className="w-screen h-screen relative">
       <img src={loginBg} alt="" className="w-screen h-screen object-cover" />
@@ -35,9 +40,9 @@ export default function Signup() {
               </span>
             </div>
             <Button
-              value={"Login"}
+              value={"Signup"}
               className="bg-secondary rounded-xl text-white text-2xl font-semibold py-4 hover:bg-primary cursor-pointer"
-              onClick={() => navigate("/feedback")}
+              onClick={() => navigate("/login")}
             />
           </form>
         </div>
