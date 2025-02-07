@@ -48,6 +48,17 @@ export default function Sidebar() {
               <CiCalendar size={20} />
               Subscription
             </NavLink>
+            <NavLink
+              to={"/questionaries"}
+              className={({ isActive }) =>
+                isActive
+                  ? "bg-secondary w-full text-left p-8 px-10 flex gap-2 items-center"
+                  : " w-full text-left p-8 flex gap-2 items-center"
+              }
+            >
+              <CiCalendar size={20} />
+              Questionaries
+            </NavLink>
           </div>
           <div className="flex flex-col w-full">
             <hr />
