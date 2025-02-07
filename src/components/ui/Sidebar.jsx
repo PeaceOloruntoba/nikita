@@ -46,7 +46,7 @@ export default function Sidebar() {
               }
             >
               <CiCalendar size={20} />
-              Subscrription
+              Subscription
             </NavLink>
           </div>
           <div className="flex flex-col w-full">
