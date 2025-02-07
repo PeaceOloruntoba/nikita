@@ -31,7 +31,7 @@ export default function Restaurant() {
     },
   ];
   return (
-    <div className="w-full h-full flex flex-col items-center p-8">
+    <div className="w-full h-full flex flex-col items-center p-8 gap-8">
       <div className="flex w-full items-end justify-end">
         <Button
           className="cursor-pointer bg-[#4895E5] text-white px-3 py-1 rounded-lg"
