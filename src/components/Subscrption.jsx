@@ -149,7 +149,18 @@ export const EditSubscription = ({ onClose }) => {
         </button>
 
         <FormControl fullWidth>
-          <TextField label="Address" value="" variant="outlined" />
+          <TextField
+            label="Address"
+            value=""
+            variant="outlined"
+            sx={{
+              "& .MuiOutlinedInput-root": {
+                "& fieldset": {
+                  borderColor: "rgba(72, 149, 229, 0.25)",
+                },
+              },
+            }}
+          />
         </FormControl>
 
         <TimePicker
@@ -172,6 +183,11 @@ export const EditSubscription = ({ onClose }) => {
             renderValue={(selected) =>
               selected.length === 0 ? "Select Days" : selected.join(", ")
             }
+            sx={{
+              "& .MuiOutlinedInput-notchedOutline": {
+                borderColor: "rgba(72, 149, 229, 0.25)",
+              },
+            }}
           >
             <MenuItem value="all">
               <Checkbox checked={selectedDays.length === daysOfWeek.length} />
