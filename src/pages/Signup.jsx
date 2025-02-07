@@ -31,7 +31,7 @@ export default function Signup() {
             />
             <div className="w-full flex items-end justify-end text-2xl text-secondary font-semibold">
               <span className="">
-                Don't have an account? <NavLink to={"/"}>Sign Up</NavLink>
+                Already have an account? <NavLink to={"/login"}>Login</NavLink>
               </span>
             </div>
             <Button
