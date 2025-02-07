@@ -14,7 +14,7 @@ import {
 // 🟢 Cards Component
 export const Cards = ({ value, border, onEdit }) => (
   <div
-    className="bg-white p-6 flex flex-col items-center justify-between h-[250px] rounded-lg"
+    className="bg-white p-6 flex flex-col items-center justify-between h-[250px] w-[200px] rounded-lg"
     style={{ border: `3px solid ${border}` }}
   >
     <span className="text-2xl font-medium text-black">{value}</span>
@@ -27,58 +27,6 @@ export const Cards = ({ value, border, onEdit }) => (
   </div>
 );
 
-// 🟢 Edit Subscription Modal Component
-export const EditSubscription = ({
-  onClose,
-  breakStart,
-  setBreakStart,
-  breakEnd,
-  setBreakEnd,
-  days,
-  setDays,
-}) => {
-  return (
-    <div className="fixed inset-0 flex items-center justify-center bg-black/50">
-      <div className="bg-white rounded-lg p-6 text-2xl flex flex-col gap-6 w-[400px]">
-        <button onClick={onClose} className="self-end text-gray-600">
-          <MdOutlineCancel size={24} />
-        </button>
-
-        {/* Address Input */}
-        <div className="flex flex-col">
-          <label>Address</label>
-          <input
-            type="text"
-            className="border-none outline outline-[#4895E5]/20 p-3 rounded-lg w-full text-[#3A3A3A] focus:outline-[#4895E5]"
-            placeholder="Enter Address"
-          />
-        </div>
-
-        {/* Time Pickers */}
-        <TimePicker
-          label="Break Start Time"
-          time={breakStart}
-          setTime={setBreakStart}
-        />
-        <TimePicker
-          label="Break End Time"
-          time={breakEnd}
-          setTime={setBreakEnd}
-        />
-
-        {/* Multi-Select Dropdown */}
-        <MultiSelectDropdownForm days={days} setDays={setDays} />
-
-        {/* Save Button */}
-        <button className="cursor-pointer bg-[#4895E5] text-white p-3 rounded-lg w-full flex items-center justify-center">
-          <MdCheckCircleOutline size={18} /> Save
-        </button>
-      </div>
-    </div>
-  );
-};
-
-// 🟢 Multi-Select Dropdown Component
 const daysOfWeek = [
   "Monday",
   "Tuesday",
@@ -89,85 +37,14 @@ const daysOfWeek = [
   "Sunday",
 ];
 
-export const MultiSelectDropdownForm = () => {
-  const [selectedDays, setSelectedDays] = useState([]);
-
-  const handleChange = (event) => {
-    const {
-      target: { value },
-    } = event;
-    setSelectedDays(typeof value === "string" ? value.split(",") : value);
-  };
-
-  return (
-    <div
-      style={{
-        padding: "20px",
-        maxWidth: "400px",
-        margin: "auto",
-        background: "#fff",
-        borderRadius: "8px",
-        boxShadow: "0 2px 10px rgba(0,0,0,0.1)",
-      }}
-    >
-      <FormControl fullWidth margin="normal">
-        <InputLabel>Address</InputLabel>
-        <TextField
-          value="Bruchhausenerstraße 36 59759 Arnsberg Deutschland NRW"
-          variant="outlined"
-          disabled
-        />
-      </FormControl>
-
-      <FormControl fullWidth margin="normal">
-        <InputLabel>Break Start Time</InputLabel>
-        <TextField type="time" defaultValue="10:00" variant="outlined" />
-      </FormControl>
-
-      <FormControl fullWidth margin="normal">
-        <InputLabel>Break End Time</InputLabel>
-        <TextField type="time" defaultValue="10:15" variant="outlined" />
-      </FormControl>
-
-      <FormControl fullWidth margin="normal">
-        <InputLabel>Days of the week</InputLabel>
-        <Select
-          multiple
-          value={selectedDays}
-          onChange={handleChange}
-          renderValue={(selected) =>
-            selected.length === 0 ? "Select Days" : selected.join(", ")
-          }
-        >
-          {daysOfWeek.map((day) => (
-            <MenuItem key={day} value={day}>
-              <Checkbox checked={selectedDays.indexOf(day) > -1} />
-              <ListItemText primary={day} />
-            </MenuItem>
-          ))}
-        </Select>
-      </FormControl>
-
-      <Button
-        fullWidth
-        variant="contained"
-        color="primary"
-        style={{ marginTop: "20px" }}
-      >
-        ✔
-      </Button>
-    </div>
-  );
-};
-
-// 🟢 Time Picker Modal Component
-export const TimePicker = ({ label, time, setTime }) => {
+const TimePicker = ({ label, time, setTime }) => {
   const [showPicker, setShowPicker] = useState(false);
-  const [hour, setHour] = useState("");
-  const [minute, setMinute] = useState("");
+  const [hour, setHour] = useState("12");
+  const [minute, setMinute] = useState("00");
   const [period, setPeriod] = useState("AM");
 
   const handleSave = () => {
+    if (hour < 1 || hour > 12 || minute < 0 || minute > 59) return;
     setTime(`${hour}:${minute} ${period}`);
     setShowPicker(false);
   };
@@ -186,12 +63,13 @@ export const TimePicker = ({ label, time, setTime }) => {
         <div className="fixed inset-0 flex items-center justify-center bg-black/50">
           <div className="bg-white p-6 rounded-lg">
             <h2 className="text-lg font-semibold mb-4">Enter Time</h2>
-
             <div className="flex gap-2 items-center">
               <input
                 type="number"
                 value={hour}
-                onChange={(e) => setHour(e.target.value)}
+                onChange={(e) =>
+                  setHour(Math.min(12, Math.max(1, e.target.value)))
+                }
                 placeholder="HH"
                 className="border p-2 rounded w-16 text-center"
               />
@@ -199,7 +77,9 @@ export const TimePicker = ({ label, time, setTime }) => {
               <input
                 type="number"
                 value={minute}
-                onChange={(e) => setMinute(e.target.value)}
+                onChange={(e) =>
+                  setMinute(Math.min(59, Math.max(0, e.target.value)))
+                }
                 placeholder="MM"
                 className="border p-2 rounded w-16 text-center"
               />
@@ -218,7 +98,6 @@ export const TimePicker = ({ label, time, setTime }) => {
                 </button>
               </div>
             </div>
-
             <div className="flex justify-between mt-4">
               <button
                 onClick={() => setShowPicker(false)}
@@ -233,6 +112,90 @@ export const TimePicker = ({ label, time, setTime }) => {
           </div>
         </div>
       )}
+    </div>
+  );
+};
+
+export const EditSubscription = ({ onClose }) => {
+  const [breakStart, setBreakStart] = useState("");
+  const [breakEnd, setBreakEnd] = useState("");
+  const [selectedDays, setSelectedDays] = useState([]);
+
+  const handleDayChange = (event) => {
+    const {
+      target: { value },
+    } = event;
+    if (value.includes("all")) {
+      setSelectedDays(daysOfWeek);
+    } else if (value.includes("clear")) {
+      setSelectedDays([]);
+    } else {
+      setSelectedDays(value);
+    }
+  };
+
+  return (
+    <div className="fixed inset-0 flex items-center justify-center bg-black/50">
+      <div className="bg-white rounded-lg p-6 text-2xl flex flex-col gap-6 w-[400px]">
+        <button onClick={onClose} className="self-end text-gray-600">
+          <MdOutlineCancel size={24} />
+        </button>
+
+        <FormControl fullWidth>
+          <TextField
+            label="Address"
+            value=""
+            variant="outlined"
+          />
+        </FormControl>
+
+        <TimePicker
+          label="Break Start Time"
+          time={breakStart}
+          setTime={setBreakStart}
+        />
+        <TimePicker
+          label="Break End Time"
+          time={breakEnd}
+          setTime={setBreakEnd}
+        />
+
+        <FormControl fullWidth>
+          <InputLabel>Days of the week</InputLabel>
+          <Select
+            multiple
+            value={selectedDays}
+            onChange={handleDayChange}
+            renderValue={(selected) =>
+              selected.length === 0 ? "Select Days" : selected.join(", ")
+            }
+          >
+            <MenuItem value="all">
+              <Checkbox checked={selectedDays.length === daysOfWeek.length} />
+              <ListItemText primary="Select All" />
+            </MenuItem>
+            <MenuItem value="clear">
+              <Checkbox checked={selectedDays.length === 0} />
+              <ListItemText primary="Clear" />
+            </MenuItem>
+            {daysOfWeek.map((day) => (
+              <MenuItem key={day} value={day}>
+                <Checkbox checked={selectedDays.indexOf(day) > -1} />
+                <ListItemText primary={day} />
+              </MenuItem>
+            ))}
+          </Select>
+        </FormControl>
+
+        <Button
+          fullWidth
+          variant="contained"
+          color="primary"
+          startIcon={<MdCheckCircleOutline />}
+        >
+          Save
+        </Button>
+      </div>
     </div>
   );
 };
