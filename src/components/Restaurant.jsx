@@ -19,6 +19,24 @@ export function Card({ number, qrCode }) {
     </div>
   );
 }
-export default function Restaurant() {
-  return <div>Restaurant</div>;
+export function Details() {
+  return (
+    <div className="p-8 bg-white rounded-lg flex flex-col">
+      <div className="flex flex-col">
+        <span>Name of Person 1 who scanned the qr code</span>
+        <div className="flex items-center justify-between">
+          <span>Dish</span>
+          <span>30€</span>
+        </div>
+        <div className="flex items-center justify-between">
+          <span>Dish</span>
+          <span>30€</span>
+        </div>
+        <div className="flex items-center justify-between">
+          <span>Drink</span>
+          <span>30€</span>
+        </div>
+      </div>
+    </div>
+  );
 }
