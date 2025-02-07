@@ -75,8 +75,8 @@ export default function Feedback() {
       : feedbacks.filter((fb) => fb.status === feedbackStatus);
 
   return (
-    <div className="p-6 text-[#3a3a3a] flex flex-col gap-12">
-      <div className="grid grid-cols-3 gap-12">
+    <div className="p-6 text-[#3a3a3a] flex flex-col gap-6">
+      <div className="grid grid-cols-3 gap-6">
         {feedbackCard.map((card) => (
           <button
             key={card.id}
@@ -89,7 +89,7 @@ export default function Feedback() {
           </button>
         ))}
       </div>
-      <div className="grid grid-cols-3 gap-12">
+      <div className="grid grid-cols-3 gap-6">
         {displayFeedbacks.map((card) => (
           <FeedbackCard key={card.id} card={card} />
         ))}
