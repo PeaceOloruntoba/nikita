@@ -23,7 +23,7 @@ export default function Subscription() {
     <div className="w-full h-full flex items-center justify-center">
       <div className="grid grid-cols-3 gap-12">
         {subs?.map((sub) => (
-          <Cards value={sub?.value} border={sub?.value} key={sub?.id} />
+          <Cards value={sub?.value} border={sub?.border} key={sub?.id} />
         ))}
       </div>
     </div>

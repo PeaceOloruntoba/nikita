@@ -7,18 +7,24 @@ import { MenuItem, Select, FormControl, InputLabel } from "@mui/material";
 
 export function Cards({ value, border, onEdit }) {
   const [isOpen, setIsOpen] = useState(false);
+
   return (
-    <div
-      className={`bg-white p-6 flex flex-col items-center justify-between h-[250px] border-${border} rounded-lg`}
-    >
-      <span className="text-2xl font-medium text-black">{value}</span>
-      <button
-        className="cursor-pointer bg-[#4895E5] text-white p-3 rounded-lg w-full flex items-center text-center justify-center"
-        onClick={onEdit}
+    <>
+      <div
+        className="bg-white p-6 flex flex-col items-center justify-between h-[250px] w-[200px] rounded-lg"
+        style={{ border: `2px solid ${border}` }}
       >
-        <MdCheckCircleOutline size={18} />
-      </button>
-    </div>
+        <span className="text-2xl font-medium text-black">{value}</span>
+        <button
+          className="cursor-pointer bg-[#4895E5] text-white p-3 rounded-lg w-full flex items-center text-center justify-center"
+          onClick={() => setIsOpen(true)}
+        >
+          <MdCheckCircleOutline size={18} />
+        </button>
+      </div>
+
+      {isOpen && <EditSubscription onClose={() => setIsOpen(false)} />}
+    </>
   );
 }
 
