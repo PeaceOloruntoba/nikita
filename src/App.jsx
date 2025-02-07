@@ -8,10 +8,12 @@ import Subscription from "./pages/Subscription";
 import Menu from "./pages/Menu";
 import Questionaries from "./pages/Questionaries";
 import Signup from "./pages/Signup";
+import { Toaster } from "sonner";
 
 export default function App() {
   return (
     <>
+    <Toaster position="top-right" />
       <Routes>
         <Route element={<RootLayout />}>
           <Route path="" element={<Navigate to={"/login"} />} />
