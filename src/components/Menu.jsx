@@ -81,7 +81,7 @@ export function DishCategory() {
 export function AddDishCategory({ onClose }) {
   return (
     <div className="fixed inset-0 flex items-center justify-center bg-black/50">
-      <div className="bg-white rounded-lg p-6 text-2xl flex flex-col gap-6 w-[400px] h-[600px]">
+      <div className="bg-white rounded-lg p-6 text-xl flex flex-col gap-6 w-1/3 h-4/5">
         <button onClick={onClose} className="self-end text-gray-600">
           <MdOutlineCancel size={20} />
         </button>
@@ -132,7 +132,7 @@ export function AddDishCategory({ onClose }) {
 export function EditDishCategory({ onClose }) {
   return (
     <div className="fixed inset-0 flex items-center justify-center bg-black/50">
-      <div className="bg-white rounded-lg p-6 text-2xl flex flex-col gap-6 w-[400px] h-[600px]">
+      <div className="bg-white rounded-lg p-6 text-2xl flex flex-col gap-6 w-1/3 h-4/5">
         <button onClick={onClose} className="self-end text-gray-600">
           <MdOutlineCancel size={24} />
         </button>
