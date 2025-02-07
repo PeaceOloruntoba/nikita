@@ -59,6 +59,17 @@ export default function Sidebar() {
               <CiCalendar size={20} />
               Questionaries
             </NavLink>
+            <NavLink
+              to={"/restaurant"}
+              className={({ isActive }) =>
+                isActive
+                  ? "bg-secondary w-full text-left p-8 px-10 flex gap-2 items-center"
+                  : " w-full text-left p-8 flex gap-2 items-center"
+              }
+            >
+              <CiCalendar size={20} />
+              Restaurant
+            </NavLink>
           </div>
           <div className="flex flex-col w-full">
             <hr />
