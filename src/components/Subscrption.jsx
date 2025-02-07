@@ -1,6 +1,5 @@
 import React, { useState } from "react";
 import { MdCheckCircleOutline, MdOutlineCancel } from "react-icons/md";
-import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import { TimePicker } from "@mui/x-date-pickers/TimePicker";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
