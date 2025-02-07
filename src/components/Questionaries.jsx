@@ -1,5 +1,6 @@
 import React from "react";
 import { MdCheckCircleOutline, MdOutlineCancel } from "react-icons/md";
+import Button from "./shared/Button";
 
 export function Adder() {
   return (
@@ -13,7 +14,7 @@ export function Adder() {
             disabled
           />
           <Button
-            className="cursor-pointer bg-[#AAAFB6] text-white p-3 rounded-lg"
+            className="cursor-pointer bg-[#4895E5] text-white p-3 rounded-lg"
             value={<MdCheckCircleOutline size={18} />}
             onClick={() => setIsEditOpen(true)}
           />
@@ -27,7 +28,7 @@ export function Adder() {
             disabled
           />
           <Button
-            className="cursor-pointer bg-[#AAAFB6] text-white p-3 rounded-lg"
+            className="cursor-pointer bg-[#D92C4A] text-white p-3 rounded-lg"
             value={<MdOutlineCancel size={18} />}
             onClick={() => setIsEditOpen(true)}
           />
@@ -51,8 +52,8 @@ export function Lister() {
         <div className="flex items-center gap-6">
           <input
             type="text"
-            className="border-none outline outline-[#4895E5]/20 p-3 rounded-lg w-full text-[#3A3A3A]/50 focus:outline-[#4895E5]"
-            placeholder="rwerwerwerwer rwerwerwerwer rwerwerwerwer rwerwerwerwer 1231231231"
+            className="border-none outline outline-[#4895E5]/20 p-3 rounded-lg w-full text-[#3A3A3A]/50 focus:outline-[#4895E5] text-wrap"
+            placeholder="rwerwerwerwer rwerwerwerwer rwerwerwerwer rwerwerwerwer 123123123 112312312311231231231123123123112312312311231231231"
             disabled
           />
         </div>
