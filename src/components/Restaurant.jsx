@@ -21,8 +21,8 @@ export function Card({ number, qrCode }) {
 }
 export function Details() {
   return (
-    <div className="p-8 bg-white rounded-lg flex flex-col">
-      <div className="flex flex-col">
+    <div className="p-8 bg-white rounded-lg flex flex-col gap-2">
+      <div className="flex flex-col gap-2">
         <span>Name of Person 1 who scanned the qr code</span>
         <div className="flex items-center justify-between">
           <span>Dish</span>
@@ -36,6 +36,39 @@ export function Details() {
           <span>Drink</span>
           <span>30€</span>
         </div>
+      </div>
+      <div className="flex flex-col gap-2">
+        <span>Name of Person 1 who scanned the qr code</span>
+        <div className="flex items-center justify-between">
+          <span>Dish</span>
+          <span>30€</span>
+        </div>
+        <div className="flex items-center justify-between">
+          <span>Dish</span>
+          <span>30€</span>
+        </div>
+        <div className="flex items-center justify-between">
+          <span>Drink</span>
+          <span>30€</span>
+        </div>
+      </div>
+      <div className="flex items-center gap-4">
+        <Button
+          value={"Ordered"}
+          className="cursor-pointer py-2 px-3 rounded-lg text-2xl bg-[#F2EBF0] text-black"
+        />
+        <Button
+          value={"Paid"}
+          className="cursor-pointer py-2 px-3 rounded-lg text-2xl bg-[#6C1233] text-white"
+        />
+        <Button
+          value={"Cleaned"}
+          className="cursor-pointer py-2 px-3 rounded-lg text-2xl bg-[#6C1233] text-white"
+        />
+        <Button
+          value={"Finished"}
+          className="cursor-pointer py-2 px-3 rounded-lg text-2xl bg-[#6C1233] text-white"
+        />
       </div>
     </div>
   );
