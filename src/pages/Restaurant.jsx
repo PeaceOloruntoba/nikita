@@ -9,25 +9,25 @@ export default function Restaurant() {
       id: 1,
       number: 4,
       qrCode:
-        "https://www.google.com/url?sa=i&url=https%3A%2F%2Fwww.freepik.com%2Fpremium-vector%2Fqr-code-vector-icon_33320307.htm&psig=AOvVaw388BFduFWuP42sPqZYTHfa&ust=1739012755263000&source=images&cd=vfe&opi=89978449&ved=0CBEQjRxqFwoTCIDAzr-1sYsDFQAAAAAdAAAAABAE",
+        "https://static.vecteezy.com/system/resources/previews/011/008/568/non_2x/black-qr-code-scan-free-vector.jpg",
     },
     {
       id: 2,
       number: 4,
       qrCode:
-        "https://www.google.com/url?sa=i&url=https%3A%2F%2Fwww.freepik.com%2Fpremium-vector%2Fqr-code-vector-icon_33320307.htm&psig=AOvVaw388BFduFWuP42sPqZYTHfa&ust=1739012755263000&source=images&cd=vfe&opi=89978449&ved=0CBEQjRxqFwoTCIDAzr-1sYsDFQAAAAAdAAAAABAE",
+        "https://static.vecteezy.com/system/resources/previews/011/008/568/non_2x/black-qr-code-scan-free-vector.jpg",
     },
     {
       id: 3,
       number: 0,
       qrCode:
-        "https://www.google.com/url?sa=i&url=https%3A%2F%2Fwww.freepik.com%2Fpremium-vector%2Fqr-code-vector-icon_33320307.htm&psig=AOvVaw388BFduFWuP42sPqZYTHfa&ust=1739012755263000&source=images&cd=vfe&opi=89978449&ved=0CBEQjRxqFwoTCIDAzr-1sYsDFQAAAAAdAAAAABAE",
+        "https://static.vecteezy.com/system/resources/previews/011/008/568/non_2x/black-qr-code-scan-free-vector.jpg",
     },
     {
       id: 4,
       number: 0,
       qrCode:
-        "https://www.google.com/url?sa=i&url=https%3A%2F%2Fwww.freepik.com%2Fpremium-vector%2Fqr-code-vector-icon_33320307.htm&psig=AOvVaw388BFduFWuP42sPqZYTHfa&ust=1739012755263000&source=images&cd=vfe&opi=89978449&ved=0CBEQjRxqFwoTCIDAzr-1sYsDFQAAAAAdAAAAABAE",
+        "https://static.vecteezy.com/system/resources/previews/011/008/568/non_2x/black-qr-code-scan-free-vector.jpg",
     },
   ];
   return (
