@@ -83,18 +83,18 @@ export function AddDishCategory({ onClose }) {
     <div className="fixed inset-0 flex items-center justify-center bg-black/50">
       <div className="bg-white rounded-lg p-6 text-2xl flex flex-col gap-6 w-[400px] h-[600px]">
         <button onClick={onClose} className="self-end text-gray-600">
-          <MdOutlineCancel size={24} />
+          <MdOutlineCancel size={20} />
         </button>
         <input
           type="text"
           className="border-none outline outline-[#4895E5]/20 p-3 rounded-lg w-full text-[#3A3A3A] focus:outline-[#4895E5]"
           placeholder="Dish Name"
         />
-        <div className="bg-[#D02C46] p-6 rounded-lg flex items-center justify-center text-white">
+        <div className="bg-[#D02C46] p-2 rounded-lg flex items-center justify-center text-white">
           <span className="text-white p-12">
-            <PiWarningCircleThin size={30} />
+            <PiWarningCircleThin size={26} />
           </span>
-          <span>
+          <span className="text-sm">
             Achtung: Bitte wählen Sie alle Ihre Allergien aus, um
             sicherzustellen, dass Ihren Gästen keine falschen Gerichte
             vorgeschlagen werden. So können wir Ihren Gästen eine sichere und
