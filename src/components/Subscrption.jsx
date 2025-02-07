@@ -1,17 +1,17 @@
 import React, { useState } from "react";
 import { MdCheckCircleOutline, MdOutlineCancel } from "react-icons/md";
-import "react-datepicker/dist/react-datepicker.css";
 import { TimePicker } from "@mui/x-date-pickers/TimePicker";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { AdapterDateFns } from "@mui/x-date-pickers/AdapterDateFns";
 import { MenuItem, Select, FormControl, InputLabel } from "@mui/material";
 
 export function Cards({ value, border, onEdit }) {
+  const [isOpen, setIsOpen] = useState(false);
   return (
     <div
       className={`bg-white p-6 flex flex-col items-center justify-between h-[250px] border-${border} rounded-lg`}
     >
-      <span>{value}</span>
+      <span className="text-2xl font-medium text-black">{value}</span>
       <button
         className="cursor-pointer bg-[#4895E5] text-white p-3 rounded-lg w-full flex items-center text-center justify-center"
         onClick={onEdit}

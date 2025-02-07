@@ -9,7 +9,7 @@ export default function Subscription() {
       border: "#CD7F32",
     },
     {
-      id: 1,
+      id: 2,
       value: "6 month",
       border: "#AAAFB6",
     },
