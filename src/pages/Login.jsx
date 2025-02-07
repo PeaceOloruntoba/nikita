@@ -5,6 +5,10 @@ import Button from "../components/shared/Button";
 
 export default function Login() {
   const navigate = useNavigate();
+  function handleLogin() {
+    navigate("/feedback");
+    toast.success("Login Successful!");
+  }
   return (
     <div className="w-screen h-screen relative">
       <img src={loginBg} alt="" className="w-screen h-screen object-cover" />
@@ -32,7 +36,7 @@ export default function Login() {
             <Button
               value={"Login"}
               className="bg-secondary rounded-xl text-white text-2xl font-semibold py-4 hover:bg-primary cursor-pointer"
-              onClick={() => navigate("/feedback")}
+              onClick={() => handleLogin()}
             />
           </form>
         </div>

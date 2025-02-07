@@ -42,7 +42,7 @@ export default function Signup() {
             <Button
               value={"Signup"}
               className="bg-secondary rounded-xl text-white text-2xl font-semibold py-4 hover:bg-primary cursor-pointer"
-              onClick={() => navigate("/login")}
+              onClick={() => handleSignup()}
             />
           </form>
         </div>
