@@ -42,7 +42,7 @@ export default function Restaurant() {
           }
         />
       </div>
-      <div className="grid grid-cols-4 gap-8">
+      <div className="grid grid-cols-4 gap-8 w-full">
         {tables?.map((data) => (
           <Card number={data?.number} qrCode={data?.qrCode} key={data?.id} />
         ))}
