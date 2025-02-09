@@ -19,11 +19,13 @@ const clearAuthDataFromLocalStorage = () => {
   localStorage.removeItem("token");
 };
 
-const loginUser = async (user, openOtpModal, navigate, set) => {
+const loginUser = async (user, navigate, set) => {
   set({ isAuthenticating: true });
   try {
-    const response = await axiosInstance.post("/auth/signin", user);
+    const response = await axiosInstance.post("/login", user);
+    console.log(response)
     const data = response?.data?.data;
+    console.log(data);
     set((state) => ({
       ...state,
       user: data?.user,
