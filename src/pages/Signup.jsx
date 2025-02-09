@@ -42,7 +42,6 @@ export default function Signup() {
                 required
                 type="checkbox"
                 className="bg-white outline-none border-none p-4 py-2 rounded-xl"
-                placeholder="Enter your password again"
               />
               <span>I agree to terms and conditions.</span>
             </div>
