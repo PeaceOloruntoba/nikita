@@ -1,10 +1,9 @@
 import React, { useState } from "react";
 import { loginBg } from "../assets";
-import { NavLink, useNavigate } from "react-router-dom";
+import { NavLink, useNavigate } from "react-router";
 import Button from "../components/shared/Button";
 import { toast } from "sonner";
 import useAuthStore from "../store/useAuthStore";
-import Spinner from "../components/shared/Spinner";
 
 export default function Signup() {
   const navigate = useNavigate();
@@ -16,8 +15,8 @@ export default function Signup() {
   const [user, setUser] = useState({
     email: "",
     password: "",
-    confirm_password: "",
-    terms_accepted: false,
+    confirmPassword: "",
+    agreed: false,
   });
 
   function handleChange(e) {
@@ -28,36 +27,40 @@ export default function Signup() {
     }));
   }
 
-  function handleSignup(e) {
+  async function handleSubmit(e) {
     e.preventDefault();
-    if (user.password !== user.confirm_password) {
+    if (user.password !== user.confirmPassword) {
       toast.error("Passwords do not match!");
       return;
     }
-    if (!user.terms_accepted) {
-      toast.error("You must accept the terms and conditions!");
+    if (!user.agreed) {
+      toast.error("You must agree to the terms and conditions!");
       return;
     }
-    signUp(user, navigate);
+    await signUp(user, navigate);
   }
 
   return (
-    <div className="w-screen h-screen relative">
-      <img src={loginBg} alt="" className="w-screen h-screen object-cover" />
+    <div className="w-screen h-screen flex items-center justify-center relative">
+      <img
+        src={loginBg}
+        alt="Background"
+        className="w-screen h-screen object-cover absolute"
+      />
       <div className="absolute inset-0 flex items-center justify-center">
-        <div className="backdrop-blur p-12 rounded-2xl shadow-xl flex flex-col w-1/3 gap-6">
-          <span className="text-primary text-3xl font-bold w-full text-center">
+        <div className="backdrop-blur p-8 md:p-12 rounded-2xl shadow-xl flex flex-col w-full max-w-sm md:max-w-md gap-6">
+          <span className="text-primary text-3xl font-bold text-center">
             Signup
           </span>
-          <form className="flex flex-col gap-8" onSubmit={handleSignup}>
+          <form className="flex flex-col gap-6" onSubmit={handleSubmit}>
             <input
               required
-              type="text"
+              type="email"
               name="email"
               value={user.email}
               onChange={handleChange}
-              className="bg-white outline-none border-none p-4 py-2 rounded-xl"
-              placeholder="Enter your email or username here"
+              className="bg-white outline-none border p-3 rounded-xl"
+              placeholder="Enter your email"
             />
             <input
               required
@@ -65,37 +68,40 @@ export default function Signup() {
               name="password"
               value={user.password}
               onChange={handleChange}
-              className="bg-white outline-none border-none p-4 py-2 rounded-xl"
-              placeholder="Enter your password here"
+              className="bg-white outline-none border p-3 rounded-xl"
+              placeholder="Enter your password"
             />
             <input
               required
               type="password"
-              name="confirm_password"
-              value={user.confirm_password}
+              name="confirmPassword"
+              value={user.confirmPassword}
               onChange={handleChange}
-              className="bg-white outline-none border-none p-4 py-2 rounded-xl"
-              placeholder="Enter your password again"
+              className="bg-white outline-none border p-3 rounded-xl"
+              placeholder="Confirm your password"
             />
             <div className="flex items-center gap-2">
               <input
                 required
                 type="checkbox"
-                name="terms_accepted"
-                checked={user.terms_accepted}
+                name="agreed"
+                checked={user.agreed}
                 onChange={handleChange}
-                className="bg-white outline-none border-none p-4 py-2 rounded-xl"
+                className="w-4 h-4"
               />
-              <span>I agree to terms and conditions.</span>
-            </div>
-            <div className="w-full flex items-end justify-end text-md text-secondary font-semibold">
-              <span>
-                Already have an account? <NavLink to={"/login"}>Login</NavLink>
+              <span className="text-sm">
+                I agree to the terms and conditions.
               </span>
             </div>
+            <div className="text-sm text-secondary font-semibold text-right">
+              Already have an account?{" "}
+              <NavLink to="/login" className="text-primary">
+                Login
+              </NavLink>
+            </div>
             <Button
-              value={isAuthenticating ? <Spinner /> : "Signup"}
-              className="bg-secondary rounded-xl text-white text-lg font-semibold py-2 hover:bg-primary cursor-pointer"
+              value={isAuthenticating ? "Signing up..." : "Signup"}
+              className="bg-secondary rounded-xl text-white text-lg font-semibold py-2 hover:bg-primary cursor-pointer disabled:opacity-50"
               disabled={isAuthenticating}
             />
           </form>
