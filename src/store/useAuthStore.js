@@ -25,6 +25,7 @@ const loginUser = async (user, navigate, set, get) => {
   set({ isAuthenticating: true });
   try {
     const response = await axiosInstance.post("/login", user);
+    console.log(response)
     const data = response?.data?.data;
 
     if (!data?.user || !data?.token) {
@@ -51,7 +52,6 @@ const signUpUser = async (user, navigate, set) => {
   set({ isAuthenticating: true });
   try {
     const response = await axiosInstance.post("/register?for-admin=1", user);
-
     toast.success("Account created successfully! Please login.");
     navigate("/login");
   } catch (error) {

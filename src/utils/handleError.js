@@ -1,11 +1,9 @@
 import { toast } from "sonner";
 
 export const handleError = (error) => {
-  console.error(error);
   const { response } = error;
-  if (response?.message) {
+  if (response) {
     toast.error(response.message);
-  } else {
-    toast.error("Something went wrong");
   }
+  toast.error(error?.message);
 };
