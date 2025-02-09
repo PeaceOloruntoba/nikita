@@ -1,10 +1,26 @@
-import React from "react";
+import React, { useState } from "react";
 import { loginBg } from "../assets";
 import { NavLink, useNavigate } from "react-router";
 import Button from "../components/shared/Button";
+import useAuthStore from "../store/useAuthStore";
 
 export default function Login() {
   const navigate = useNavigate();
+  const { login, isAuthenticating } = useAuthStore((state) => ({
+    login: state.login,
+    isAuthenticating: state.isAuthenticating,
+  }));
+  const [user, setUser] = useState({
+    email: "",
+    password: "",
+  });
+  function handleChange(e) {
+    const { name, value, type, checked } = e.target;
+    setUser((prev) => ({
+      ...prev,
+      [name]: type === "checkbox" ? checked : value,
+    }));
+  }
   function handleLogin() {
     navigate("/feedback");
     toast.success("Login Successful!");
@@ -19,12 +35,20 @@ export default function Login() {
           </span>
           <form className="flex flex-col gap-8">
             <input
-              type="text"
+              required
+              type="email"
+              name="email"
+              value={user.email}
+              onChange={handleChange}
               className="bg-white outline-none border-none p-4 py-2 rounded-xl"
               placeholder="Enter your email or username here"
             />
             <input
+              required
               type="password"
+              name="password"
+              value={user.password}
+              onChange={handleChange}
               className="bg-white outline-none border-none p-4 py-2 rounded-xl"
               placeholder="Enter your password here"
             />
