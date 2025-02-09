@@ -60,6 +60,7 @@ const signUpUser = async (user, navigate, set) => {
     const response = await axiosInstance.post(`/register?for-admin=1`, user);
     toast.success(response?.message);
     toast.success("Please Login!")
+    console.log(response)
     navigate("/login")
   } catch (error) {
     handleError(error);
