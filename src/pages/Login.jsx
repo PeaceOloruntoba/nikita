@@ -7,10 +7,7 @@ import { toast } from "sonner";
 
 export default function Login() {
   const navigate = useNavigate();
-  const { login, isAuthenticating } = useAuthStore((state) => ({
-    login: state.login,
-    isAuthenticating: state.isAuthenticating,
-  }));
+  const { login, isAuthenticating } = useAuthStore();
 
   const [user, setUser] = useState({ email: "", password: "" });
 
