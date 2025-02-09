@@ -52,12 +52,13 @@ const loginUser = async (user, openOtpModal, navigate, set) => {
   }
 };
 
-const signUpUser = async (user, openOtpModal, set) => {
+const signUpUser = async (user, navigate, set) => {
   set({ isAuthenticating: true });
   try {
     const response = await axiosInstance.post(`/register?for-admin=1`, user);
-    toast.success("Sign Up Successful");
-    openOtpModal();
+    toast.success(response?.message);
+    toast.success("Please Login!")
+    navigate("/login")
   } catch (error) {
     handleError(error);
   } finally {
@@ -133,7 +134,7 @@ const useAuthStore = create((set, get) => {
     isValidating: () => (get().getToken() ? true : false),
     login: (user, openOtpModal, navigate) =>
       loginUser(user, openOtpModal, navigate, set),
-    signUp: (user, openOtpModal) => signUpUser(user, openOtpModal, set),
+    signUp: (user, navigate) => signUpUser(user, navigate, set),
     verifyOtp: (data, closeOtpModal, navigate) =>
       verifyOtp(data, closeOtpModal, navigate, set),
     resendOtp: (user) => resendOtp(user, set),
