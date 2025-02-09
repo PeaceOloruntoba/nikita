@@ -3,11 +3,16 @@ import { loginBg } from "../assets";
 import { NavLink, useNavigate } from "react-router";
 import Button from "../components/shared/Button";
 import { toast } from "sonner";
+import useAuthStore from "../store/useAuthStore";
 
 export default function Signup() {
   const navigate = useNavigate();
+  const { signUp, isAuthenticating } = useAuthStore((state) => ({
+    signUp: state.signUp,
+    isAuthenticating: state.isAuthenticating,
+  }));
   function handleSignup() {
-    navigate("/login");
+    signUp(user, navigate)
     toast.success("Signup Successful, Please Login!");
   }
   return (
