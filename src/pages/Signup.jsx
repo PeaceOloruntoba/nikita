@@ -4,6 +4,7 @@ import { NavLink, useNavigate } from "react-router";
 import Button from "../components/shared/Button";
 import { toast } from "sonner";
 import useAuthStore from "../store/useAuthStore";
+import Spinner from "../components/shared/Spinner";
 
 export default function Signup() {
   const navigate = useNavigate();
@@ -12,7 +13,7 @@ export default function Signup() {
     isAuthenticating: state.isAuthenticating,
   }));
   function handleSignup() {
-    signUp(user, navigate)
+    signUp(user, navigate);
     toast.success("Signup Successful, Please Login!");
   }
   return (
@@ -56,9 +57,10 @@ export default function Signup() {
               </span>
             </div>
             <Button
-              value={"Signup"}
+              value={isAuthenticating ? <Spinner /> : "Signup"}
               className="bg-secondary rounded-xl text-white text-lg font-semibold py-2 hover:bg-primary cursor-pointer"
               onClick={() => handleSignup()}
+              disabled={isAuthenticating}
             />
           </form>
         </div>
