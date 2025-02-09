@@ -55,7 +55,7 @@ const loginUser = async (user, openOtpModal, navigate, set) => {
 const signUpUser = async (user, openOtpModal, set) => {
   set({ isAuthenticating: true });
   try {
-    const response = await axiosInstance.post("/auth/signup", user);
+    const response = await axiosInstance.post(`/register?for-admin=1`, user);
     toast.success("Sign Up Successful");
     openOtpModal();
   } catch (error) {
