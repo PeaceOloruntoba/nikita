@@ -21,23 +21,23 @@ const clearAuthDataFromLocalStorage = () => {
 };
 
 // Authentication Functions
-const loginUser = async (user, navigate, set) => {
+const loginUser = async (user, navigate, set, get) => {
   set({ isAuthenticating: true });
   try {
     const response = await axiosInstance.post("/login", user);
     const data = response?.data?.data;
 
-    if (!data?.user || !data?.token)
+    if (!data?.user || !data?.token) {
       throw new Error("Invalid response from server");
+    }
 
     saveAuthDataToLocalStorage(data.user, data.token);
-
-    set({
+    set((state) => ({
       user: data.user,
       token: data.token,
       isAuthenticated: true,
       isAuthenticating: false,
-    });
+    }));
 
     toast.success(`Welcome Back! ${data.user.firstName}`);
     navigate("/admin");
