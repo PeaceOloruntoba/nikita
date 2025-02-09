@@ -4,6 +4,7 @@ import { NavLink, useNavigate } from "react-router";
 import Button from "../components/shared/Button";
 import useAuthStore from "../store/useAuthStore";
 import { toast } from "sonner";
+import Spinner from "../components/shared/Spinner";
 
 export default function Login() {
   const navigate = useNavigate();
@@ -59,7 +60,7 @@ export default function Login() {
               </NavLink>
             </div>
             <Button
-              value={isAuthenticating ? "Logging in..." : "Login"}
+              value={isAuthenticating ? <Spinner /> : "Login"}
               className="bg-secondary rounded-xl text-white text-lg font-semibold py-2 hover:bg-primary cursor-pointer disabled:opacity-50"
               disabled={isAuthenticating}
             />
