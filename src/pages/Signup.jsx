@@ -7,10 +7,7 @@ import useAuthStore from "../store/useAuthStore";
 
 export default function Signup() {
   const navigate = useNavigate();
-  const { signUp, isAuthenticating } = useAuthStore((state) => ({
-    signUp: state.signUp,
-    isAuthenticating: state.isAuthenticating,
-  }));
+  const { signUp, isAuthenticating } = useAuthStore();
 
   const [user, setUser] = useState({
     email: "",
