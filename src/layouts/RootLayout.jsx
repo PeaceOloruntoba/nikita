@@ -10,7 +10,7 @@ export default function RootLayout() {
       <div className="flex flex-col w-full text-[#4895E5]/20">
         <Header />
         <hr />
-        <div className="overflow-scroll .hide-scrollbar">
+        <div className="overflow-scroll hide-scrollbar">
           <Outlet />
         </div>
       </div>
