@@ -69,7 +69,7 @@ export function MenuCategory() {
       {categories.map((category) => (
         <div
           key={category.id}
-          className={`flex items-center gap-6 p-2 cursor-pointer ${
+          className={`flex items-center justify-between gap-6 p-2 cursor-pointer ${
             selectedCategory?.id === category.id ? "bg-gray-200" : ""
           }`}
           onClick={() => handleCategoryClick(category)}
@@ -80,7 +80,7 @@ export function MenuCategory() {
               className="cursor-pointer bg-[#D92C4A] text-white p-3 rounded-lg"
               value={<MdOutlineCancel size={18} />}
               onClick={(e) => {
-                e.stopPropagation(); // Prevent triggering category click when clicking delete
+                e.stopPropagation();
                 handleDeleteCategory(category.id);
               }}
             />
