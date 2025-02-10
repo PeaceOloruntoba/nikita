@@ -65,9 +65,9 @@ export function Card({ number, qrCode, onDelete, tableName }) {
         <div className="fixed inset-0 flex items-center justify-center bg-black/80">
           <div
             ref={detailsRef}
-            className="p-8 bg-white rounded-lg flex flex-col gap-2"
+            className="p-6 bg-white rounded-lg flex flex-col gap-2"
           >
-            <Details onDelete={onDelete} tableName={tableName} />
+            <Details onDelete={onDelete} tableName={tableName} number={number} />
           </div>
         </div>
       )}
@@ -75,16 +75,21 @@ export function Card({ number, qrCode, onDelete, tableName }) {
   );
 }
 
-export function Details({ onDelete, tableName }) {
+export function Details({ onDelete, tableName, number }) {
   return (
-    <div className="flex flex-col gap-2 text-black">
+    <div className="flex flex-col gap-8 text-black">
       <div className="flex flex-col gap-2">
-        <span>{tableName}</span>
+        <span className="text-xl">
+          Table Name: <span className="font-semibold">{tableName}</span>
+        </span>
+        <span className="text-xl">
+          Capacity: <span className="font-semibold">{number}</span>
+        </span>
       </div>
       <div className="flex items-center gap-4">
         <Button
           value={"Delete"}
-          className="cursor-pointer py-2 px-3 rounded-lg text-2xl bg-[#F2EBF0] text-black"
+          className="cursor-pointer py-2 px-3 rounded-lg text-lg bg-red-600 text-white/80 w-full"
           onClick={onDelete}
         />
       </div>
