@@ -8,7 +8,6 @@ const createQuestion = async (set, questionData) => {
   set({ isLoading: true });
   try {
     const response = await axiosInstance.post("/questions", questionData);
-    console.log(response);
     toast.success("Question created successfully!");
     await getQuestions(set);
     set({ isLoading: false });
@@ -23,8 +22,8 @@ const getQuestions = async (set) => {
   set({ isLoading: true });
   try {
     const response = await axiosInstance.get("/questions");
-    console.log(response);
     const data = response?.data?.data || [];
+    console.log(response)
     set({ questions: data, isLoading: false });
   } catch (error) {
     handleError(error);
@@ -40,7 +39,6 @@ const updateQuestion = async (set, questionId, updatedData) => {
       `/questions/${questionId}`,
       updatedData
     );
-    console.log(response);
     toast.success("Question updated successfully!");
     await getQuestions(set);
     set({ isLoading: false });
@@ -64,15 +62,28 @@ const deleteQuestion = async (set, questionId) => {
   }
 };
 
+// Select a question
+const selectQuestion = (set, question) => {
+  set({ selectedQuestion: question });
+};
+
+// Deselect the question
+const deselectQuestion = (set) => {
+  set({ selectedQuestion: null });
+};
+
 // Zustand Store
 const useQuestionStore = create((set) => ({
   questions: [],
+  selectedQuestion: null,
   isLoading: false,
   getQuestions: () => getQuestions(set),
   createQuestion: (questionData) => createQuestion(set, questionData),
   updateQuestion: (questionId, updatedData) =>
     updateQuestion(set, questionId, updatedData),
   deleteQuestion: (questionId) => deleteQuestion(set, questionId),
+  selectQuestion: (question) => selectQuestion(set, question),
+  deselectQuestion: () => deselectQuestion(set),
 }));
 
 export default useQuestionStore;
