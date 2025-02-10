@@ -78,17 +78,14 @@ export function Card({ number, qrCode, onDelete }) {
 export function Details({ onDelete }) {
   return (
     <div className="flex flex-col gap-2 text-black">
-      {/* Details about the table */}
       <div className="flex flex-col gap-2">
         <span>Name of Person who scanned the QR code</span>
-        {/* Table data goes here */}
       </div>
       <div className="flex items-center gap-4">
-        {/* Other buttons */}
         <Button
           value={"Delete"}
           className="cursor-pointer py-2 px-3 rounded-lg text-2xl bg-[#F2EBF0] text-black"
-          onClick={onDelete} // Trigger delete function
+          onClick={onDelete}
         />
       </div>
     </div>
