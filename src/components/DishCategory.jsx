@@ -1,29 +1,26 @@
 import React, { useState, useEffect } from "react";
 import Button from "./shared/Button";
-import useMenuStore from "../store/useMenuStore";
 import {
   MdOutlineCancel,
   MdCheckCircleOutline,
+  MdOutlineAddCircleOutline,
   MdModeEdit,
 } from "react-icons/md";
-import ConfirmationModal from "./shared/ConfirmationModal";
+import { PiWarningCircleThin } from "react-icons/pi";
+import useMenuStore from "../store/useMenuStore";
 
 export function DishCategory() {
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isEditOpen, setIsEditOpen] = useState(false);
+  const [selectedDish, setSelectedDish] = useState(null);
+
   const {
+    categories,
     selectedCategory,
-    dishes,
     getCategoryDishes,
-    addDishToCategory,
-    updateDish,
+    dishes,
     deleteDish,
   } = useMenuStore();
-
-  const [dishName, setDishName] = useState("");
-  const [dishPrice, setDishPrice] = useState("");
-  const [openConfirmationModal, setOpenConfirmationModal] = useState(false);
-  const [dishToDelete, setDishToDelete] = useState(null);
-  const [openEditDishModal, setOpenEditDishModal] = useState(false);
-  const [dishToEdit, setDishToEdit] = useState(null);
 
   useEffect(() => {
     if (selectedCategory) {
@@ -31,137 +28,163 @@ export function DishCategory() {
     }
   }, [selectedCategory, getCategoryDishes]);
 
-  const handleAddDish = () => {
-    if (dishName && dishPrice && selectedCategory) {
-      addDishToCategory(selectedCategory.id, {
-        name: dishName,
-        price: dishPrice,
-      });
-      setDishName("");
-      setDishPrice("");
-    }
-  };
-
-//   console.log(dishes)
-
-  const handleEditDish = () => {
-    if (dishToEdit && dishName && dishPrice) {
-      updateDish(dishToEdit.id, { name: dishName, price: dishPrice });
-      setOpenEditDishModal(false);
-      setDishName("");
-      setDishPrice("");
-    }
+  const handleDishSelection = (dish) => {
+    setSelectedDish(dish);
   };
 
   const handleDeleteDish = () => {
-    if (dishToDelete) {
-      deleteDish(dishToDelete.id);
-      setOpenConfirmationModal(false);
+    if (selectedDish) {
+      deleteDish(selectedDish.id);
+      setSelectedDish(null);
     }
   };
 
   return (
-    <div className="bg-white rounded-lg p-4 h-full text-lg flex flex-col gap-6">
+    <div className="bg-white rounded-lg p-4 h-full text-2xl flex flex-col gap-6">
       <div className="flex items-center gap-6">
-        <input
-          type="text"
-          className="border-none outline outline-[#4895E5]/20 p-2 rounded-lg w-full text-[#3A3A3A] focus:outline-[#4895E5]"
-          placeholder="Add Dish"
-          value={dishName}
-          onChange={(e) => setDishName(e.target.value)}
-        />
-        <input
-          type="number"
-          className="border-none outline outline-[#4895E5]/20 p-2 rounded-lg w-full text-[#3A3A3A] focus:outline-[#4895E5]"
-          placeholder="Dish Price"
-          value={dishPrice}
-          onChange={(e) => setDishPrice(e.target.value)}
-        />
         <Button
           className="cursor-pointer bg-[#4895E5] text-white p-3 rounded-lg"
-          value={<MdCheckCircleOutline size={18} />}
-          onClick={handleAddDish}
+          value={<MdOutlineAddCircleOutline size={18} />}
+          onClick={() => setIsModalOpen(true)}
         />
       </div>
       <hr />
-      {/* <div className="flex flex-col gap-3">
-        {dishes?.map((dish) => (
-          <div key={dish.id} className="flex items-center gap-6">
-            <div className="p-2 w-full">{dish.name}</div>
-            <div className="p-2 w-full">${dish.price}</div>
-            <Button
-              className="cursor-pointer bg-[#AAAFB6] text-white p-3 rounded-lg"
-              value={<MdModeEdit size={18} />}
-              onClick={() => {
-                setDishToEdit(dish);
-                setDishName(dish.name);
-                setDishPrice(dish.price);
-                setOpenEditDishModal(true);
-              }}
-            />
-            <Button
-              className="cursor-pointer bg-[#D92C4A] text-white p-3 rounded-lg"
-              value={<MdOutlineCancel size={18} />}
-              onClick={() => {
-                setDishToDelete(dish);
-                setOpenConfirmationModal(true);
-              }}
-            />
-          </div>
-        ))}
-      </div> */}
-
-      {/* Edit Dish Modal */}
-      {openEditDishModal && (
-        <div className="fixed inset-0 flex items-center justify-center bg-black/50">
-          <div className="bg-white rounded-lg p-6 w-1/3 text-lg">
-            <div className="flex justify-between items-center mb-4">
-              <span>Edit Dish</span>
-              <MdOutlineCancel
-                size={24}
-                className="cursor-pointer"
-                onClick={() => setOpenEditDishModal(false)}
+      <div className="flex flex-col gap-6">
+        {dishes.length > 0 ? (
+          dishes.map((dish) => (
+            <div key={dish.id} className="flex items-center gap-6">
+              <input
+                type="text"
+                className="border-none outline outline-[#4895E5]/20 p-3 rounded-lg w-full text-[#3A3A3A] focus:outline-[#4895E5]"
+                placeholder={dish.name}
+                value={dish.name}
+                disabled
+                onClick={() => handleDishSelection(dish)}
               />
+              {selectedDish && selectedDish.id === dish.id && (
+                <>
+                  <Button
+                    className="cursor-pointer bg-[#AAAFB6] text-white p-3 rounded-lg"
+                    value={<MdModeEdit size={18} />}
+                    onClick={() => setIsEditOpen(true)}
+                  />
+                  <Button
+                    className="cursor-pointer bg-[#D92C4A] text-white p-3 rounded-lg"
+                    value={<MdOutlineCancel size={18} />}
+                    onClick={handleDeleteDish}
+                  />
+                </>
+              )}
             </div>
-            <input
-              type="text"
-              value={dishName}
-              onChange={(e) => setDishName(e.target.value)}
-              className="border-none outline outline-[#4895E5]/20 p-2 rounded-lg w-full text-[#3A3A3A] focus:outline-[#4895E5] mb-4"
-              placeholder="Dish Name"
-            />
-            <input
-              type="number"
-              value={dishPrice}
-              onChange={(e) => setDishPrice(e.target.value)}
-              className="border-none outline outline-[#4895E5]/20 p-2 rounded-lg w-full text-[#3A3A3A] focus:outline-[#4895E5] mb-4"
-              placeholder="Dish Price"
-            />
-            <div className="flex justify-between mt-4">
-              <button
-                className="bg-gray-300 text-white p-2 rounded-lg"
-                onClick={() => setOpenEditDishModal(false)}
-              >
-                Cancel
-              </button>
-              <button
-                className="bg-blue-500 text-white p-2 rounded-lg"
-                onClick={handleEditDish}
-              >
-                Save
-              </button>
-            </div>
-          </div>
-        </div>
-      )}
+          ))
+        ) : (
+          <div>No dishes found for this category</div>
+        )}
+      </div>
+      {isModalOpen && <AddDishCategory onClose={() => setIsModalOpen(false)} />}
+      {isEditOpen && <EditDishCategory onClose={() => setIsEditOpen(false)} />}
+    </div>
+  );
+}
 
-      {/* Confirmation Modal */}
-      <ConfirmationModal
-        open={openConfirmationModal}
-        onClose={() => setOpenConfirmationModal(false)}
-        onConfirm={handleDeleteDish}
-        message="Are you sure you want to delete this dish?"
-      />
+export function AddDishCategory({ onClose }) {
+  return (
+    <div className="fixed inset-0 flex items-center justify-center bg-black/50">
+      <div className="bg-white rounded-lg p-6 text-lg flex flex-col gap-6 w-1/3 h-4/5">
+        <button onClick={onClose} className="self-end text-gray-600">
+          <MdOutlineCancel size={20} />
+        </button>
+        <input
+          type="text"
+          className="border-none outline outline-[#4895E5]/20 p-3 rounded-lg w-full text-[#3A3A3A] focus:outline-[#4895E5]"
+          placeholder="Dish Name"
+        />
+        <div className="bg-[#D02C46] p-2 rounded-lg flex items-center justify-center text-white">
+          <span className="text-white p-12">
+            <PiWarningCircleThin size={26} />
+          </span>
+          <span className="text-sm">
+            Achtung: Bitte wählen Sie alle Ihre Allergien aus, um
+            sicherzustellen, dass Ihren Gästen keine falschen Gerichte
+            vorgeschlagen werden. So können wir Ihren Gästen eine sichere und
+            passende Auswahl bieten!
+          </span>
+        </div>
+        <input
+          type="text"
+          className="border-none outline outline-[#4895E5]/20 p-3 rounded-lg w-full text-[#3A3A3A] focus:outline-[#4895E5]"
+          placeholder="Search ingredient"
+        />
+        <hr />
+        <ul className="flex flex-col items-center gap-4 text-[#3A3A3A] w-full h-full">
+          <li className="flex items-center justify-between w-full px-2">
+            Ingredient 1 <input type="checkbox" name="ingredient1" />
+          </li>
+          <li className="flex items-center justify-between w-full px-2">
+            Ingredient 2{" "}
+            <input
+              type="checkbox"
+              checked
+              name="ingredient2"
+              className="text-[#6C1233]"
+            />
+          </li>
+        </ul>
+        <button className="cursor-pointer bg-[#4895E5] text-white p-3 rounded-lg w-full flex items-center text-center justify-center">
+          <MdCheckCircleOutline size={18} />
+        </button>
+      </div>
+    </div>
+  );
+}
+
+export function EditDishCategory({ onClose }) {
+  return (
+    <div className="fixed inset-0 flex items-center justify-center bg-black/50">
+      <div className="bg-white rounded-lg p-6 text-lg flex flex-col gap-6 w-1/3 h-4/5">
+        <button onClick={onClose} className="self-end text-gray-600">
+          <MdOutlineCancel size={24} />
+        </button>
+        <input
+          type="text"
+          className="border-none outline outline-[#4895E5]/20 p-2 rounded-lg w-full text-[#3A3A3A] focus:outline-[#4895E5]"
+          placeholder="Dish Name"
+        />
+        <div className="bg-[#D02C46] p-2 rounded-lg flex items-center justify-center text-white">
+          <span className="text-white p-12">
+            <PiWarningCircleThin size={30} />
+          </span>
+          <span className="text-sm">
+            Achtung: Bitte wählen Sie alle Ihre Allergien aus, um
+            sicherzustellen, dass Ihren Gästen keine falschen Gerichte
+            vorgeschlagen werden. So können wir Ihren Gästen eine sichere und
+            passende Auswahl bieten!
+          </span>
+        </div>
+        <input
+          type="text"
+          className="border-none outline outline-[#4895E5]/20 p-3 rounded-lg w-full text-[#3A3A3A] focus:outline-[#4895E5]"
+          placeholder="Search ingredient"
+        />
+        <hr />
+        <ul className="flex flex-col items-center gap-4 text-[#3A3A3A] w-full h-full">
+          <li className="flex items-center justify-between w-full px-2">
+            Ingredient 1 <input type="checkbox" name="ingredient1" />
+          </li>
+          <li className="flex items-center justify-between w-full px-2">
+            Ingredient 2{" "}
+            <input
+              type="checkbox"
+              checked
+              name="ingredient2"
+              className="text-[#6C1233]"
+            />
+          </li>
+        </ul>
+        <button className="cursor-pointer bg-[#4895E5] text-white p-3 rounded-lg w-full flex items-center text-center justify-center">
+          <MdCheckCircleOutline size={18} />
+        </button>
+      </div>
     </div>
   );
 }
