@@ -10,7 +10,7 @@ export default function ConfirmationModal({
   if (!open) return null;
 
   return (
-    <div className="fixed inset-0 flex items-center justify-center bg-black/50">
+    <div className="fixed inset-0 flex items-center justify-center bg-black/50 text-black">
       <div className="bg-white rounded-lg p-6 w-1/3 text-lg">
         <div className="flex justify-between items-center mb-4">
           <span>Confirmation</span>
