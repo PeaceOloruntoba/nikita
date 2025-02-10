@@ -15,8 +15,8 @@ export default function Restaurant() {
   const { tables, createTable, isLoading } = useRestaurantStore();
 
   const handleCreateTable = () => {
-    createTable(newTable); // Create table through store
-    setShowCreateModal(false); // Close modal after creating table
+    createTable(newTable);
+    setShowCreateModal(false);
   };
 
   return (
@@ -29,7 +29,7 @@ export default function Restaurant() {
               <MdOutlineAddCircleOutline size={18} /> Add Table
             </span>
           }
-          onClick={() => setShowCreateModal(true)} // Open modal on click
+          onClick={() => setShowCreateModal(true)}
         />
       </div>
 
@@ -38,13 +38,10 @@ export default function Restaurant() {
           <Card number={data?.name} key={data?.id} qrCode={data?.token} />
         ))}
       </div>
-
-      {/* Modal for Creating Table */}
       {showCreateModal && (
         <div className="fixed inset-0 flex items-center justify-center bg-black/80 text-black">
           <div className="bg-white p-6 rounded-lg w-1/3">
             <h2 className="text-xl font-semibold mb-4">Create New Table</h2>
-
             <div className="mb-4">
               <label className="block text-sm font-semibold">Table Name</label>
               <input
@@ -56,7 +53,6 @@ export default function Restaurant() {
                 }
               />
             </div>
-
             <div className="mb-4">
               <label className="block text-sm font-semibold">Description</label>
               <textarea
@@ -67,7 +63,6 @@ export default function Restaurant() {
                 }
               />
             </div>
-
             <div className="mb-4">
               <label className="block text-sm font-semibold">Capacity</label>
               <input
@@ -79,17 +74,16 @@ export default function Restaurant() {
                 }
               />
             </div>
-
             <div className="flex justify-end gap-4">
               <Button
                 className="py-2 px-4 bg-gray-500 text-white rounded-lg"
                 value="Cancel"
-                onClick={() => setShowCreateModal(false)} // Close modal
+                onClick={() => setShowCreateModal(false)}
               />
               <Button
                 className="py-2 px-4 bg-primary text-white rounded-lg"
                 value="Create"
-                onClick={handleCreateTable} // Trigger table creation
+                onClick={handleCreateTable}
                 isLoading={isLoading}
               />
             </div>
