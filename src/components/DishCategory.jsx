@@ -9,22 +9,21 @@ import {
 import { PiWarningCircleThin } from "react-icons/pi";
 import useMenuStore from "../store/useMenuStore";
 
-const {
-  categories,
-  dishes,
-  selectedCategory,
-  getCategoryDishes,
-  deleteDish,
-  getIngredients,
-  filterIngredients,
-  ingredients,
-  filteredIngredients,
-} = useMenuStore();
-const handleSearchIngredients = (event) => {
-  filterIngredients(event.target.value);
-};
-
 export function DishCategory() {
+  const {
+    categories,
+    dishes,
+    selectedCategory,
+    getCategoryDishes,
+    deleteDish,
+    getIngredients,
+    filterIngredients,
+    ingredients,
+    filteredIngredients,
+  } = useMenuStore();
+  const handleSearchIngredients = (event) => {
+    filterIngredients(event.target.value);
+  };
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isEditOpen, setIsEditOpen] = useState(false);
   const [selectedDish, setSelectedDish] = useState(null);
@@ -108,10 +107,13 @@ export function DishCategory() {
 }
 
 export function AddDishCategory({ categoryId, onClose }) {
+  const handleSearchIngredients = (event) => {
+    filterIngredients(event.target.value);
+  };
   const [dishName, setDishName] = useState("");
   const [selectedIngredients, setSelectedIngredients] = useState([]);
 
-  const { ingredients, addDishToCategory } = useMenuStore();
+  const { filterIngredients, ingredients, addDishToCategory } = useMenuStore();
 
   const handleSubmit = () => {
     const newDish = {
@@ -198,8 +200,11 @@ export function EditDishCategory({ categoryId, dish, onClose }) {
   const [selectedIngredients, setSelectedIngredients] = useState(
     dish.ingredients || []
   );
+  const handleSearchIngredients = (event) => {
+    filterIngredients(event.target.value);
+  };
 
-  const { ingredients, updateDish } = useMenuStore();
+  const { filterIngredients, ingredients, updateDish } = useMenuStore();
 
   const handleSubmit = () => {
     const updatedDish = {
@@ -247,6 +252,7 @@ export function EditDishCategory({ categoryId, dish, onClose }) {
           type="text"
           className="border-none outline outline-[#4895E5]/20 p-3 rounded-lg w-full text-[#3A3A3A] focus:outline-[#4895E5]"
           placeholder="Search ingredient"
+          onChange={handleSearchIngredients}
         />
         <hr />
         <ul className="flex flex-col items-center gap-4 text-[#3A3A3A] w-full h-full">
