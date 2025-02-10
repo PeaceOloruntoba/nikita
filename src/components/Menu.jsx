@@ -10,11 +10,11 @@ import { PiWarningCircleThin } from "react-icons/pi";
 
 export function MenuCategory() {
   return (
-    <div className="bg-white rounded-lg p-4 h-full text-2xl flex flex-col gap-6">
+    <div className="bg-white rounded-lg p-4 h-full text-lg flex flex-col gap-6">
       <div className="flex items-center gap-6">
         <input
           type="text"
-          className="border-none outline outline-[#4895E5]/20 p-3 rounded-lg w-full text-[#3A3A3A] focus:outline-[#4895E5]"
+          className="border-none outline outline-[#4895E5]/20 p-2 rounded-lg w-full text-[#3A3A3A] focus:outline-[#4895E5]"
           placeholder="Add Categorie"
         />
         <Button
@@ -26,7 +26,7 @@ export function MenuCategory() {
       <div className="flex items-center gap-6">
         <input
           type="text"
-          className="border-none outline outline-[#4895E5]/20 p-3 rounded-lg w-full text-[#3A3A3A] focus:outline-[#4895E5]"
+          className="border-none outline outline-[#4895E5]/20 p-2 rounded-lg w-full text-[#3A3A3A] focus:outline-[#4895E5]"
           placeholder="Categorie 1"
           value={"Categorie 1"}
           disabled
@@ -81,7 +81,7 @@ export function DishCategory() {
 export function AddDishCategory({ onClose }) {
   return (
     <div className="fixed inset-0 flex items-center justify-center bg-black/50">
-      <div className="bg-white rounded-lg p-6 text-xl flex flex-col gap-6 w-1/3 h-4/5">
+      <div className="bg-white rounded-lg p-6 text-lg flex flex-col gap-6 w-1/3 h-4/5">
         <button onClick={onClose} className="self-end text-gray-600">
           <MdOutlineCancel size={20} />
         </button>
@@ -132,20 +132,20 @@ export function AddDishCategory({ onClose }) {
 export function EditDishCategory({ onClose }) {
   return (
     <div className="fixed inset-0 flex items-center justify-center bg-black/50">
-      <div className="bg-white rounded-lg p-6 text-2xl flex flex-col gap-6 w-1/3 h-4/5">
+      <div className="bg-white rounded-lg p-6 text-lg flex flex-col gap-6 w-1/3 h-4/5">
         <button onClick={onClose} className="self-end text-gray-600">
           <MdOutlineCancel size={24} />
         </button>
         <input
           type="text"
-          className="border-none outline outline-[#4895E5]/20 p-3 rounded-lg w-full text-[#3A3A3A] focus:outline-[#4895E5]"
+          className="border-none outline outline-[#4895E5]/20 p-2 rounded-lg w-full text-[#3A3A3A] focus:outline-[#4895E5]"
           placeholder="Dish Name"
         />
-        <div className="bg-[#D02C46] p-6 rounded-lg flex items-center justify-center text-white">
+        <div className="bg-[#D02C46] p-2 rounded-lg flex items-center justify-center text-white">
           <span className="text-white p-12">
             <PiWarningCircleThin size={30} />
           </span>
-          <span>
+          <span className="text-sm">
             Achtung: Bitte wählen Sie alle Ihre Allergien aus, um
             sicherzustellen, dass Ihren Gästen keine falschen Gerichte
             vorgeschlagen werden. So können wir Ihren Gästen eine sichere und
