@@ -5,14 +5,15 @@ import { LuLogOut } from "react-icons/lu";
 import useAuthStore from "../../store/useAuthStore";
 
 export default function Header() {
-  const { logoutUser } = useAuthStore();
+  const logout = useAuthStore((state) => state.logout);
+
   const navigate = useNavigate();
   const [isOpen, setIsOpen] = useState(false);
   const toggleDropdown = () => {
     setIsOpen(!isOpen);
   };
   function handleLogout() {
-    logoutUser(navigate);
+    logout(navigate);
   }
   return (
     <div className="w-full flex p-4 items-center justify-end">
@@ -51,7 +52,7 @@ export default function Header() {
               <div className="absolute top-full w-full group:shadow-lg rounded-lg mt-1">
                 <button
                   className="rounded-lg w-full px-4 text-sm text-white cursor-pointer py-2 font-semibold text-nowrap flex items-center gap-2 justify-center bg-secondary"
-                  onClick={() => handleLogout()}
+                  onClick={()=>handleLogout()}
                 >
                   <LuLogOut size={16} />
                   Sign Out
