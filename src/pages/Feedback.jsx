@@ -1,55 +1,27 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { negativeFeedback, positiveFeedback, totalFeedback } from "../assets";
 import { FeedbackTitleCard, FeedbackCard } from "../components/Feedback";
+import useAdminStore from "../store/useAdminStore"; // Import Zustand Store
+import Spinner from "../components/shared/Spinner";
 
 export default function Feedback() {
+  const { feedbacks, getFeedbacks, isLoading } = useAdminStore();
   const [feedbackStatus, setFeedbackStatus] = useState(null);
 
-  const feedbacks = [
-    {
-      id: 1,
-      firstName: "Surename",
-      lastName: "Name",
-      stars: 5.0,
-      status: "positive",
-      feedback:
-        "Feedback Feedback Feedback Feedback Feedback Feedback Feedback Feedback Feedback Feedback Feedback Feedback Feedback Feedback Feedback ",
-    },
-    {
-      id: 2,
-      firstName: "Surename",
-      lastName: "Name",
-      stars: 5.0,
-      status: "positive",
-      feedback:
-        "Feedback Feedback Feedback Feedback Feedback Feedback Feedback Feedback Feedback Feedback Feedback Feedback Feedback Feedback Feedback ",
-    },
-    {
-      id: 3,
-      firstName: "Surename",
-      lastName: "Name",
-      stars: 5.0,
-      status: "negative",
-      feedback:
-        "Feedback Feedback Feedback Feedback Feedback Feedback Feedback Feedback Feedback Feedback Feedback Feedback Feedback Feedback Feedback ",
-    },
-  ];
+  useEffect(() => {
+    getFeedbacks();
+  }, []);
 
-  // Calculate feedback counts dynamically
-  const totalFeedbackCount = feedbacks.length;
-  const positiveFeedbackCount = feedbacks.filter(
-    (fb) => fb.status === "positive"
-  ).length;
-  const negativeFeedbackCount = feedbacks.filter(
-    (fb) => fb.status === "negative"
-  ).length;
+  const totalFeedbackCount = feedbacks?.totalFeedback;
+  const positiveFeedbackCount = feedbacks?.totalPositive;
+  const negativeFeedbackCount = feedbacks?.totalNegative;
 
   const feedbackCard = [
     {
       id: 1,
       name: "Total Feedback",
       value: totalFeedbackCount,
-      status: null, // Shows all feedbacks
+      status: null,
       icon: <img src={totalFeedback} alt="Total Feedback" />,
     },
     {
@@ -71,8 +43,8 @@ export default function Feedback() {
   // Filter feedbacks based on selected feedbackStatus
   const displayFeedbacks =
     feedbackStatus === null
-      ? feedbacks
-      : feedbacks.filter((fb) => fb.status === feedbackStatus);
+      ? feedbacks?.feedbacks
+      : feedbacks?.feedbacks.filter((fb) => fb.is_positive === feedbackStatus);
 
   return (
     <div className="p-6 text-[#3a3a3a] flex flex-col gap-6">
@@ -89,11 +61,23 @@ export default function Feedback() {
           </button>
         ))}
       </div>
-      <div className="grid grid-cols-3 gap-6">
-        {displayFeedbacks.map((card) => (
-          <FeedbackCard key={card.id} card={card} />
-        ))}
-      </div>
+      {isLoading ? (
+        <p className="text-center text-lg">
+          <Spinner />
+        </p>
+      ) : (
+        <div className="grid grid-cols-3 gap-6">
+          {displayFeedbacks?.length > 0 ? (
+            displayFeedbacks.map((card) => (
+              <FeedbackCard key={card.id} card={card} />
+            ))
+          ) : (
+            <p className="col-span-3 text-center text-gray-500">
+              No feedback available.
+            </p>
+          )}
+        </div>
+      )}
     </div>
   );
 }

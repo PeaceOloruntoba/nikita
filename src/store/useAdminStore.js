@@ -3,29 +3,25 @@ import axiosInstance from "../utils/axiosConfig";
 import { toast } from "sonner";
 import { handleError } from "../utils/handleError";
 
+// Fetch feedbacks from API
 const getFeedbacks = async (set) => {
-  set({ isAuthenticating: true });
+  set({ isLoading: true });
   try {
-    const response = await axiosInstance.post("/feedbacks");
-    console.log(response);
-    const data = response?.data;
-    set((state) => ({
-      feedbacks: data,
-      isAuthenticating: false,
-    }));
+    const response = await axiosInstance.get("/feedbacks");
+    console.log(response)
+    const data = response?.data?.data || [];
+    set({ feedbacks: data, isLoading: false });
   } catch (error) {
     handleError(error);
-    set({ isAuthenticating: false });
+    set({ isLoading: false });
   }
 };
 
 // Zustand Store
-const useAdminStore = create((set) => {
-
-  return {
-    feedbacks: feedbacks || {},
-    getFeedbacks: () => getFeedbacks(set),
-  };
-});
+const useAdminStore = create((set) => ({
+  feedbacks: [],
+  isLoading: false,
+  getFeedbacks: () => getFeedbacks(set),
+}));
 
 export default useAdminStore;
