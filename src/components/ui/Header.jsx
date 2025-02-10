@@ -51,7 +51,7 @@ export default function Header() {
               <div className="absolute top-full w-full group:shadow-lg rounded-lg mt-1">
                 <button
                   className="rounded-lg w-full px-4 text-sm text-white cursor-pointer py-2 font-semibold text-nowrap flex items-center gap-2 justify-center bg-secondary"
-                  onClick={() => handleLogout}
+                  onClick={() => handleLogout()}
                 >
                   <LuLogOut size={16} />
                   Sign Out
