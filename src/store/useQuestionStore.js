@@ -8,6 +8,7 @@ const createQuestion = async (set, questionData) => {
   set({ isLoading: true });
   try {
     const response = await axiosInstance.post("/questions", questionData);
+    console.log(response)
     toast.success("Question created successfully!");
     await getQuestions(set);
     set({ isLoading: false });
@@ -22,6 +23,7 @@ const getQuestions = async (set) => {
   set({ isLoading: true });
   try {
     const response = await axiosInstance.get("/questions");
+    console.log(response);
     const data = response?.data?.data || [];
     set({ questions: data, isLoading: false });
   } catch (error) {
@@ -38,6 +40,7 @@ const updateQuestion = async (set, questionId, updatedData) => {
       `/questions/${questionId}`,
       updatedData
     );
+    console.log(response);
     toast.success("Question updated successfully!");
     await getQuestions(set);
     set({ isLoading: false });
