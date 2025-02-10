@@ -2,7 +2,7 @@ import React, { useRef, useState, useEffect } from "react";
 import Button from "./shared/Button";
 import { MdQrCode } from "react-icons/md";
 
-export function Card({ number, qrCode, onDelete }) {
+export function Card({ number, qrCode, onDelete, tableName }) {
   const [showDetails, setShowDetails] = useState(false);
   const [showQR, setShowQR] = useState(false);
   const detailsRef = useRef(null);
@@ -67,7 +67,7 @@ export function Card({ number, qrCode, onDelete }) {
             ref={detailsRef}
             className="p-8 bg-white rounded-lg flex flex-col gap-2"
           >
-            <Details onDelete={onDelete} />
+            <Details onDelete={onDelete} tableName={tableName} />
           </div>
         </div>
       )}
@@ -75,11 +75,11 @@ export function Card({ number, qrCode, onDelete }) {
   );
 }
 
-export function Details({ onDelete }) {
+export function Details({ onDelete, tableName }) {
   return (
     <div className="flex flex-col gap-2 text-black">
       <div className="flex flex-col gap-2">
-        <span>Name of Person who scanned the QR code</span>
+        <span>{tableName}</span>
       </div>
       <div className="flex items-center gap-4">
         <Button
