@@ -15,13 +15,7 @@ export function MenuCategory() {
     createCategory,
     deleteCategory,
     setSelectedCategory,
-  } = useMenuStore((state) => ({
-    categories: state.categories,
-    getCategories: state.getCategories,
-    createCategory: state.createCategory,
-    deleteCategory: state.deleteCategory,
-    setSelectedCategory: state.setSelectedCategory,
-  }));
+  } = useMenuStore();
 
   const [categoryName, setCategoryName] = useState("");
   const [openConfirmationModal, setOpenConfirmationModal] = useState(false);

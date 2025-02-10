@@ -1,5 +1,6 @@
 import React from "react";
-import { DishCategory, MenuCategory } from "../components/Menu";
+import { MenuCategory } from "../components/MenuCategory";
+import { DishCategory } from "../components/DishCategory";
 
 export default function Menu() {
   return (

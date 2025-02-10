@@ -16,14 +16,7 @@ export function DishCategory() {
     addDishToCategory,
     updateDish,
     deleteDish,
-  } = useMenuStore((state) => ({
-    selectedCategory: state.selectedCategory,
-    dishes: state.dishes,
-    getCategoryDishes: state.getCategoryDishes,
-    addDishToCategory: state.addDishToCategory,
-    updateDish: state.updateDish,
-    deleteDish: state.deleteDish,
-  }));
+  } = useMenuStore();
 
   const [dishName, setDishName] = useState("");
   const [dishPrice, setDishPrice] = useState("");
