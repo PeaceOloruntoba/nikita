@@ -25,13 +25,11 @@ const loginUser = async (user, navigate, set, get) => {
   set({ isAuthenticating: true });
   try {
     const response = await axiosInstance.post("/login", user);
-    console.log(response)
     const data = response?.data?.data;
 
     if (!data?.user || !data?.token) {
       throw new Error("Invalid response from server");
     }
-
     saveAuthDataToLocalStorage(data.user, data.token);
     set((state) => ({
       user: data.user,
@@ -40,8 +38,8 @@ const loginUser = async (user, navigate, set, get) => {
       isAuthenticating: false,
     }));
 
-    toast.success(`Welcome Back! ${data.user.firstName}`);
-    navigate("/admin");
+    toast.success(`Welcome Back! ${data.user.name}`);
+    navigate("/feedback");
   } catch (error) {
     handleError(error);
     set({ isAuthenticating: false });
