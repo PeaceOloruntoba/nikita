@@ -16,16 +16,22 @@ export function DishCategory() {
 
   const {
     categories,
+    dishes,
     selectedCategory,
     getCategoryDishes,
-    dishes,
     deleteDish,
+    getIngredients,
+    filterIngredients,
+    ingredients,
+    filteredIngredients,
   } = useMenuStore();
 
   useEffect(() => {
-    if (selectedCategory) {
-      getCategoryDishes(selectedCategory.id);
-    }
+    getIngredients();
+  }, [getIngredients]);
+
+  useEffect(() => {
+    getCategoryDishes(selectedCategory?.id);
   }, [selectedCategory, getCategoryDishes]);
 
   const handleDishSelection = (dish) => {
@@ -34,11 +40,14 @@ export function DishCategory() {
 
   const handleDeleteDish = () => {
     if (selectedDish) {
-      deleteDish(selectedDish.id);
+      deleteDish(selectedDish.id, selectedCategory.id);
       setSelectedDish(null);
     }
   };
 
+  const handleSearchIngredients = (event) => {
+    filterIngredients(event.target.value); // Filter ingredients as the user types
+  };
   return (
     <div className="bg-white rounded-lg p-4 h-full text-2xl flex flex-col gap-6">
       <div className="flex items-center gap-6">
@@ -50,8 +59,8 @@ export function DishCategory() {
       </div>
       <hr />
       {/* <div className="flex flex-col gap-6">
-        {dishes.length > 0 ? (
-          dishes.map((dish) => (
+        {dishes?.length > 0 ? (
+          dishes?.map((dish) => (
             <div key={dish.id} className="flex items-center gap-6">
               <input
                 type="text"
@@ -81,13 +90,48 @@ export function DishCategory() {
           <div>No dishes found for this category</div>
         )}
       </div> */}
-      {isModalOpen && <AddDishCategory onClose={() => setIsModalOpen(false)} />}
-      {isEditOpen && <EditDishCategory onClose={() => setIsEditOpen(false)} />}
+      {isModalOpen && (
+        <AddDishCategory
+          categoryId={selectedCategory.id}
+          onClose={() => setIsModalOpen(false)}
+        />
+      )}
+      {isEditOpen && (
+        <EditDishCategory
+          categoryId={selectedCategory.id}
+          dish={selectedDish}
+          onClose={() => setIsEditOpen(false)}
+        />
+      )}
     </div>
   );
 }
 
-export function AddDishCategory({ onClose }) {
+export function AddDishCategory({ categoryId, onClose }) {
+  const [dishName, setDishName] = useState("");
+  const [selectedIngredients, setSelectedIngredients] = useState([]);
+
+  const { ingredients, addDishToCategory } = useMenuStore();
+
+  const handleSubmit = () => {
+    const newDish = {
+      name: dishName,
+      ingredients: selectedIngredients,
+      categoryId: categoryId, // Pass the category ID here
+    };
+
+    addDishToCategory(newDish); // Add the new dish
+    onClose(); // Close the modal after submission
+  };
+
+  const handleIngredientToggle = (ingredientId) => {
+    setSelectedIngredients((prev) =>
+      prev.includes(ingredientId)
+        ? prev.filter((id) => id !== ingredientId)
+        : [...prev, ingredientId]
+    );
+  };
+
   return (
     <div className="fixed inset-0 flex items-center justify-center bg-black/50">
       <div className="bg-white rounded-lg p-6 text-lg flex flex-col gap-6 w-1/3 h-4/5">
@@ -96,6 +140,8 @@ export function AddDishCategory({ onClose }) {
         </button>
         <input
           type="text"
+          value={dishName}
+          onChange={(e) => setDishName(e.target.value)}
           className="border-none outline outline-[#4895E5]/20 p-3 rounded-lg w-full text-[#3A3A3A] focus:outline-[#4895E5]"
           placeholder="Dish Name"
         />
@@ -106,39 +152,74 @@ export function AddDishCategory({ onClose }) {
           <span className="text-sm">
             Achtung: Bitte wählen Sie alle Ihre Allergien aus, um
             sicherzustellen, dass Ihren Gästen keine falschen Gerichte
-            vorgeschlagen werden. So können wir Ihren Gästen eine sichere und
-            passende Auswahl bieten!
+            vorgeschlagen werden.
           </span>
         </div>
         <input
           type="text"
           className="border-none outline outline-[#4895E5]/20 p-3 rounded-lg w-full text-[#3A3A3A] focus:outline-[#4895E5]"
           placeholder="Search ingredient"
+          onChange={handleSearchIngredients}
         />
         <hr />
-        <ul className="flex flex-col items-center gap-4 text-[#3A3A3A] w-full h-full">
-          <li className="flex items-center justify-between w-full px-2">
-            Ingredient 1 <input type="checkbox" name="ingredient1" />
-          </li>
-          <li className="flex items-center justify-between w-full px-2">
-            Ingredient 2{" "}
-            <input
-              type="checkbox"
-              checked
-              name="ingredient2"
-              className="text-[#6C1233]"
-            />
-          </li>
+        <ul className="flex flex-col items-center gap-4 text-[#3A3A3A] w-full h-full overflow-y-auto">
+          {ingredients.length > 0 ? (
+            ingredients.map((ingredient) => (
+              <li
+                key={ingredient.id}
+                className="flex items-center justify-between w-full px-2"
+              >
+                <span>{ingredient.name}</span>
+                <input
+                  type="checkbox"
+                  checked={selectedIngredients.includes(ingredient.id)}
+                  onChange={() => handleIngredientToggle(ingredient.id)}
+                />
+              </li>
+            ))
+          ) : (
+            <div>No ingredients found</div>
+          )}
         </ul>
-        <button className="cursor-pointer bg-[#4895E5] text-white p-3 rounded-lg w-full flex items-center text-center justify-center">
+        <button
+          className="cursor-pointer bg-[#4895E5] text-white p-3 rounded-lg w-full flex items-center justify-center"
+          onClick={handleSubmit}
+        >
           <MdCheckCircleOutline size={18} />
+          Add Dish
         </button>
       </div>
     </div>
   );
 }
 
-export function EditDishCategory({ onClose }) {
+export function EditDishCategory({ categoryId, dish, onClose }) {
+  const [dishName, setDishName] = useState(dish.name);
+  const [selectedIngredients, setSelectedIngredients] = useState(
+    dish.ingredients || []
+  );
+
+  const { ingredients, updateDish } = useMenuStore();
+
+  const handleSubmit = () => {
+    const updatedDish = {
+      name: dishName,
+      ingredients: selectedIngredients,
+      categoryId: categoryId, // Pass the category ID here
+    };
+
+    updateDish(dish.id, updatedDish); // Pass the dish ID for update
+    onClose(); // Close the modal after update
+  };
+
+  const handleIngredientToggle = (ingredientId) => {
+    setSelectedIngredients((prev) =>
+      prev.includes(ingredientId)
+        ? prev.filter((id) => id !== ingredientId)
+        : [...prev, ingredientId]
+    );
+  };
+
   return (
     <div className="fixed inset-0 flex items-center justify-center bg-black/50">
       <div className="bg-white rounded-lg p-6 text-lg flex flex-col gap-6 w-1/3 h-4/5">
@@ -147,6 +228,8 @@ export function EditDishCategory({ onClose }) {
         </button>
         <input
           type="text"
+          value={dishName}
+          onChange={(e) => setDishName(e.target.value)}
           className="border-none outline outline-[#4895E5]/20 p-2 rounded-lg w-full text-[#3A3A3A] focus:outline-[#4895E5]"
           placeholder="Dish Name"
         />
@@ -157,8 +240,7 @@ export function EditDishCategory({ onClose }) {
           <span className="text-sm">
             Achtung: Bitte wählen Sie alle Ihre Allergien aus, um
             sicherzustellen, dass Ihren Gästen keine falschen Gerichte
-            vorgeschlagen werden. So können wir Ihren Gästen eine sichere und
-            passende Auswahl bieten!
+            vorgeschlagen werden.
           </span>
         </div>
         <input
@@ -168,21 +250,30 @@ export function EditDishCategory({ onClose }) {
         />
         <hr />
         <ul className="flex flex-col items-center gap-4 text-[#3A3A3A] w-full h-full">
-          <li className="flex items-center justify-between w-full px-2">
-            Ingredient 1 <input type="checkbox" name="ingredient1" />
-          </li>
-          <li className="flex items-center justify-between w-full px-2">
-            Ingredient 2{" "}
-            <input
-              type="checkbox"
-              checked
-              name="ingredient2"
-              className="text-[#6C1233]"
-            />
-          </li>
+          {ingredients.length > 0 ? (
+            ingredients.map((ingredient) => (
+              <li
+                key={ingredient.id}
+                className="flex items-center justify-between w-full px-2"
+              >
+                <span>{ingredient.name}</span>
+                <input
+                  type="checkbox"
+                  checked={selectedIngredients.includes(ingredient.id)}
+                  onChange={() => handleIngredientToggle(ingredient.id)}
+                />
+              </li>
+            ))
+          ) : (
+            <div>No ingredients found</div>
+          )}
         </ul>
-        <button className="cursor-pointer bg-[#4895E5] text-white p-3 rounded-lg w-full flex items-center text-center justify-center">
+        <button
+          className="cursor-pointer bg-[#4895E5] text-white p-3 rounded-lg w-full flex items-center justify-center"
+          onClick={handleSubmit}
+        >
           <MdCheckCircleOutline size={18} />
+          Update Dish
         </button>
       </div>
     </div>
