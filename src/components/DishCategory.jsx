@@ -45,9 +45,6 @@ export function DishCategory() {
     }
   };
 
-  const handleSearchIngredients = (event) => {
-    filterIngredients(event.target.value); // Filter ingredients as the user types
-  };
   return (
     <div className="bg-white rounded-lg p-4 h-full text-2xl flex flex-col gap-6">
       <div className="flex items-center gap-6">
@@ -131,6 +128,9 @@ export function AddDishCategory({ categoryId, onClose }) {
         : [...prev, ingredientId]
     );
   };
+    const handleSearchIngredients = (event) => {
+      filterIngredients(event.target.value);
+    };
 
   return (
     <div className="fixed inset-0 flex items-center justify-center bg-black/50">
