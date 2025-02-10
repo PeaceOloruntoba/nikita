@@ -18,6 +18,7 @@ export default function Restaurant() {
     createTable(newTable);
     setShowCreateModal(false);
   };
+  console.log(tables)
 
   return (
     <div className="w-full h-full flex flex-col items-center p-8 gap-8">
@@ -35,7 +36,7 @@ export default function Restaurant() {
 
       <div className="grid grid-cols-4 gap-8 w-full">
         {tables?.map((data) => (
-          <Card number={data?.name} key={data?.id} qrCode={data?.token} />
+          <Card number={data?.capacity} key={data?.id} qrCode={data?.token} />
         ))}
       </div>
       {showCreateModal && (
