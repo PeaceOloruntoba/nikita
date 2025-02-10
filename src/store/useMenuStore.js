@@ -19,7 +19,7 @@ const createCategory = async (categoryName, set) => {
     const response = await axiosInstance.post("/menu/categories", {
       name: categoryName,
     });
-    set({ categories: [...set.categories, response.data.data] });
+    //  set({ categories: [...set.categories, response.data.data] });
     toast.success("Category added successfully!");
   } catch (error) {
     handleError(error);
@@ -120,13 +120,13 @@ const useMenuStore = create((set) => ({
   createCategory: (categoryName) => createCategory(categoryName, set),
   deleteCategory: (categoryId) => deleteCategory(categoryId, set),
   getCategoryDishes: (categoryId) => getCategoryDishes(categoryId, set),
-  addDishToCategory: (categoryId, dish) => addDishToCategory(categoryId, dish, set),
+  addDishToCategory: (categoryId, dish) =>
+    addDishToCategory(categoryId, dish, set),
   updateDish: (dishId, updatedDish) => updateDish(dishId, updatedDish, set),
   deleteDish: (dishId) => deleteDish(dishId, set),
   setSelectedCategory: (category) => set({ selectedCategory: category }),
   getIngredients: () => getIngredients(set),
   filterIngredients: (searchQuery) => filterIngredients(searchQuery, set),
 }));
-
 
 export default useMenuStore;

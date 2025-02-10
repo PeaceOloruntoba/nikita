@@ -84,7 +84,7 @@ export function DishCategory() {
         />
       </div>
       <hr />
-      <div className="flex flex-col gap-3">
+      {/* <div className="flex flex-col gap-3">
         {dishes?.map((dish) => (
           <div key={dish.id} className="flex items-center gap-6">
             <div className="p-2 w-full">{dish.name}</div>
@@ -109,7 +109,7 @@ export function DishCategory() {
             />
           </div>
         ))}
-      </div>
+      </div> */}
 
       {/* Edit Dish Modal */}
       {openEditDishModal && (
