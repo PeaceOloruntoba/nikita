@@ -42,6 +42,8 @@ export function DishCategory() {
     }
   };
 
+  console.log(dishes)
+
   const handleEditDish = () => {
     if (dishToEdit && dishName && dishPrice) {
       updateDish(dishToEdit.id, { name: dishName, price: dishPrice });
