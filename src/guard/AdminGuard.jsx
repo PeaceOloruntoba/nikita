@@ -4,13 +4,11 @@ import { Outlet } from "react-router";
 import useAuthStore from "../store/useAuthStore";
 
 export default function AdminGuard() {
-  const { user } = useAuthStore((state) => ({
-    user: state.user,
-  }));
+  const { user } = useAuthStore();
 
   console.log(user);
 
-  if (!user?.roles?.includes("admin")) {
+  if (!user?.roles == "admin") {
     return <PageNotFound />;
   }
 
