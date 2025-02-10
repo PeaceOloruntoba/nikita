@@ -7,9 +7,13 @@ import { handleError } from "../utils/handleError";
 const createTable = async (set, tableData) => {
   set({ isLoading: true });
   try {
-    const response = await axiosInstance.post("/restaurant/tables", tableData);
+    const response = await axiosInstance.post("/restaurant/tables", {
+      name: tableData.name,
+      description: tableData.description,
+      capacity: tableData.capacity,
+    });
     toast.success("Table created successfully!");
-    await getTables(set);
+    await getTables(set); // Refresh tables list after creation
     set({ isLoading: false });
   } catch (error) {
     handleError(error);

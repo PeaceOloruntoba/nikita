@@ -2,7 +2,7 @@ import React, { useRef, useState, useEffect } from "react";
 import Button from "./shared/Button";
 import { MdQrCode } from "react-icons/md";
 
-export function Card({ number, qrCode }) {
+export function Card({ number, qrCode, onDelete }) {
   const [showDetails, setShowDetails] = useState(false);
   const [showQR, setShowQR] = useState(false);
   const detailsRef = useRef(null);
@@ -67,7 +67,7 @@ export function Card({ number, qrCode }) {
             ref={detailsRef}
             className="p-8 bg-white rounded-lg flex flex-col gap-2"
           >
-            <Details />
+            <Details onDelete={onDelete} />
           </div>
         </div>
       )}
@@ -75,55 +75,20 @@ export function Card({ number, qrCode }) {
   );
 }
 
-export function Details() {
+export function Details({ onDelete }) {
   return (
     <div className="flex flex-col gap-2 text-black">
+      {/* Details about the table */}
       <div className="flex flex-col gap-2">
-        <span>Name of Person 1 who scanned the QR code</span>
-        <div className="flex items-center justify-between">
-          <span>Dish</span>
-          <span>30€</span>
-        </div>
-        <div className="flex items-center justify-between">
-          <span>Dish</span>
-          <span>30€</span>
-        </div>
-        <div className="flex items-center justify-between">
-          <span>Drink</span>
-          <span>30€</span>
-        </div>
-      </div>
-      <div className="flex flex-col gap-2">
-        <span>Name of Person 2 who scanned the QR code</span>
-        <div className="flex items-center justify-between">
-          <span>Dish</span>
-          <span>30€</span>
-        </div>
-        <div className="flex items-center justify-between">
-          <span>Dish</span>
-          <span>30€</span>
-        </div>
-        <div className="flex items-center justify-between">
-          <span>Drink</span>
-          <span>30€</span>
-        </div>
+        <span>Name of Person who scanned the QR code</span>
+        {/* Table data goes here */}
       </div>
       <div className="flex items-center gap-4">
+        {/* Other buttons */}
         <Button
-          value={"Ordered"}
+          value={"Delete"}
           className="cursor-pointer py-2 px-3 rounded-lg text-2xl bg-[#F2EBF0] text-black"
-        />
-        <Button
-          value={"Paid"}
-          className="cursor-pointer py-2 px-3 rounded-lg text-2xl bg-[#6C1233] text-white"
-        />
-        <Button
-          value={"Cleaned"}
-          className="cursor-pointer py-2 px-3 rounded-lg text-2xl bg-[#6C1233] text-white"
-        />
-        <Button
-          value={"Finished"}
-          className="cursor-pointer py-2 px-3 rounded-lg text-2xl bg-[#6C1233] text-white"
+          onClick={onDelete} // Trigger delete function
         />
       </div>
     </div>
