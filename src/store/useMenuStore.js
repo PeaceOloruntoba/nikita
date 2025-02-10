@@ -20,22 +20,30 @@ const createCategory = async (categoryName, set) => {
     const response = await axiosInstance.post("/menu/categories", {
       name: categoryName,
     });
-    //  set({ categories: [...set.categories, response.data.data] });
+
+    // Call getCategories to refresh the category list after successful creation
+    await getCategories(set); // Fetch updated categories
+
     toast.success("Category added successfully!");
   } catch (error) {
     handleError(error);
   }
 };
 
+
 // Delete a category
 const deleteCategory = async (categoryId, set) => {
   try {
-    await axiosInstance.delete(`/menu/categories/${categoryId}`);
+    const response= await axiosInstance.delete(`/menu/categories/${categoryId}`);
+   //  console.log(response)
+    await getCategories(set); // Fetch updated categories
+
     toast.success("Category deleted successfully!");
   } catch (error) {
     handleError(error);
   }
 };
+
 
 // Fetch dishes for a specific category
 const getCategoryDishes = async (categoryId, set) => {

@@ -42,7 +42,7 @@ export function DishCategory() {
     }
   };
 
-  console.log(dishes)
+//   console.log(dishes)
 
   const handleEditDish = () => {
     if (dishToEdit && dishName && dishPrice) {
