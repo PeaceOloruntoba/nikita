@@ -8,6 +8,7 @@ const getCategories = async (set) => {
   try {
     const response = await axiosInstance.get("/menu/categories");
     set({ categories: response.data.data || [] });
+    console.log(response.data.data)
   } catch (error) {
     handleError(error);
   }
@@ -30,11 +31,6 @@ const createCategory = async (categoryName, set) => {
 const deleteCategory = async (categoryId, set) => {
   try {
     await axiosInstance.delete(`/menu/categories/${categoryId}`);
-    set({
-      categories: set.categories.filter(
-        (category) => category.id !== categoryId
-      ),
-    });
     toast.success("Category deleted successfully!");
   } catch (error) {
     handleError(error);

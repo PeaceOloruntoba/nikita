@@ -34,7 +34,6 @@ export function MenuCategory() {
 
   const handleConfirmcreateCategory = () => {
     createCategory(newCategory);
-    getCategories();
     setNewCategory(""); // Clear input after adding
     setIsModalOpen(false); // Close modal
   };
