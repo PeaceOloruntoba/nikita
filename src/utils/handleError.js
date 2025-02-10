@@ -6,4 +6,5 @@ export const handleError = (error) => {
     toast.error(response.message);
   }
   toast.error(error?.message);
+  console.log(error)
 };

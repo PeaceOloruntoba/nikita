@@ -4,6 +4,7 @@ import { NavLink, useNavigate } from "react-router";
 import Button from "../components/shared/Button";
 import { toast } from "sonner";
 import useAuthStore from "../store/useAuthStore";
+import Spinner from "../components/shared/Spinner";
 
 export default function Signup() {
   const navigate = useNavigate();
@@ -12,8 +13,8 @@ export default function Signup() {
   const [user, setUser] = useState({
     email: "",
     password: "",
-    confirmPassword: "",
-    agreed: false,
+    confirm_password: "",
+    terms_accepted: false,
   });
 
   function handleChange(e) {
@@ -26,11 +27,11 @@ export default function Signup() {
 
   async function handleSubmit(e) {
     e.preventDefault();
-    if (user.password !== user.confirmPassword) {
+    if (user.password !== user.confirm_password) {
       toast.error("Passwords do not match!");
       return;
     }
-    if (!user.agreed) {
+    if (!user.terms_accepted) {
       toast.error("You must agree to the terms and conditions!");
       return;
     }
@@ -71,8 +72,8 @@ export default function Signup() {
             <input
               required
               type="password"
-              name="confirmPassword"
-              value={user.confirmPassword}
+              name="confirm_password"
+              value={user.confirm_password}
               onChange={handleChange}
               className="bg-white outline-none border p-3 rounded-xl"
               placeholder="Confirm your password"
@@ -81,8 +82,8 @@ export default function Signup() {
               <input
                 required
                 type="checkbox"
-                name="agreed"
-                checked={user.agreed}
+                name="terms_accepted"
+                checked={user.terms_accepted}
                 onChange={handleChange}
                 className="w-4 h-4"
               />
@@ -97,7 +98,7 @@ export default function Signup() {
               </NavLink>
             </div>
             <Button
-              value={isAuthenticating ? "Signing up..." : "Signup"}
+              value={isAuthenticating ? <Spinner /> : "Signup"}
               className="bg-secondary rounded-xl text-white text-lg font-semibold py-2 hover:bg-primary cursor-pointer disabled:opacity-50"
               disabled={isAuthenticating}
             />
