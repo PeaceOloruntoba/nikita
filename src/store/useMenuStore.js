@@ -91,21 +91,42 @@ const deleteDish = async (dishId, set) => {
   }
 };
 
+// Add ingredients list to store
+const getIngredients = async (set) => {
+  try {
+    const response = await axiosInstance.get("/menu/ingredients");
+    set({ ingredients: response.data.data || [] });
+  } catch (error) {
+    handleError(error);
+  }
+};
+
+// Add ingredient filtering logic
+const filterIngredients = (searchQuery, set) => {
+  const filteredIngredients = set.ingredients.filter((ingredient) =>
+    ingredient.name.toLowerCase().includes(searchQuery.toLowerCase())
+  );
+  set({ filteredIngredients });
+};
+
 const useMenuStore = create((set) => ({
   categories: [],
   dishes: [],
-  isLoading: false,
+  ingredients: [],
+  filteredIngredients: [],
   selectedCategory: null,
 
   getCategories: () => getCategories(set),
   createCategory: (categoryName) => createCategory(categoryName, set),
   deleteCategory: (categoryId) => deleteCategory(categoryId, set),
   getCategoryDishes: (categoryId) => getCategoryDishes(categoryId, set),
-  addDishToCategory: (categoryId, dish) =>
-    addDishToCategory(categoryId, dish, set),
+  addDishToCategory: (categoryId, dish) => addDishToCategory(categoryId, dish, set),
   updateDish: (dishId, updatedDish) => updateDish(dishId, updatedDish, set),
   deleteDish: (dishId) => deleteDish(dishId, set),
   setSelectedCategory: (category) => set({ selectedCategory: category }),
+  getIngredients: () => getIngredients(set),
+  filterIngredients: (searchQuery) => filterIngredients(searchQuery, set),
 }));
+
 
 export default useMenuStore;
