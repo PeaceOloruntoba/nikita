@@ -8,7 +8,7 @@ const createQuestion = async (set, questionData) => {
   set({ isLoading: true });
   try {
     const response = await axiosInstance.post("/questions", questionData);
-    console.log(response)
+    console.log(response);
     toast.success("Question created successfully!");
     await getQuestions(set);
     set({ isLoading: false });
@@ -68,9 +68,8 @@ const deleteQuestion = async (set, questionId) => {
 const useQuestionStore = create((set) => ({
   questions: [],
   isLoading: false,
-  getFeedbacks: () => getFeedbacks(set),
-  createQuestion: (questionData) => createQuestion(set, questionData),
   getQuestions: () => getQuestions(set),
+  createQuestion: (questionData) => createQuestion(set, questionData),
   updateQuestion: (questionId, updatedData) =>
     updateQuestion(set, questionId, updatedData),
   deleteQuestion: (questionId) => deleteQuestion(set, questionId),
