@@ -6,8 +6,6 @@ import useAuthStore from "../store/useAuthStore";
 export default function AdminGuard() {
   const { user } = useAuthStore();
 
-  console.log(user);
-
   if (!user?.roles == "admin") {
     return <PageNotFound />;
   }
