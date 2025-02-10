@@ -28,14 +28,14 @@ export default function Feedback() {
       id: 2,
       name: "Positive Feedback",
       value: positiveFeedbackCount,
-      status: "positive",
+      status: 1,
       icon: <img src={positiveFeedback} alt="Positive Feedback" />,
     },
     {
       id: 3,
       name: "Negative Feedback",
       value: negativeFeedbackCount,
-      status: "negative",
+      status: 0,
       icon: <img src={negativeFeedback} alt="Negative Feedback" />,
     },
   ];
