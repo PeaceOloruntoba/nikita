@@ -9,22 +9,25 @@ import {
 import { PiWarningCircleThin } from "react-icons/pi";
 import useMenuStore from "../store/useMenuStore";
 
+const {
+  categories,
+  dishes,
+  selectedCategory,
+  getCategoryDishes,
+  deleteDish,
+  getIngredients,
+  filterIngredients,
+  ingredients,
+  filteredIngredients,
+} = useMenuStore();
+const handleSearchIngredients = (event) => {
+  filterIngredients(event.target.value);
+};
+
 export function DishCategory() {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isEditOpen, setIsEditOpen] = useState(false);
   const [selectedDish, setSelectedDish] = useState(null);
-
-  const {
-    categories,
-    dishes,
-    selectedCategory,
-    getCategoryDishes,
-    deleteDish,
-    getIngredients,
-    filterIngredients,
-    ingredients,
-    filteredIngredients,
-  } = useMenuStore();
 
   useEffect(() => {
     getIngredients();
@@ -128,9 +131,6 @@ export function AddDishCategory({ categoryId, onClose }) {
         : [...prev, ingredientId]
     );
   };
-    const handleSearchIngredients = (event) => {
-      filterIngredients(event.target.value);
-    };
 
   return (
     <div className="fixed inset-0 flex items-center justify-center bg-black/50">
