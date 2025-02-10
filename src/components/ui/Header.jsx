@@ -2,13 +2,18 @@ import React, { useState } from "react";
 import { useNavigate } from "react-router";
 import { PiUserBold } from "react-icons/pi";
 import { LuLogOut } from "react-icons/lu";
+import useAuthStore from "../../store/useAuthStore";
 
 export default function Header() {
+  const { logoutUser } = useAuthStore();
   const navigate = useNavigate();
   const [isOpen, setIsOpen] = useState(false);
   const toggleDropdown = () => {
     setIsOpen(!isOpen);
   };
+  function handleLogout() {
+    logoutUser(navigate);
+  }
   return (
     <div className="w-full flex p-4 items-center justify-end">
       <div className="relative hidden md:block">
