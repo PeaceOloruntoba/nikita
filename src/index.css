@@ -17,3 +17,34 @@
     color: #a44b6f;
   }
 }
+
+body{
+    box-sizing: border-box;
+    padding: 0;
+    margin: 0;
+    width: 100dvh;
+    overflow-x: hidden;
+    scroll-behavior: smooth;
+}
+
+.hide-scrollbar::-webkit-scrollbar {
+    display: none;
+}
+
+.hide-scrollbar {
+    -ms-overflow-style: none;
+    /* IE and Edge */
+    scrollbar-width: none;
+    /* Firefox */
+}
+
+.nice-scrollbar::-webkit-scrollbar {
+    display: 2px;
+}
+
+.nice-scrollbar {
+    -ms-overflow-style: 2px;
+    /* IE and Edge */
+    scrollbar-width: 2px;
+    /* Firefox */
+}
