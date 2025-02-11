@@ -38,7 +38,7 @@ export default function Restaurant() {
           <Card
             number={data?.capacity}
             key={data?.id}
-            qrCode={data?.token}
+            qrCode={data?.id}
             tableName={data?.name}
           />
         ))}
