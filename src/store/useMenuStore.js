@@ -48,7 +48,6 @@ const deleteCategory = async (categoryId, set) => {
 const getCategoryDishes = async (categoryId, set) => {
   try {
     const response = await axiosInstance.get(`/menu/categories/${categoryId}`);
-    console.log(response.data.data.dishes)
     set({ dishes: response.data.data.dishes || [] });
   } catch (error) {
     handleError(error);
@@ -60,7 +59,6 @@ const addDishToCategory = async (dish, set) => {
   try {
     const response = await axiosInstance.post(`/menu/dishes`, dish);
     // set({ dishes: [...set.dishes, response.data.data] });
-    console.log(response)
     await getCategoryDishes();
     toast.success("Dish added successfully!");
   } catch (error) {
