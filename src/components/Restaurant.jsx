@@ -1,6 +1,7 @@
 import React, { useRef, useState, useEffect } from "react";
 import Button from "./shared/Button";
 import { MdQrCode } from "react-icons/md";
+import QRCode from "react-qr-code";
 
 export function Card({ number, qrCode, onDelete, tableName }) {
   const [showDetails, setShowDetails] = useState(false);
@@ -57,7 +58,7 @@ export function Card({ number, qrCode, onDelete, tableName }) {
       {showQR && (
         <div className="fixed inset-0 flex items-center justify-center bg-black/90">
           <div ref={qrRef} className="bg-white p-4 rounded-lg">
-            <img src={qrCode} alt="QR Code" className="w-64 h-64" />
+            <QRCode value={qrCode} />
           </div>
         </div>
       )}
