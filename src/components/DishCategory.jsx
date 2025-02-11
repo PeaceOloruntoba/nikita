@@ -115,11 +115,13 @@ export function AddDishCategory({ categoryId, onClose }) {
 
   const { filterIngredients, ingredients, addDishToCategory } = useMenuStore();
 
+  console.log(ingredients)
+
   const handleSubmit = () => {
     const newDish = {
       name: dishName,
       ingredients: selectedIngredients,
-      categoryId: categoryId, // Pass the category ID here
+      category_id: categoryId, // Pass the category ID here
     };
 
     addDishToCategory(newDish); // Add the new dish
