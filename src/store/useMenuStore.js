@@ -8,7 +8,6 @@ const getCategories = async (set) => {
   try {
     const response = await axiosInstance.get("/menu/categories");
     set({ categories: response.data.data || [] });
-    console.log(response.data.data);
   } catch (error) {
     handleError(error);
   }
@@ -57,10 +56,10 @@ const getCategoryDishes = async (categoryId, set) => {
 
 // Add a new dish to a category
 const addDishToCategory = async (dish, set) => {
-  console.log(dish);
   try {
     const response = await axiosInstance.post(`/menu/dishes`, dish);
-    set({ dishes: [...set.dishes, response.data.data] });
+    // set({ dishes: [...set.dishes, response.data.data] });
+    await getCategoryDishes();
     toast.success("Dish added successfully!");
   } catch (error) {
     handleError(error);
