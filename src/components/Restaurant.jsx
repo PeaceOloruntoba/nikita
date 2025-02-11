@@ -34,31 +34,23 @@ export function Card({ number, qrCode, onDelete, tableName }) {
     };
   }, []);
 
+  // Print QR Code
   const handlePrint = () => {
-    const printWindow = window.open("", "_blank");
-    printWindow.document.write(`
-      <html>
-        <head>
-          <title>Print QR Code</title>
-          <style>
-            body { text-align: center; font-family: Arial, sans-serif; }
-            .qr-container { display: flex; justify-content: center; align-items: center; height: 100vh; }
-          </style>
-        </head>
-        <body>
-          <div class="qr-container">
-            ${qrPrintRef.current.innerHTML}
-          </div>
-          <script>
-            window.onload = function() {
-              window.print();
-              window.onafterprint = function() { window.close(); }
-            };
-          </script>
-        </body>
-      </html>
-    `);
-    printWindow.document.close();
+    const originalContents = document.body.innerHTML; // Save original page content
+    const printContents = qrPrintRef.current.innerHTML; // Get only the QR code
+
+    document.body.innerHTML = `
+      <div style="display: flex; justify-content: center; align-items: center; height: 100vh;">
+        ${printContents}
+      </div>
+    `; // Replace page with QR code
+
+    window.print(); // Trigger print
+
+    setTimeout(() => {
+      document.body.innerHTML = originalContents; // Restore original page
+      window.location.reload(); // Refresh to restore events and styles
+    }, 500); // Delay to ensure print is triggered before restoring
   };
 
   return (
@@ -116,7 +108,6 @@ export function Card({ number, qrCode, onDelete, tableName }) {
     </>
   );
 }
-
 
 export function Details({ onDelete, tableName, number }) {
   return (
