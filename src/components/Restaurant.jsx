@@ -8,6 +8,7 @@ export function Card({ number, qrCode, onDelete, tableName }) {
   const [showQR, setShowQR] = useState(false);
   const detailsRef = useRef(null);
   const qrRef = useRef(null);
+  const qrPrintRef = useRef(null);
 
   const handleClickOutside = (event) => {
     if (
@@ -33,6 +34,33 @@ export function Card({ number, qrCode, onDelete, tableName }) {
     };
   }, []);
 
+  const handlePrint = () => {
+    const printWindow = window.open("", "_blank");
+    printWindow.document.write(`
+      <html>
+        <head>
+          <title>Print QR Code</title>
+          <style>
+            body { text-align: center; font-family: Arial, sans-serif; }
+            .qr-container { display: flex; justify-content: center; align-items: center; height: 100vh; }
+          </style>
+        </head>
+        <body>
+          <div class="qr-container">
+            ${qrPrintRef.current.innerHTML}
+          </div>
+          <script>
+            window.onload = function() {
+              window.print();
+              window.onafterprint = function() { window.close(); }
+            };
+          </script>
+        </body>
+      </html>
+    `);
+    printWindow.document.close();
+  };
+
   return (
     <>
       <div
@@ -55,26 +83,40 @@ export function Card({ number, qrCode, onDelete, tableName }) {
           />
         </div>
       </div>
+
       {showQR && (
         <div className="fixed inset-0 flex items-center justify-center bg-black/90">
-          <div ref={qrRef} className="bg-white p-8 rounded-lg">
-            <QRCode value={qrCode} />
+          <div ref={qrRef} className="bg-white p-8 rounded-lg text-center">
+            <div ref={qrPrintRef}>
+              <QRCode value={qrCode} />
+            </div>
+            <Button
+              className="mt-4 bg-blue-500 text-white px-4 py-2 rounded-lg"
+              onClick={handlePrint}
+              value="Print QR Code"
+            />
           </div>
         </div>
       )}
+
       {showDetails && (
         <div className="fixed inset-0 flex items-center justify-center bg-black/80">
           <div
             ref={detailsRef}
             className="p-6 bg-white rounded-lg flex flex-col gap-2"
           >
-            <Details onDelete={onDelete} tableName={tableName} number={number} />
+            <Details
+              onDelete={onDelete}
+              tableName={tableName}
+              number={number}
+            />
           </div>
         </div>
       )}
     </>
   );
 }
+
 
 export function Details({ onDelete, tableName, number }) {
   return (
