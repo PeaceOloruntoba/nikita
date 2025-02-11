@@ -91,13 +91,13 @@ export function DishCategory() {
       </div> */}
       {isModalOpen && (
         <AddDishCategory
-          categoryId={selectedCategory.id}
+          categoryId={selectedCategory?.id}
           onClose={() => setIsModalOpen(false)}
         />
       )}
       {isEditOpen && (
         <EditDishCategory
-          categoryId={selectedCategory.id}
+          categoryId={selectedCategory?.id}
           dish={selectedDish}
           onClose={() => setIsEditOpen(false)}
         />
