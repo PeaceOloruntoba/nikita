@@ -48,6 +48,8 @@ const deleteCategory = async (categoryId, set) => {
 const getCategoryDishes = async (categoryId, set) => {
   try {
     const response = await axiosInstance.get(`/menu/categories/${categoryId}`);
+    console.log(response)
+    console.log(categoryId);
     set({ dishes: response.data.data || [] });
   } catch (error) {
     handleError(error);
