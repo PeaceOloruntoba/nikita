@@ -57,7 +57,7 @@ export function Card({ number, qrCode, onDelete, tableName }) {
       </div>
       {showQR && (
         <div className="fixed inset-0 flex items-center justify-center bg-black/90">
-          <div ref={qrRef} className="bg-white p-4 rounded-lg">
+          <div ref={qrRef} className="bg-white p-8 rounded-lg">
             <QRCode value={qrCode} />
           </div>
         </div>
