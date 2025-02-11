@@ -34,24 +34,34 @@ export function Card({ number, qrCode, onDelete, tableName }) {
     };
   }, []);
 
-  // Print QR Code
-  const handlePrint = () => {
-    const originalContents = document.body.innerHTML; // Save original page content
-    const printContents = qrPrintRef.current.innerHTML; // Get only the QR code
+const handlePrint = () => {
+  const originalContents = document.body.innerHTML;
+  const printContents = qrPrintRef.current.innerHTML;
 
-    document.body.innerHTML = `
-      <div style="display: flex; justify-content: center; align-items: center; height: 100vh;">
+  document.body.innerHTML = `
+    <div style="
+      display: flex; 
+      flex-direction: column; 
+      align-items: center; 
+      justify-content: center; 
+      height: 100vh; 
+      width: 100vw; 
+      text-align: center;
+    ">
+      <div style="padding: 20px; border: 2px solid black; border-radius: 10px;">
         ${printContents}
       </div>
-    `; // Replace page with QR code
+    </div>
+  `;
 
-    window.print(); // Trigger print
+  window.print();
 
-    setTimeout(() => {
-      document.body.innerHTML = originalContents; // Restore original page
-      window.location.reload(); // Refresh to restore events and styles
-    }, 500); // Delay to ensure print is triggered before restoring
-  };
+  setTimeout(() => {
+    document.body.innerHTML = originalContents;
+    window.location.reload();
+  }, 500);
+};
+
 
   return (
     <>
