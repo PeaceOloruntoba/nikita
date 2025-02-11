@@ -33,7 +33,6 @@ export default function Restaurant() {
           onClick={() => setShowCreateModal(true)}
         />
       </div>
-
       <div className="grid grid-cols-4 gap-8 w-full">
         {tables?.map((data) => (
           <Card
