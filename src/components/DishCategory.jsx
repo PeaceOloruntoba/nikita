@@ -57,7 +57,7 @@ export function DishCategory() {
         />
       </div>
       <hr />
-      {/* <div className="flex flex-col gap-6">
+      <div className="flex flex-col gap-6">
         {dishes?.length > 0 ? (
           dishes?.map((dish) => (
             <div key={dish.id} className="flex items-center gap-6">
@@ -88,7 +88,7 @@ export function DishCategory() {
         ) : (
           <div>No dishes found for this category</div>
         )}
-      </div> */}
+      </div>
       {isModalOpen && (
         <AddDishCategory
           categoryId={selectedCategory?.id}
