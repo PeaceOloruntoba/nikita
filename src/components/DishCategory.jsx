@@ -60,15 +60,13 @@ export function DishCategory() {
       <div className="flex flex-col gap-6">
         {dishes?.length > 0 ? (
           dishes?.map((dish) => (
-            <div key={dish.id} className="flex items-center gap-6">
-              <input
-                type="text"
-                className="border-none outline outline-[#4895E5]/20 p-3 rounded-lg w-full text-[#3A3A3A] focus:outline-[#4895E5]"
-                placeholder={dish.name}
-                value={dish.name}
-                disabled
-                onClick={() => handleDishSelection(dish)}
-              />
+            <div
+              key={dish.id}
+              className={`flex items-center justify-between gap-6 p-2 cursor-pointer ${
+                selectedDish?.id === dish.id ? "bg-gray-200" : ""
+              }`}
+            >
+              <span className="text-[#3A3A3A]">{dish.name}</span>
               {selectedDish && selectedDish.id === dish.id && (
                 <>
                   <Button
