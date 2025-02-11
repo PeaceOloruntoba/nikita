@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Button from "../components/shared/Button";
 import { MdOutlineAddCircleOutline } from "react-icons/md";
 import { Card } from "../components/Restaurant";
@@ -12,13 +12,17 @@ export default function Restaurant() {
     capacity: "",
   });
 
-  const { tables, createTable, isLoading } = useRestaurantStore();
+  const { tables, getTables, createTable, isLoading } = useRestaurantStore();
+
+  useEffect(() => {
+    getTables();
+  }, []);
 
   const handleCreateTable = () => {
     createTable(newTable);
     setShowCreateModal(false);
   };
-  console.log(tables)
+  console.log(tables);
 
   return (
     <div className="w-full h-full flex flex-col items-center p-8 gap-8">
