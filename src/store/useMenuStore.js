@@ -60,6 +60,7 @@ const addDishToCategory = async (dish, set) => {
   try {
     const response = await axiosInstance.post(`/menu/dishes`, dish);
     // set({ dishes: [...set.dishes, response.data.data] });
+    console.log(response)
     await getCategoryDishes();
     toast.success("Dish added successfully!");
   } catch (error) {
