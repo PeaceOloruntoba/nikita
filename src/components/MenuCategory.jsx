@@ -11,6 +11,7 @@ export function MenuCategory() {
     getCategories,
     setSelectedCategory,
     createCategory,
+    getCategoryDishes,
     deleteCategory,
   } = useMenuStore();
 
@@ -24,6 +25,7 @@ export function MenuCategory() {
 
   const handleCategoryClick = (category) => {
     setSelectedCategory(category);
+    getCategoryDishes(category?.id)
   };
 
   const handlecreateCategory = () => {
