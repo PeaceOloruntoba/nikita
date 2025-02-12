@@ -1,7 +1,7 @@
 import React, { useRef, useState, useEffect } from "react";
 import Button from "./shared/Button";
 import { MdQrCode } from "react-icons/md";
-import { QRCode } from "react-qrcode-logo";
+import { QRCode } from "qrcode.react";
 
 export function Card({ number, qrCode, onDelete, tableName }) {
   const [showDetails, setShowDetails] = useState(false);
