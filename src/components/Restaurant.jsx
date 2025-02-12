@@ -29,6 +29,7 @@ export function Card({ number, qrCode, onDelete, tableName }) {
 
   useEffect(() => {
     document.addEventListener("mousedown", handleClickOutside);
+    console.log(qrCode)
     return () => {
       document.removeEventListener("mousedown", handleClickOutside);
     };
@@ -62,7 +63,6 @@ const handlePrint = () => {
   }, 500);
 };
 
-console.log(qrCode)
 
 
   return (
