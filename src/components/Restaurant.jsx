@@ -34,11 +34,11 @@ export function Card({ number, qrCode, onDelete, tableName }) {
     };
   }, []);
 
-const handlePrint = () => {
-  const originalContents = document.body.innerHTML;
-  const printContents = qrPrintRef.current.innerHTML;
+  const handlePrint = () => {
+    const originalContents = document.body.innerHTML;
+    const printContents = qrPrintRef.current.innerHTML;
 
-  document.body.innerHTML = `
+    document.body.innerHTML = `
     <div style="
       display: flex; 
       flex-direction: column; 
@@ -54,15 +54,13 @@ const handlePrint = () => {
     </div>
   `;
 
-  window.print();
+    window.print();
 
-  setTimeout(() => {
-    document.body.innerHTML = originalContents;
-    window.location.reload();
-  }, 500);
-};
-
-
+    setTimeout(() => {
+      document.body.innerHTML = originalContents;
+      window.location.reload();
+    }, 500);
+  };
 
   return (
     <>
@@ -91,7 +89,7 @@ const handlePrint = () => {
         <div className="fixed inset-0 flex items-center justify-center bg-black/90">
           <div ref={qrRef} className="bg-white p-8 rounded-lg text-center">
             <div ref={qrPrintRef}>
-              <QRCode value={qrCode} />
+              <QRCode value={qrCode.toString()} />
             </div>
             <Button
               className="mt-4 bg-blue-500 text-white px-4 py-2 rounded-lg"
