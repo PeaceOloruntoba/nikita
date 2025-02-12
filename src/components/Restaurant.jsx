@@ -62,6 +62,8 @@ const handlePrint = () => {
   }, 500);
 };
 
+console.log(qrCode)
+
 
   return (
     <>
