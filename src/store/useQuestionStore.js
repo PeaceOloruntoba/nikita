@@ -23,7 +23,6 @@ const getQuestions = async (set) => {
   try {
     const response = await axiosInstance.get("/questions");
     const data = response?.data?.data || [];
-    console.log(response)
     set({ questions: data, isLoading: false });
   } catch (error) {
     handleError(error);
