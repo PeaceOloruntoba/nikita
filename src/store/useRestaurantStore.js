@@ -13,7 +13,7 @@ const createTable = async (set, tableData) => {
       capacity: tableData.capacity,
     });
     toast.success("Table created successfully!");
-    await getTables(set); // Refresh tables list after creation
+    await getTables(set);
     set({ isLoading: false });
   } catch (error) {
     handleError(error);
@@ -27,7 +27,6 @@ const getTables = async (set) => {
   try {
     const response = await axiosInstance.get("/restaurant/tables");
     const data = response?.data?.data || [];
-    console.log(response);
     set({ tables: data, isLoading: false });
   } catch (error) {
     handleError(error);
