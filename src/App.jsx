@@ -12,6 +12,7 @@ import { Toaster } from "sonner";
 import Restaurant from "./pages/Restaurant";
 import AdminGuard from "./guard/AdminGuard";
 import Interface from "./pages/Interface";
+import UpdateProfile from "./pages/UpdateProfile";
 
 export default function App() {
   return (
@@ -39,6 +40,7 @@ export default function App() {
             <Route path="restaurant" element={<Restaurant />} />
           </Route>
         </Route>
+        <Route path="update-profile" element={<UpdateProfile />} />
         <Route path="login" element={<Login />} />
         <Route path="signup" element={<Signup />} />
       </Routes>

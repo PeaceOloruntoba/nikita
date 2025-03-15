@@ -24,7 +24,7 @@ const clearAuthDataFromLocalStorage = () => {
 const loginUser = async (user, navigate, set, get) => {
   set({ isAuthenticating: true });
   try {
-    const response = await axiosInstance.post("/login", user);
+    const response = await axiosInstance.post("/auth/login", user);
     const data = response?.data?.data;
 
     if (!data?.user || !data?.token) {
@@ -49,7 +49,7 @@ const loginUser = async (user, navigate, set, get) => {
 const signUpUser = async (user, navigate, set) => {
   set({ isAuthenticating: true });
   try {
-    const response = await axiosInstance.post("/register", user);
+    const response = await axiosInstance.post("/auth/register", user);
     const data = response?.data?.data;
 
     if (!data?.user || !data?.token) {
@@ -66,6 +66,19 @@ const signUpUser = async (user, navigate, set) => {
       "Restaurant created successfully! Please complete your profile."
     );
     navigate("/update-profile");
+  } catch (error) {
+    handleError(error);
+  } finally {
+    set({ isAuthenticating: false });
+  }
+};
+
+const updateProfile = async (user, navigate, set) => {
+  set({ isAuthenticating: true });
+  try {
+    const response = await axiosInstance.post("/profile/update", user);
+    toast.success("Restaurant profile created successfully!");
+    navigate("/interface");
   } catch (error) {
     handleError(error);
   } finally {
@@ -93,6 +106,7 @@ const useAuthStore = create((set) => {
     login: (user, navigate) => loginUser(user, navigate, set),
     signUp: (user, navigate) => signUpUser(user, navigate, set),
     logout: (navigate) => logoutUser(navigate, set),
+    updateProfile: (user, navigate) => updateProfile(user, navigate, set),
   };
 });
 
