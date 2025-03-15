@@ -93,10 +93,9 @@ const updateProfile = async (user, navigate, set) => {
 const getProfile = async (set) => {
   set({ isAuthenticating: true });
   try {
-    const response = await axiosInstance.get("/profile/get", user);
-    console.log(response);
+    const response = await axiosInstance.get("/profile/get");
     set((state) => ({
-      profile: response.data.user,
+      profile: response.data.data,
     }));
   } catch (error) {
     handleError(error);

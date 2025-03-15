@@ -1,5 +1,5 @@
 import React, { useEffect } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router";
 import useAuthStore from "../store/useAuthStore";
 
 export default function Settings() {
@@ -10,8 +10,10 @@ export default function Settings() {
     getProfile();
   }, [getProfile]);
 
+  console.log(profile)
+
   return (
-    <div className="max-w-3xl mx-auto bg-white shadow-md rounded-lg p-6 mt-10">
+    <div className="max-w-3xl mx-auto bg-white shadow-md rounded-lg p-6 mt-10 m-6">
       <h2 className="text-2xl font-semibold text-primary mb-4">
         Profile Settings
       </h2>
