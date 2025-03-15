@@ -5,6 +5,7 @@ import positiveFeedback from "./images/positive-feedback-icon.png";
 import negativeFeedback from "./images/negative-feedback-icon.png";
 import annawine from "./images/AnnaWineMob.jpg";
 import restaurant from "./images/restaurant.jpg";
+import menu from "./images/menu.jpg";
 
 export {
   profilePic,
@@ -14,4 +15,5 @@ export {
   negativeFeedback,
   annawine,
   restaurant,
+  menu,
 };
