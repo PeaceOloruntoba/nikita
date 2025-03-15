@@ -49,9 +49,9 @@ const loginUser = async (user, navigate, set, get) => {
 const signUpUser = async (user, navigate, set) => {
   set({ isAuthenticating: true });
   try {
-    const response = await axiosInstance.post("/register?for-admin=1", user);
-    toast.success("Account created successfully! Please login.");
-    navigate("/login");
+    const response = await axiosInstance.post("/register", user);
+    toast.success("Restaurant created successfully! Please complete your profile.");
+    navigate("/update-profile");
   } catch (error) {
     handleError(error);
   } finally {
