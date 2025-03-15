@@ -6,6 +6,7 @@ const UpdateProfile = () => {
   const navigate = useNavigate();
   const { updateProfile } = useAuthStore();
   const [step, setStep] = useState(1);
+
   const [formData, setFormData] = useState({
     first_name: "",
     last_name: "",
@@ -14,10 +15,14 @@ const UpdateProfile = () => {
     restaurant_address: "",
     cuisine_type: "",
     service_style: "",
+    seating_capacity: "",
+    tables_count: "",
     menu_text: "",
     wine_menu_text: "",
     ai_languages: [],
     ai_communication_style: "",
+    ai_personality: "",
+    ai_tone: "",
   });
 
   // Handle input changes
@@ -38,8 +43,8 @@ const UpdateProfile = () => {
   };
 
   // Move between steps
-  const nextStep = () => setStep(step + 1);
-  const prevStep = () => setStep(step - 1);
+  const nextStep = () => setStep((prev) => prev + 1);
+  const prevStep = () => setStep((prev) => prev - 1);
 
   // Submit Profile using Zustand
   const handleSubmit = (e) => {
@@ -54,11 +59,13 @@ const UpdateProfile = () => {
           Update Profile
         </h2>
 
+        {/* Step 1: General Information */}
         {step === 1 && (
           <div>
             <h3 className="text-primary font-medium mb-4">
               Step 1: General Information
             </h3>
+
             <label className="block text-primary">First Name</label>
             <input
               type="text"
@@ -95,11 +102,13 @@ const UpdateProfile = () => {
           </div>
         )}
 
+        {/* Step 2: Restaurant Details */}
         {step === 2 && (
           <div>
             <h3 className="text-primary font-medium mb-4">
               Step 2: Restaurant Details
             </h3>
+
             <label className="block text-primary">Restaurant Name</label>
             <input
               type="text"
@@ -153,11 +162,55 @@ const UpdateProfile = () => {
           </div>
         )}
 
+        {/* Step 3: Seating & Tables */}
         {step === 3 && (
           <div>
             <h3 className="text-primary font-medium mb-4">
-              Step 3: Menu & AI Preferences
+              Step 3: Seating & Tables
             </h3>
+
+            <label className="block text-primary">Seating Capacity</label>
+            <input
+              type="number"
+              name="seating_capacity"
+              value={formData.seating_capacity}
+              onChange={handleChange}
+              className="w-full p-2 border rounded mb-3"
+            />
+
+            <label className="block text-primary">Number of Tables</label>
+            <input
+              type="number"
+              name="tables_count"
+              value={formData.tables_count}
+              onChange={handleChange}
+              className="w-full p-2 border rounded mb-4"
+            />
+
+            <div className="flex justify-between">
+              <button
+                onClick={prevStep}
+                className="bg-secondary text-primary px-4 py-2 rounded"
+              >
+                Back
+              </button>
+              <button
+                onClick={nextStep}
+                className="bg-primary text-white px-4 py-2 rounded"
+              >
+                Next
+              </button>
+            </div>
+          </div>
+        )}
+
+        {/* Step 4: Menu Information */}
+        {step === 4 && (
+          <div>
+            <h3 className="text-primary font-medium mb-4">
+              Step 4: Menu Information
+            </h3>
+
             <label className="block text-primary">Food Menu</label>
             <textarea
               name="menu_text"
@@ -174,24 +227,29 @@ const UpdateProfile = () => {
               className="w-full p-2 border rounded mb-3"
             ></textarea>
 
-            <label className="block text-primary">AI Languages</label>
-            <div className="flex flex-wrap gap-2 mb-3">
-              {["English", "French", "Spanish", "German", "Italian"].map(
-                (lang) => (
-                  <label
-                    key={lang}
-                    className="flex items-center gap-2 text-primary"
-                  >
-                    <input
-                      type="checkbox"
-                      value={lang}
-                      onChange={handleCheckboxChange}
-                    />
-                    {lang}
-                  </label>
-                )
-              )}
+            <div className="flex justify-between">
+              <button
+                onClick={prevStep}
+                className="bg-secondary text-primary px-4 py-2 rounded"
+              >
+                Back
+              </button>
+              <button
+                onClick={nextStep}
+                className="bg-primary text-white px-4 py-2 rounded"
+              >
+                Next
+              </button>
             </div>
+          </div>
+        )}
+
+        {/* Step 5: AI Configuration */}
+        {step === 5 && (
+          <div>
+            <h3 className="text-primary font-medium mb-4">
+              Step 5: AI Configuration
+            </h3>
 
             <label className="block text-primary">AI Communication Style</label>
             <input
@@ -199,7 +257,25 @@ const UpdateProfile = () => {
               name="ai_communication_style"
               value={formData.ai_communication_style}
               onChange={handleChange}
-              className="w-full p-2 border rounded mb-4"
+              className="w-full p-2 border rounded mb-3"
+            />
+
+            <label className="block text-primary">AI Personality</label>
+            <input
+              type="text"
+              name="ai_personality"
+              value={formData.ai_personality}
+              onChange={handleChange}
+              className="w-full p-2 border rounded mb-3"
+            />
+
+            <label className="block text-primary">AI Tone</label>
+            <input
+              type="text"
+              name="ai_tone"
+              value={formData.ai_tone}
+              onChange={handleChange}
+              className="w-full p-2 border rounded mb-3"
             />
 
             <div className="flex justify-between">
