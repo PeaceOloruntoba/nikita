@@ -54,7 +54,7 @@ const signUpUser = async (user, navigate, set) => {
   set({ isAuthenticating: true });
   try {
     const response = await axiosInstance.post("/auth/register", user);
-    const data = response?.data?.data;
+    const data = response?.data;
 
     if (!data?.user || !data?.token) {
       throw new Error("Invalid response from server");
