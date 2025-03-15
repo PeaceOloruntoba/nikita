@@ -25,8 +25,7 @@ const loginUser = async (user, navigate, set, get) => {
   set({ isAuthenticating: true });
   try {
     const response = await axiosInstance.post("/auth/login", user);
-    const data = response?.data?.data;
-
+    const data = response?.data;
     if (!data?.user || !data?.token) {
       throw new Error("Invalid response from server");
     }
@@ -38,8 +37,13 @@ const loginUser = async (user, navigate, set, get) => {
       isAuthenticating: false,
     }));
 
-    toast.success(`Welcome Back! ${data.user.name}`);
-    navigate("/interface");
+    if (data.message == "Please complete your profile setup") {
+      navigate("/update-profile");
+      toast.warning(data?.message);
+    } else {
+      toast.success(`Welcome Back! ${data.user.email}`);
+      navigate("/interface");
+    }
   } catch (error) {
     handleError(error);
     set({ isAuthenticating: false });
@@ -76,7 +80,7 @@ const signUpUser = async (user, navigate, set) => {
 const updateProfile = async (user, navigate, set) => {
   set({ isAuthenticating: true });
   try {
-    const response = await axiosInstance.post("/profile/update", user);
+    const response = await axiosInstance.put("/profile/update", user);
     toast.success("Restaurant profile created successfully!");
     navigate("/interface");
   } catch (error) {
