@@ -127,6 +127,7 @@ const useAuthStore = create((set) => {
     signUp: (user, navigate) => signUpUser(user, navigate, set),
     logout: (navigate) => logoutUser(navigate, set),
     updateProfile: (user, navigate) => updateProfile(user, navigate, set),
+    getProfile: () => getProfile(set),
   };
 });
 
