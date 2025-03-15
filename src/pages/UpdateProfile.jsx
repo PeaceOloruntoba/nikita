@@ -4,7 +4,7 @@ import useAuthStore from "../store/useAuthStore";
 
 const UpdateProfile = () => {
   const navigate = useNavigate();
-  const { updateProfile } = useAuthStore(); // Use Zustand store function
+  const { updateProfile } = useAuthStore();
   const [step, setStep] = useState(1);
   const [formData, setFormData] = useState({
     first_name: "",
@@ -48,160 +48,177 @@ const UpdateProfile = () => {
   };
 
   return (
-    <div className="max-w-lg mx-auto p-6 bg-white shadow-md rounded-md">
-      <h2 className="text-xl font-semibold text-center mb-4">Update Profile</h2>
+    <div className="fixed inset-0 flex items-center justify-center bg-black/50">
+      <div className="bg-white border-primary shadow-secondary rounded-lg w-full max-w-lg p-6 sm:p-8 mx-4 sm:mx-0">
+        <h2 className="text-primary text-xl font-semibold text-center mb-6">
+          Update Profile
+        </h2>
 
-      {step === 1 && (
-        <div>
-          <h3 className="font-medium">Step 1: General Information</h3>
-          <label className="block">First Name</label>
-          <input
-            type="text"
-            name="first_name"
-            value={formData.first_name}
-            onChange={handleChange}
-            className="w-full p-2 border rounded"
-          />
-
-          <label className="block mt-2">Last Name</label>
-          <input
-            type="text"
-            name="last_name"
-            value={formData.last_name}
-            onChange={handleChange}
-            className="w-full p-2 border rounded"
-          />
-
-          <label className="block mt-2">Location</label>
-          <input
-            type="text"
-            name="location"
-            value={formData.location}
-            onChange={handleChange}
-            className="w-full p-2 border rounded"
-          />
-
-          <button
-            onClick={nextStep}
-            className="mt-4 bg-blue-500 text-white p-2 rounded w-full"
-          >
-            Next
-          </button>
-        </div>
-      )}
-
-      {step === 2 && (
-        <div>
-          <h3 className="font-medium">Step 2: Restaurant Details</h3>
-          <label className="block">Restaurant Name</label>
-          <input
-            type="text"
-            name="restaurant_name"
-            value={formData.restaurant_name}
-            onChange={handleChange}
-            className="w-full p-2 border rounded"
-          />
-
-          <label className="block mt-2">Restaurant Address</label>
-          <input
-            type="text"
-            name="restaurant_address"
-            value={formData.restaurant_address}
-            onChange={handleChange}
-            className="w-full p-2 border rounded"
-          />
-
-          <label className="block mt-2">Cuisine Type</label>
-          <input
-            type="text"
-            name="cuisine_type"
-            value={formData.cuisine_type}
-            onChange={handleChange}
-            className="w-full p-2 border rounded"
-          />
-
-          <label className="block mt-2">Service Style</label>
-          <input
-            type="text"
-            name="service_style"
-            value={formData.service_style}
-            onChange={handleChange}
-            className="w-full p-2 border rounded"
-          />
-
-          <button
-            onClick={prevStep}
-            className="mt-4 bg-gray-500 text-white p-2 rounded w-full"
-          >
-            Back
-          </button>
-          <button
-            onClick={nextStep}
-            className="mt-4 bg-blue-500 text-white p-2 rounded w-full"
-          >
-            Next
-          </button>
-        </div>
-      )}
-
-      {step === 3 && (
-        <div>
-          <h3 className="font-medium">Step 3: Menu & AI Preferences</h3>
-          <label className="block">Food Menu</label>
-          <textarea
-            name="menu_text"
-            value={formData.menu_text}
-            onChange={handleChange}
-            className="w-full p-2 border rounded"
-          ></textarea>
-
-          <label className="block mt-2">Wine Menu</label>
-          <textarea
-            name="wine_menu_text"
-            value={formData.wine_menu_text}
-            onChange={handleChange}
-            className="w-full p-2 border rounded"
-          ></textarea>
-
-          <label className="block mt-2">AI Languages</label>
+        {step === 1 && (
           <div>
-            {["English", "French", "Spanish", "German", "Italian"].map(
-              (lang) => (
-                <label key={lang} className="inline-flex items-center mr-3">
-                  <input
-                    type="checkbox"
-                    value={lang}
-                    onChange={handleCheckboxChange}
-                  />
-                  <span className="ml-1">{lang}</span>
-                </label>
-              )
-            )}
+            <h3 className="text-primary font-medium mb-4">
+              Step 1: General Information
+            </h3>
+            <label className="block text-primary">First Name</label>
+            <input
+              type="text"
+              name="first_name"
+              value={formData.first_name}
+              onChange={handleChange}
+              className="w-full p-2 border rounded mb-3"
+            />
+
+            <label className="block text-primary">Last Name</label>
+            <input
+              type="text"
+              name="last_name"
+              value={formData.last_name}
+              onChange={handleChange}
+              className="w-full p-2 border rounded mb-3"
+            />
+
+            <label className="block text-primary">Location</label>
+            <input
+              type="text"
+              name="location"
+              value={formData.location}
+              onChange={handleChange}
+              className="w-full p-2 border rounded mb-4"
+            />
+
+            <button
+              onClick={nextStep}
+              className="w-full bg-primary text-white p-2 rounded"
+            >
+              Next
+            </button>
           </div>
+        )}
 
-          <label className="block mt-2">AI Communication Style</label>
-          <input
-            type="text"
-            name="ai_communication_style"
-            value={formData.ai_communication_style}
-            onChange={handleChange}
-            className="w-full p-2 border rounded"
-          />
+        {step === 2 && (
+          <div>
+            <h3 className="text-primary font-medium mb-4">
+              Step 2: Restaurant Details
+            </h3>
+            <label className="block text-primary">Restaurant Name</label>
+            <input
+              type="text"
+              name="restaurant_name"
+              value={formData.restaurant_name}
+              onChange={handleChange}
+              className="w-full p-2 border rounded mb-3"
+            />
 
-          <button
-            onClick={prevStep}
-            className="mt-4 bg-gray-500 text-white p-2 rounded w-full"
-          >
-            Back
-          </button>
-          <button
-            onClick={handleSubmit}
-            className="mt-4 bg-green-500 text-white p-2 rounded w-full"
-          >
-            Submit
-          </button>
-        </div>
-      )}
+            <label className="block text-primary">Restaurant Address</label>
+            <input
+              type="text"
+              name="restaurant_address"
+              value={formData.restaurant_address}
+              onChange={handleChange}
+              className="w-full p-2 border rounded mb-3"
+            />
+
+            <label className="block text-primary">Cuisine Type</label>
+            <input
+              type="text"
+              name="cuisine_type"
+              value={formData.cuisine_type}
+              onChange={handleChange}
+              className="w-full p-2 border rounded mb-3"
+            />
+
+            <label className="block text-primary">Service Style</label>
+            <input
+              type="text"
+              name="service_style"
+              value={formData.service_style}
+              onChange={handleChange}
+              className="w-full p-2 border rounded mb-4"
+            />
+
+            <div className="flex justify-between">
+              <button
+                onClick={prevStep}
+                className="bg-secondary text-primary px-4 py-2 rounded"
+              >
+                Back
+              </button>
+              <button
+                onClick={nextStep}
+                className="bg-primary text-white px-4 py-2 rounded"
+              >
+                Next
+              </button>
+            </div>
+          </div>
+        )}
+
+        {step === 3 && (
+          <div>
+            <h3 className="text-primary font-medium mb-4">
+              Step 3: Menu & AI Preferences
+            </h3>
+            <label className="block text-primary">Food Menu</label>
+            <textarea
+              name="menu_text"
+              value={formData.menu_text}
+              onChange={handleChange}
+              className="w-full p-2 border rounded mb-3"
+            ></textarea>
+
+            <label className="block text-primary">Wine Menu</label>
+            <textarea
+              name="wine_menu_text"
+              value={formData.wine_menu_text}
+              onChange={handleChange}
+              className="w-full p-2 border rounded mb-3"
+            ></textarea>
+
+            <label className="block text-primary">AI Languages</label>
+            <div className="flex flex-wrap gap-2 mb-3">
+              {["English", "French", "Spanish", "German", "Italian"].map(
+                (lang) => (
+                  <label
+                    key={lang}
+                    className="flex items-center gap-2 text-primary"
+                  >
+                    <input
+                      type="checkbox"
+                      value={lang}
+                      onChange={handleCheckboxChange}
+                    />
+                    {lang}
+                  </label>
+                )
+              )}
+            </div>
+
+            <label className="block text-primary">AI Communication Style</label>
+            <input
+              type="text"
+              name="ai_communication_style"
+              value={formData.ai_communication_style}
+              onChange={handleChange}
+              className="w-full p-2 border rounded mb-4"
+            />
+
+            <div className="flex justify-between">
+              <button
+                onClick={prevStep}
+                className="bg-secondary text-primary px-4 py-2 rounded"
+              >
+                Back
+              </button>
+              <button
+                onClick={handleSubmit}
+                className="bg-primary text-white px-4 py-2 rounded"
+              >
+                Submit
+              </button>
+            </div>
+          </div>
+        )}
+      </div>
     </div>
   );
 };
