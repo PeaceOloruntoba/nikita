@@ -20,6 +20,16 @@ export default function App() {
         <Route element={<AdminGuard />}>
           <Route element={<RootLayout />}>
             <Route path="" element={<Navigate to={"/login"} />} />
+            <Route path="interface" element={<Feedback />} />
+            <Route path="interface/food-menu" element={<Feedback />} />
+            <Route path="interface/wine-menu" element={<Feedback />} />
+            <Route path="insights" element={<Feedback />} />
+            <Route path="qr-codes" element={<Feedback />} />
+            <Route path="training" element={<Feedback />} />
+            <Route path="reviews" element={<Feedback />} />
+            <Route path="support" element={<Feedback />} />
+            <Route path="setting" element={<Feedback />} />
+
             <Route path="feedback" element={<Feedback />} />
             <Route path="menu" element={<Menu />} />
             <Route path="subscription" element={<Subscription />} />
