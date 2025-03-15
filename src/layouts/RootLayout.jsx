@@ -10,14 +10,10 @@ export default function RootLayout() {
       <div className="w-1/4">
         <Sidebar />
       </div>
-      <div className="flex flex-col w-full text-[#4895E5]/20">
-        <Header />
-        <hr />
-        <div className="overflow-scroll hide-scrollbar">
-          <Outlet />
-        </div>
+      <div className="overflow-scroll hide-scrollbar w-5/5">
+        <Outlet />
       </div>
-      <div className="w-3/5 h-screen">
+      <div className="w-2/5 h-screen">
         <Ai />
       </div>
     </div>
