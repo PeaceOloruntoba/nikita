@@ -25,7 +25,7 @@ export default function Sidebar() {
               to={"/interface"}
               className={({ isActive }) =>
                 isActive
-                  ? "bg-gray-100 rounded-lg w-full text-left p-3 px-6 flex gap-2 items-center"
+                  ? "bg-gray-100 w-full text-left p-3 px-6 flex gap-2 items-center"
                   : " w-full text-left p-4 flex gap-2 items-center"
               }
             >
@@ -36,7 +36,7 @@ export default function Sidebar() {
               to={"/insights"}
               className={({ isActive }) =>
                 isActive
-                  ? "bg-gray-100 rounded-lg w-full text-left p-4 px-6 flex gap-2 items-center"
+                  ? "bg-gray-100 w-full text-left p-4 px-6 flex gap-2 items-center"
                   : " w-full text-left p-4 flex gap-2 items-center"
               }
             >
@@ -47,7 +47,7 @@ export default function Sidebar() {
               to={"/qr-codes"}
               className={({ isActive }) =>
                 isActive
-                  ? "bg-gray-100 rounded-lg w-full text-left p-3 px-6 flex gap-2 items-center"
+                  ? "bg-gray-100 w-full text-left p-3 px-6 flex gap-2 items-center"
                   : " w-full text-left p-4 flex gap-2 items-center"
               }
             >
@@ -58,7 +58,7 @@ export default function Sidebar() {
               to={"/training"}
               className={({ isActive }) =>
                 isActive
-                  ? "bg-gray-100 rounded-lg w-full text-left p-4 px-6 flex gap-2 items-center"
+                  ? "bg-gray-100 w-full text-left p-4 px-6 flex gap-2 items-center"
                   : " w-full text-left p-4 flex gap-2 items-center"
               }
             >
@@ -69,7 +69,7 @@ export default function Sidebar() {
               to={"/reviews"}
               className={({ isActive }) =>
                 isActive
-                  ? "bg-gray-100 rounded-lg w-full text-left p-4 px-6 flex gap-2 items-center"
+                  ? "bg-gray-100 w-full text-left p-4 px-6 flex gap-2 items-center"
                   : " w-full text-left p-4 flex gap-2 items-center"
               }
             >
@@ -80,7 +80,7 @@ export default function Sidebar() {
               to={"/support"}
               className={({ isActive }) =>
                 isActive
-                  ? "bg-gray-100 rounded-lg w-full text-left p-4 px-6 flex gap-2 items-center"
+                  ? "bg-gray-100 w-full text-left p-4 px-6 flex gap-2 items-center"
                   : " w-full text-left p-4 flex gap-2 items-center"
               }
             >
@@ -91,13 +91,23 @@ export default function Sidebar() {
               to={"/settings"}
               className={({ isActive }) =>
                 isActive
-                  ? "bg-gray-100 rounded-lg w-full text-left p-4 px-6 flex gap-2 items-center"
+                  ? "bg-gray-100 w-full text-left p-4 px-6 flex gap-2 items-center"
                   : " w-full text-left p-4 flex gap-2 items-center"
               }
             >
               <CiCalendar size={20} />
               Settings
             </NavLink>
+          </div>
+          <div className="flex flex-col w-full">
+            <hr />
+            <button
+              onClick={() => handleLogout()}
+              className="flex p-2 border rounded-lg gap-2 items-center text-red-600 m-4"
+            >
+              Logout
+              <IoSettingsOutline size={20} />
+            </button>
           </div>
         </div>
       </div>
