@@ -15,6 +15,7 @@ export default function Signup() {
     password: "",
     confirm_password: "",
     terms_accepted: false,
+    role: "admin"
   });
 
   function handleChange(e) {
