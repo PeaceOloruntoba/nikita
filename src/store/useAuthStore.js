@@ -90,6 +90,21 @@ const updateProfile = async (user, navigate, set) => {
   }
 };
 
+const getProfile = async (set) => {
+  set({ isAuthenticating: true });
+  try {
+    const response = await axiosInstance.get("/profile/get", user);
+    console.log(response);
+    set((state) => ({
+      profile: response.data.user,
+    }));
+  } catch (error) {
+    handleError(error);
+  } finally {
+    set({ isAuthenticating: false });
+  }
+};
+
 const logoutUser = (navigate, set) => {
   clearAuthDataFromLocalStorage();
   set({ user: null, token: null, isAuthenticated: false });
@@ -106,6 +121,7 @@ const useAuthStore = create((set) => {
     token: token || null,
     isAuthenticated: !!user, // Authenticated if user exists
     isAuthenticating: false,
+    profile: {},
 
     login: (user, navigate) => loginUser(user, navigate, set),
     signUp: (user, navigate) => signUpUser(user, navigate, set),
