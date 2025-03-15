@@ -7,7 +7,9 @@ import Ai from "../components/ui/Ai";
 export default function RootLayout() {
   return (
     <div className="w-screen h-screen flex bg-[#F2EBF0]">
-      <Sidebar />
+      <div className="w-1/4">
+        <Sidebar />
+      </div>
       <div className="flex flex-col w-full text-[#4895E5]/20">
         <Header />
         <hr />
@@ -15,7 +17,9 @@ export default function RootLayout() {
           <Outlet />
         </div>
       </div>
-      <Ai />
+      <div className="w-3/5 h-screen">
+        <Ai />
+      </div>
     </div>
   );
 }
