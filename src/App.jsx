@@ -30,12 +30,11 @@ export default function App() {
             <Route path="training" element={<Feedback />} />
             <Route path="reviews" element={<Feedback />} />
             <Route path="support" element={<Feedback />} />
-            <Route path="setting" element={<Feedback />} />
+            <Route path="settings" element={<Settings />} />
 
             <Route path="feedback" element={<Feedback />} />
             <Route path="menu" element={<Menu />} />
             <Route path="subscription" element={<Subscription />} />
-            <Route path="settings" element={<Settings />} />
             <Route path="questionaries" element={<Questionaries />} />
             <Route path="restaurant" element={<Restaurant />} />
           </Route>
