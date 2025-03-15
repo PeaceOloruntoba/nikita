@@ -1,5 +1,5 @@
 import React from "react";
-import { restaurant } from "../assets";
+import { menu, restaurant } from "../assets";
 
 export default function Interface() {
   return (
@@ -9,9 +9,9 @@ export default function Interface() {
       <div className="flex items-center justify-center gap-8">
         <div className="flex flex-col">
           <span className="w-full text-lg font-semibold">Food Menu</span>
-          <img src={restaurant} alt="" className="w-fit rounded-2xl h-64" />
+          <img src={menu} alt="" className="w-fit rounded-2xl h-64" />
         </div>
-        <img src={restaurant} alt="" className="w-fit rounded-2xl h-64" />
+        <img src={menu} alt="" className="w-fit rounded-2xl h-64" />
       </div>
     </div>
   );
