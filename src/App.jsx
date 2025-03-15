@@ -17,10 +17,10 @@ export default function App() {
     <>
       <Toaster position="top-right" richColors />
       <Routes>
-        <Route element={<AdminGuard />}>
-          <Route element={<RootLayout />}>
+        <Route element={<RootLayout />}>
+          <Route path="interface" element={<Feedback />} />
+          <Route element={<AdminGuard />}>
             <Route path="" element={<Navigate to={"/login"} />} />
-            <Route path="interface" element={<Feedback />} />
             <Route path="interface/food-menu" element={<Feedback />} />
             <Route path="interface/wine-menu" element={<Feedback />} />
             <Route path="insights" element={<Feedback />} />
