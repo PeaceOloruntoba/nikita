@@ -2,6 +2,7 @@ import React from "react";
 import Sidebar from "../components/ui/Sidebar";
 import Header from "../components/ui/Header";
 import { Outlet } from "react-router";
+import Ai from "../components/ui/Ai";
 
 export default function RootLayout() {
   return (
@@ -14,6 +15,7 @@ export default function RootLayout() {
           <Outlet />
         </div>
       </div>
+      <Ai />
     </div>
   );
 }
