@@ -22,9 +22,10 @@ export default function App() {
       <Toaster position="top-right" richColors />
       <Routes>
         <Route element={<RootLayout />}>
-          <Route path="interface" element={<Interface />} />
           <Route element={<AdminGuard />}>
-            <Route path="" element={<Navigate to={"/login"} />} />
+            <Route path="interface" element={<Interface />} />
+            <Route path="" element={<Navigate to={"/interface"} />} />
+            <Route path="update-profile" element={<UpdateProfile />} />
             <Route path="interface/food-menu" element={<FoodMenu />} />
             <Route path="interface/wine-menu" element={<WineMenu />} />
             <Route path="insights" element={<Feedback />} />
@@ -41,7 +42,6 @@ export default function App() {
             <Route path="restaurant" element={<Restaurant />} />
           </Route>
         </Route>
-        <Route path="update-profile" element={<UpdateProfile />} />
         <Route path="login" element={<Login />} />
         <Route path="signup" element={<Signup />} />
       </Routes>
