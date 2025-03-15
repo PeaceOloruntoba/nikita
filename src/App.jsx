@@ -13,6 +13,8 @@ import Restaurant from "./pages/Restaurant";
 import AdminGuard from "./guard/AdminGuard";
 import Interface from "./pages/Interface";
 import UpdateProfile from "./pages/UpdateProfile";
+import FoodMenu from "./pages/FoodMenu";
+import WineMenu from "./pages/WineMenu";
 
 export default function App() {
   return (
@@ -23,8 +25,8 @@ export default function App() {
           <Route path="interface" element={<Interface />} />
           <Route element={<AdminGuard />}>
             <Route path="" element={<Navigate to={"/login"} />} />
-            <Route path="interface/food-menu" element={<Feedback />} />
-            <Route path="interface/wine-menu" element={<Feedback />} />
+            <Route path="interface/food-menu" element={<FoodMenu />} />
+            <Route path="interface/wine-menu" element={<WineMenu />} />
             <Route path="insights" element={<Feedback />} />
             <Route path="qr-codes" element={<Feedback />} />
             <Route path="training" element={<Feedback />} />
