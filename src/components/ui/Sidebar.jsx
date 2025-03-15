@@ -33,7 +33,7 @@ export default function Sidebar() {
               Interface
             </NavLink>
             <NavLink
-              to={"/insight"}
+              to={"/insights"}
               className={({ isActive }) =>
                 isActive
                   ? "bg-secondary w-full text-left p-4 px-6 flex gap-2 items-center"
@@ -55,7 +55,7 @@ export default function Sidebar() {
               QR Codes
             </NavLink>
             <NavLink
-              to={"/insight"}
+              to={"/training"}
               className={({ isActive }) =>
                 isActive
                   ? "bg-secondary w-full text-left p-4 px-6 flex gap-2 items-center"
