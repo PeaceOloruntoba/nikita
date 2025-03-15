@@ -16,7 +16,7 @@ const getFoodMenu = async (set) => {
 // Fetch wine menu
 const getWineMenu = async (set) => {
   try {
-    const response = await axiosInstance.get("/profile/food-menu");
+    const response = await axiosInstance.get("/profile/wine-menu");
     set({ wineMenu: response.data.data || [] });
   } catch (error) {
     handleError(error);
