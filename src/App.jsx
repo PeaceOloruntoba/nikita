@@ -11,6 +11,7 @@ import Signup from "./pages/Signup";
 import { Toaster } from "sonner";
 import Restaurant from "./pages/Restaurant";
 import AdminGuard from "./guard/AdminGuard";
+import Interface from "./pages/Interface";
 
 export default function App() {
   return (
@@ -18,7 +19,7 @@ export default function App() {
       <Toaster position="top-right" richColors />
       <Routes>
         <Route element={<RootLayout />}>
-          <Route path="interface" element={<Feedback />} />
+          <Route path="interface" element={<Interface />} />
           <Route element={<AdminGuard />}>
             <Route path="" element={<Navigate to={"/login"} />} />
             <Route path="interface/food-menu" element={<Feedback />} />
