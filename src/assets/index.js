@@ -3,6 +3,7 @@ import loginBg from "./images/login-bg.png";
 import totalFeedback from "./images/feedback-icon.png";
 import positiveFeedback from "./images/positive-feedback-icon.png";
 import negativeFeedback from "./images/negative-feedback-icon.png";
+import annawine from "./images/AnnaWineMob.jpg";
 
 export {
   profilePic,
@@ -10,4 +11,5 @@ export {
   totalFeedback,
   positiveFeedback,
   negativeFeedback,
+  annawine,
 };
