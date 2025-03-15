@@ -4,8 +4,9 @@ import { NavLink, useNavigate } from "react-router";
 import { IoSettingsOutline } from "react-icons/io5";
 import { PiUsersThree } from "react-icons/pi";
 import { MdOutlineSpaceDashboard } from "react-icons/md";
-import { CiCalendar, CiShare2 } from "react-icons/ci";
+import { CiCalendar, CiShare2, CiLogout } from "react-icons/ci";
 import { FaBookReader } from "react-icons/fa";
+import { BiLogOut } from "react-icons/bi";
 
 export default function Sidebar() {
   const navigate = useNavigate();
@@ -103,10 +104,10 @@ export default function Sidebar() {
             <hr />
             <button
               onClick={() => handleLogout()}
-              className="flex p-2 border rounded-lg gap-2 items-center text-red-600 m-4"
+              className="flex p-2 border rounded-lg gap-2 items-center bg-primary text-white m-4"
             >
               Logout
-              <IoSettingsOutline size={20} />
+              <BiLogOut size={20} />
             </button>
           </div>
         </div>
