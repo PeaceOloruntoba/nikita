@@ -17,6 +17,8 @@ import FoodMenu from "./pages/FoodMenu";
 import WineMenu from "./pages/WineMenu";
 import Insights from "./pages/Insights";
 import QrCodes from "./pages/QrCodes";
+import Training from "./pages/Training";
+import Reviews from "./pages/Reviews";
 
 export default function App() {
   return (
@@ -32,16 +34,10 @@ export default function App() {
             <Route path="interface/wine-menu" element={<WineMenu />} />
             <Route path="insights" element={<Insights />} />
             <Route path="qr-codes" element={<QrCodes />} />
-            <Route path="training" element={<Feedback />} />
-            <Route path="reviews" element={<Feedback />} />
+            <Route path="training" element={<Training />} />
+            <Route path="reviews" element={<Reviews />} />
             <Route path="support" element={<Feedback />} />
             <Route path="settings" element={<Settings />} />
-
-            <Route path="feedback" element={<Feedback />} />
-            <Route path="menu" element={<Menu />} />
-            <Route path="subscription" element={<Subscription />} />
-            <Route path="questionaries" element={<Questionaries />} />
-            <Route path="restaurant" element={<Restaurant />} />
           </Route>
         </Route>
         <Route path="login" element={<Login />} />
