@@ -19,6 +19,7 @@ import Insights from "./pages/Insights";
 import QrCodes from "./pages/QrCodes";
 import Training from "./pages/Training";
 import Reviews from "./pages/Reviews";
+import Support from "./pages/Support";
 
 export default function App() {
   return (
@@ -36,7 +37,7 @@ export default function App() {
             <Route path="qr-codes" element={<QrCodes />} />
             <Route path="training" element={<Training />} />
             <Route path="reviews" element={<Reviews />} />
-            <Route path="support" element={<Feedback />} />
+            <Route path="support" element={<Support />} />
             <Route path="settings" element={<Settings />} />
           </Route>
         </Route>
