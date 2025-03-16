@@ -78,6 +78,7 @@ const signUpUser = async (user, navigate, set) => {
 };
 
 const updateProfile = async (user, navigate, set) => {
+  console.log(user)
   set({ isAuthenticating: true });
   try {
     const response = await axiosInstance.put("/profile/update", user);
@@ -91,9 +92,11 @@ const updateProfile = async (user, navigate, set) => {
 };
 
 const getProfile = async (set) => {
+  console.log("fff")
   set({ isAuthenticating: true });
   try {
     const response = await axiosInstance.get("/profile/get");
+    console.log(response)
     set((state) => ({
       profile: response.data.data,
     }));

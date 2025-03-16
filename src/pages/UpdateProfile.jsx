@@ -1,10 +1,10 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router";
 import useAuthStore from "../store/useAuthStore";
 
 const UpdateProfile = () => {
   const navigate = useNavigate();
-  const { updateProfile } = useAuthStore();
+  const { updateProfile, getProfile, profile: storedProfile } = useAuthStore();
   const [step, setStep] = useState(1);
 
   const [formData, setFormData] = useState({
@@ -24,6 +24,32 @@ const UpdateProfile = () => {
     ai_personality: "",
     ai_tone: "",
   });
+
+  useEffect(() => {
+    getProfile();
+  }, [getProfile]);
+
+  useEffect(() => {
+    if (storedProfile) {
+      setFormData({
+        first_name: storedProfile.first_name || "",
+        last_name: storedProfile.last_name || "",
+        location: storedProfile.location || "",
+        restaurant_name: storedProfile.restaurant_name || "",
+        restaurant_address: storedProfile.restaurant_address || "",
+        cuisine_type: storedProfile.cuisine_type || "",
+        service_style: storedProfile.service_style || "",
+        seating_capacity: storedProfile.seating_capacity || "",
+        tables_count: storedProfile.tables_count || "",
+        menu_text: storedProfile.menu_text || "",
+        wine_menu_text: storedProfile.wine_menu_text || "",
+        ai_languages: storedProfile.ai_languages || [],
+        ai_communication_style: storedProfile.ai_communication_style || "",
+        ai_personality: storedProfile.ai_personality || "",
+        ai_tone: storedProfile.ai_tone || "",
+      });
+    }
+  }, [storedProfile]);
 
   // Handle input changes
   const handleChange = (e) => {
