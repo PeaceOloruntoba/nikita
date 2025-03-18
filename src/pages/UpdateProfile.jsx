@@ -50,15 +50,13 @@ const UpdateProfile = () => {
         cuisine_type: storedProfile.cuisine_type || "",
         service_style: storedProfile.service_style || "",
         seating_capacity: storedProfile.seating_capacity || "",
-        menu_text: storedProfile.menu_text
-          ? JSON.parse(storedProfile.menu_text).join("\n")
+        menu_text: storedProfile.food_menu
+          ? JSON.stringify(storedProfile.food_menu, null, 2)
           : "",
-        wine_menu_text: storedProfile.wine_menu_text
-          ? JSON.parse(storedProfile.wine_menu_text).join("\n")
+        wine_menu_text: storedProfile.wine_menu
+          ? JSON.stringify(storedProfile.wine_menu, null, 2)
           : "",
-        ai_languages: storedProfile.ai_languages
-          ? JSON.parse(storedProfile.ai_languages)
-          : [],
+        ai_languages: storedProfile.ai_languages || [],
         ai_communication_style: storedProfile.ai_communication_style || "",
         ai_personality: storedProfile.ai_personality || "",
         ai_tone: storedProfile.ai_tone || "",
