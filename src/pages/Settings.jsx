@@ -7,10 +7,10 @@ export default function Settings() {
   const { profile, getProfile } = useAuthStore();
 
   useEffect(() => {
-      getProfile();
-  }, [profile, getProfile]);
+    getProfile();
+  }, [getProfile]);
 
-  console.log(profile)
+  // console.log(profile)
   return (
     <div className="max-w-3xl mx-auto bg-white shadow-md rounded-lg p-6 mt-10 m-6">
       <h2 className="text-2xl font-semibold text-primary mb-4">
@@ -42,10 +42,6 @@ export default function Settings() {
           <ProfileItem label="Contact Phone" value={profile.contact_phone} />
           <ProfileItem label="Email Address" value={profile.email} />
           <ProfileItem label="Website" value={profile.website} />
-          <ProfileItem
-            label="Restaurant Concept"
-            value={profile.restaurant_concept}
-          />
           <ProfileItem label="Service Style" value={profile.service_style} />
           <ProfileItem
             label="Exclusive Dishes/Wines"
