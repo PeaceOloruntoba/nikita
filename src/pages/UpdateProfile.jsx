@@ -16,13 +16,23 @@ const UpdateProfile = () => {
     cuisine_type: "",
     service_style: "",
     seating_capacity: "",
-    tables_count: "",
     menu_text: "",
     wine_menu_text: "",
     ai_languages: [],
     ai_communication_style: "",
     ai_personality: "",
     ai_tone: "",
+    legal_representative: "",
+    contact_phone: "",
+    email: "",
+    website: "",
+    exclusive_dishes: "",
+    seasonal_menu: false,
+    menu_update_frequency: "",
+    daily_menu: false,
+    staff_using_ai: "",
+    video_support: false,
+    additional_features: "",
   });
 
   useEffect(() => {
@@ -40,24 +50,41 @@ const UpdateProfile = () => {
         cuisine_type: storedProfile.cuisine_type || "",
         service_style: storedProfile.service_style || "",
         seating_capacity: storedProfile.seating_capacity || "",
-        tables_count: storedProfile.tables_count || "",
-        menu_text: storedProfile.menu_text || "",
-        wine_menu_text: storedProfile.wine_menu_text || "",
-        ai_languages: storedProfile.ai_languages || [],
+        menu_text: storedProfile.menu_text
+          ? JSON.parse(storedProfile.menu_text).join("\n")
+          : "",
+        wine_menu_text: storedProfile.wine_menu_text
+          ? JSON.parse(storedProfile.wine_menu_text).join("\n")
+          : "",
+        ai_languages: storedProfile.ai_languages
+          ? JSON.parse(storedProfile.ai_languages)
+          : [],
         ai_communication_style: storedProfile.ai_communication_style || "",
         ai_personality: storedProfile.ai_personality || "",
         ai_tone: storedProfile.ai_tone || "",
+        legal_representative: storedProfile.legal_representative || "",
+        contact_phone: storedProfile.contact_phone || "",
+        email: storedProfile.email || "",
+        website: storedProfile.website || "",
+        exclusive_dishes: storedProfile.exclusive_dishes || "",
+        seasonal_menu: storedProfile.seasonal_menu || false,
+        menu_update_frequency: storedProfile.menu_update_frequency || "",
+        daily_menu: storedProfile.daily_menu || false,
+        staff_using_ai: storedProfile.staff_using_ai || "",
+        video_support: storedProfile.video_support || false,
+        additional_features: storedProfile.additional_features || "",
       });
     }
   }, [storedProfile]);
 
-  // Handle input changes
   const handleChange = (e) => {
-    const { name, value } = e.target;
-    setFormData({ ...formData, [name]: value });
+    const { name, value, type, checked } = e.target;
+    setFormData({
+      ...formData,
+      [name]: type === "checkbox" ? checked : value,
+    });
   };
 
-  // Handle multi-select checkboxes
   const handleCheckboxChange = (e) => {
     const { value, checked } = e.target;
     setFormData((prevData) => ({
@@ -68,11 +95,9 @@ const UpdateProfile = () => {
     }));
   };
 
-  // Move between steps
   const nextStep = () => setStep((prev) => prev + 1);
   const prevStep = () => setStep((prev) => prev - 1);
 
-  // Submit Profile using Zustand
   const handleSubmit = (e) => {
     e.preventDefault();
     updateProfile(formData, navigate);
@@ -85,7 +110,6 @@ const UpdateProfile = () => {
           Update Profile
         </h2>
 
-        {/* Step 1: General Information */}
         {step === 1 && (
           <div>
             <h3 className="text-primary font-medium mb-4">
@@ -128,7 +152,6 @@ const UpdateProfile = () => {
           </div>
         )}
 
-        {/* Step 2: Restaurant Details */}
         {step === 2 && (
           <div>
             <h3 className="text-primary font-medium mb-4">
@@ -188,27 +211,44 @@ const UpdateProfile = () => {
           </div>
         )}
 
-        {/* Step 3: Seating & Tables */}
         {step === 3 && (
           <div>
             <h3 className="text-primary font-medium mb-4">
-              Step 3: Seating & Tables
+              Step 3: Additional Restaurant Information
             </h3>
 
-            <label className="block text-primary">Seating Capacity</label>
+            <label className="block text-primary">Legal Representative</label>
             <input
-              type="number"
-              name="seating_capacity"
-              value={formData.seating_capacity}
+              type="text"
+              name="legal_representative"
+              value={formData.legal_representative}
               onChange={handleChange}
               className="w-full p-2 border rounded mb-3"
             />
 
-            <label className="block text-primary">Number of Tables</label>
+            <label className="block text-primary">Contact Phone</label>
             <input
-              type="number"
-              name="tables_count"
-              value={formData.tables_count}
+              type="text"
+              name="contact_phone"
+              value={formData.contact_phone}
+              onChange={handleChange}
+              className="w-full p-2 border rounded mb-3"
+            />
+
+            <label className="block text-primary">Email</label>
+            <input
+              type="email"
+              name="email"
+              value={formData.email}
+              onChange={handleChange}
+              className="w-full p-2 border rounded mb-3"
+            />
+
+            <label className="block text-primary">Website</label>
+            <input
+              type="text"
+              name="website"
+              value={formData.website}
               onChange={handleChange}
               className="w-full p-2 border rounded mb-4"
             />
@@ -230,11 +270,87 @@ const UpdateProfile = () => {
           </div>
         )}
 
-        {/* Step 4: Menu Information */}
         {step === 4 && (
           <div>
             <h3 className="text-primary font-medium mb-4">
-              Step 4: Menu Information
+              Step 4: Seating & Capacity
+            </h3>
+
+            <label className="block text-primary">Seating Capacity</label>
+            <input
+              type="number"
+              name="seating_capacity"
+              value={formData.seating_capacity}
+              onChange={handleChange}
+              className="w-full p-2 border rounded mb-3"
+            />
+
+            <label className="block text-primary">Exclusive Dishes</label>
+            <input
+              type="text"
+              name="exclusive_dishes"
+              value={formData.exclusive_dishes}
+              onChange={handleChange}
+              className="w-full p-2 border rounded mb-3"
+            />
+
+            <label className="block text-primary">Seasonal Menu</label>
+            <input
+              type="checkbox"
+              name="seasonal_menu"
+              checked={formData.seasonal_menu}
+              onChange={handleChange}
+              className="mr-2"
+            />
+
+            <label className="block text-primary">Menu Update Frequency</label>
+            <input
+              type="text"
+              name="menu_update_frequency"
+              value={formData.menu_update_frequency}
+              onChange={handleChange}
+              className="w-full p-2 border rounded mb-3"
+            />
+
+            <label className="block text-primary">Daily Menu</label>
+            <input
+              type="checkbox"
+              name="daily_menu"
+              checked={formData.daily_menu}
+              onChange={handleChange}
+              className="mr-2"
+            />
+
+            <label className="block text-primary">Staff Using AI</label>
+            <input
+              type="text"
+              name="staff_using_ai"
+              value={formData.staff_using_ai}
+              onChange={handleChange}
+              className="w-full p-2 border rounded mb-4"
+            />
+
+            <div className="flex justify-between">
+              <button
+                onClick={prevStep}
+                className="bg-secondary text-primary px-4 py-2 rounded"
+              >
+                Back
+              </button>
+              <button
+                onClick={nextStep}
+                className="bg-primary text-white px-4 py-2 rounded"
+              >
+                Next
+              </button>
+            </div>
+          </div>
+        )}
+
+        {step === 5 && (
+          <div>
+            <h3 className="text-primary font-medium mb-4">
+              Step 5: Menu Information
             </h3>
 
             <label className="block text-primary">Food Menu</label>
@@ -270,12 +386,75 @@ const UpdateProfile = () => {
           </div>
         )}
 
-        {/* Step 5: AI Configuration */}
-        {step === 5 && (
+        {step === 6 && (
           <div>
             <h3 className="text-primary font-medium mb-4">
-              Step 5: AI Configuration
+              Step 6: AI Configuration
             </h3>
+
+            <label className="block text-primary">AI Languages</label>
+            <div className="mb-3">
+              <label>
+                <input
+                  type="checkbox"
+                  value="Russian"
+                  checked={formData.ai_languages.includes("Russian")}
+                  onChange={handleCheckboxChange}
+                  className="mr-2"
+                />
+                Russian
+              </label>
+              <label className="ml-2">
+                <input
+                  type="checkbox"
+                  value="English"
+                  checked={formData.ai_languages.includes("English")}
+                  onChange={handleCheckboxChange}
+                  className="mr-2"
+                />
+                English
+              </label>
+              <label className="ml-2">
+                <input
+                  type="checkbox"
+                  value="French"
+                  checked={formData.ai_languages.includes("French")}
+                  onChange={handleCheckboxChange}
+                  className="mr-2"
+                />
+                French
+              </label>
+              <label className="ml-2">
+                <input
+                  type="checkbox"
+                  value="Spanish"
+                  checked={formData.ai_languages.includes("Spanish")}
+                  onChange={handleCheckboxChange}
+                  className="mr-2"
+                />
+                Spanish
+              </label>
+              <label className="ml-2">
+                <input
+                  type="checkbox"
+                  value="German"
+                  checked={formData.ai_languages.includes("German")}
+                  onChange={handleCheckboxChange}
+                  className="mr-2"
+                />
+                German
+              </label>
+              <label className="ml-2">
+                <input
+                  type="checkbox"
+                  value="Italian"
+                  checked={formData.ai_languages.includes("Italian")}
+                  onChange={handleCheckboxChange}
+                  className="mr-2"
+                />
+                Italian
+              </label>
+            </div>
 
             <label className="block text-primary">AI Communication Style</label>
             <input
@@ -302,6 +481,24 @@ const UpdateProfile = () => {
               value={formData.ai_tone}
               onChange={handleChange}
               className="w-full p-2 border rounded mb-3"
+            />
+
+            <label className="block text-primary">Video Support</label>
+            <input
+              type="checkbox"
+              name="video_support"
+              checked={formData.video_support}
+              onChange={handleChange}
+              className="mr-2"
+            />
+
+            <label className="block text-primary">Additional Features</label>
+            <input
+              type="text"
+              name="additional_features"
+              value={formData.additional_features}
+              onChange={handleChange}
+              className="w-full p-2 border rounded mb-4"
             />
 
             <div className="flex justify-between">
