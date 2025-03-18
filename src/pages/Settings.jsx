@@ -7,11 +7,10 @@ export default function Settings() {
   const { profile, getProfile } = useAuthStore();
 
   useEffect(() => {
-    if (!profile) {
       getProfile();
-    }
   }, [profile, getProfile]);
 
+  console.log(profile)
   return (
     <div className="max-w-3xl mx-auto bg-white shadow-md rounded-lg p-6 mt-10 m-6">
       <h2 className="text-2xl font-semibold text-primary mb-4">
