@@ -50,7 +50,7 @@ export default function Settings() {
           <ProfileItem label="Service Style" value={profile.service_style} />
           <ProfileItem
             label="Exclusive Dishes/Wines"
-            value={profile.exclusive_items}
+            value={profile.exclusive_dishes} // Corrected this line
           />
           <ProfileItem
             label="Seasonal Menu"
@@ -58,7 +58,7 @@ export default function Settings() {
           />
           <ProfileItem
             label="Menu Change Frequency"
-            value={profile.menu_change_frequency}
+            value={profile.menu_update_frequency}
           />
           <ProfileItem
             label="Daily Menu"
@@ -86,8 +86,8 @@ export default function Settings() {
             value={profile.menu_update_frequency}
           />
           <ProfileItem
-            label="Custom AI Features"
-            value={profile.custom_ai_features}
+            label="Additional Features"
+            value={profile.additional_features} // changed from custom_ai_features
           />
 
           {/* Update Button */}
