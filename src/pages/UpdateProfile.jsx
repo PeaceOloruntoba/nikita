@@ -98,7 +98,24 @@ const UpdateProfile = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    updateProfile(formData, navigate);
+
+    const foodMenuArray = formData.menu_text
+      .split("\n")
+      .map((item) => item.trim())
+      .filter((item) => item);
+
+    const wineMenuArray = formData.wine_menu_text
+      .split("\n")
+      .map((item) => item.trim())
+      .filter((item) => item);
+
+    const updatedFormData = {
+      ...formData,
+      food_menu: foodMenuArray,
+      wine_menu: wineMenuArray,
+    };
+
+    updateProfile(updatedFormData, navigate);
   };
 
   return (
