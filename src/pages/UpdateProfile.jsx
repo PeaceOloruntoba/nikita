@@ -96,27 +96,27 @@ const UpdateProfile = () => {
   const nextStep = () => setStep((prev) => prev + 1);
   const prevStep = () => setStep((prev) => prev - 1);
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
+const handleSubmit = (e) => {
+  e.preventDefault();
 
-    const foodMenuArray = formData.menu_text
-      .split("\n")
-      .map((item) => item.trim())
-      .filter((item) => item);
+  const foodMenuArray = formData.menu_text
+    .split("\n")
+    .map((item) => item.trim())
+    .filter((item) => item);
 
-    const wineMenuArray = formData.wine_menu_text
-      .split("\n")
-      .map((item) => item.trim())
-      .filter((item) => item);
+  const wineMenuArray = formData.wine_menu_text
+    .split("\n")
+    .map((item) => item.trim())
+    .filter((item) => item);
 
-    const updatedFormData = {
-      ...formData,
-      food_menu: foodMenuArray,
-      wine_menu: wineMenuArray,
-    };
-
-    updateProfile(updatedFormData, navigate);
+  const updatedFormData = {
+    ...formData,
+    food_menu: foodMenuArray,
+    wine_menu: wineMenuArray,
   };
+
+  updateProfile(updatedFormData, navigate);
+};
 
   return (
     <div className="fixed inset-0 flex items-center justify-center bg-black/50">
