@@ -23,12 +23,24 @@ const getWineMenu = async (set) => {
   }
 };
 
+// Fetch all tables
+const getTables = async (set) => {
+  try {
+    const response = await axiosInstance.get("/profile/tables");
+    set({ tables: response.data.data || [] });
+  } catch (error) {
+    handleError(error);
+  }
+};
+
 const useMenuStore = create((set) => ({
   foodMenu: [],
   wineMenu: [],
+  tables: [],
 
   getFoodMenu: () => getFoodMenu(set),
   getWineMenu: () => getWineMenu(set),
+  getTables: () => getTables(set),
 }));
 
 export default useMenuStore;
