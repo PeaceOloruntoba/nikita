@@ -1,18 +1,53 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import useMenuStore from "../store/useMenuStore";
+import Modal from "./Modal";
 
 export default function WineMenu() {
-  const { wineMenu, getWineMenu } = useMenuStore();
+  const { wineMenu, getWineMenu, updateWineMenu } = useMenuStore();
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [menuText, setMenuText] = useState("");
 
   useEffect(() => {
     getWineMenu();
   }, [getWineMenu]);
 
+  useEffect(() => {
+    if (wineMenu && wineMenu.length > 0) {
+      setMenuText(wineMenu.join("\n"));
+    } else {
+      setMenuText("");
+    }
+  }, [wineMenu]);
+
+  const handleOpenModal = () => {
+    setIsModalOpen(true);
+  };
+
+  const handleCloseModal = () => {
+    setIsModalOpen(false);
+  };
+
+  const handleSaveMenu = () => {
+    const newMenu = menuText.split("\n").filter((item) => item.trim() !== "");
+    updateWineMenu(newMenu);
+    handleCloseModal();
+  };
+
   return (
     <div className="max-w-3xl mx-auto bg-white shadow-md rounded-lg p-6 mt-10 m-6">
-      <h2 className="text-2xl font-semibold text-primary mb-4">Wine Menu</h2>
+      <div className="flex items-center justify-between">
+        <h2 className="text-2xl font-semibold text-primary mb-4">Wine Menu</h2>
+        <button
+          className="bg-primary text-white px-6 py-1 rounded cursor-pointer focus:bg-primary/70 active:bg-primary/70"
+          onClick={handleOpenModal}
+        >
+          {wineMenu && wineMenu.length > 0
+            ? "Update Wine Menu"
+            : "Add Wine Menu"}
+        </button>
+      </div>
 
-      {wineMenu.length === 0 ? (
+      {wineMenu && wineMenu.length === 0 ? (
         <p className="text-gray-500">No wine items available.</p>
       ) : (
         <ul className="space-y-2">
@@ -26,6 +61,29 @@ export default function WineMenu() {
           ))}
         </ul>
       )}
+
+      <Modal isOpen={isModalOpen} onClose={handleCloseModal}>
+        <h3 className="text-lg font-semibold mb-4">Wine Menu</h3>
+        <textarea
+          value={menuText}
+          onChange={(e) => setMenuText(e.target.value)}
+          className="w-full h-48 p-2 border rounded-md"
+        />
+        <div className="mt-4 flex justify-end">
+          <button
+            className="bg-gray-300 px-4 py-2 rounded-md mr-2"
+            onClick={handleCloseModal}
+          >
+            Cancel
+          </button>
+          <button
+            className="bg-primary text-white px-4 py-2 rounded-md"
+            onClick={handleSaveMenu}
+          >
+            Save
+          </button>
+        </div>
+      </Modal>
     </div>
   );
 }
