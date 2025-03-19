@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import useMenuStore from "../store/useMenuStore";
-import Modal from "./Modal"; // Import the Modal component
+import Modal from "../components/ui/Modal";
 
 export default function FoodMenu() {
   const { foodMenu, getFoodMenu, updateFoodMenu } = useMenuStore();
