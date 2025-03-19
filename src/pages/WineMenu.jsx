@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import useMenuStore from "../store/useMenuStore";
-import Modal from "./Modal";
+import Modal from "../components/ui/Modal";
 
 export default function WineMenu() {
   const { wineMenu, getWineMenu, updateWineMenu } = useMenuStore();
