@@ -539,30 +539,6 @@ const UpdateProfile = () => {
               className="w-full p-2 border rounded mb-3"
             />
 
-            <label className="block text-primary">Restaurant Image</label>
-            <input
-              type="file"
-              name="restaurant_image"
-              onChange={handleChange}
-              className="w-full p-2 border rounded mb-3"
-            />
-
-            <label className="block text-primary">Food Menu Card Image</label>
-            <input
-              type="file"
-              name="food_menu_card_image"
-              onChange={handleChange}
-              className="w-full p-2 border rounded mb-3"
-            />
-
-            <label className="block text-primary">Wine Menu Card Image</label>
-            <input
-              type="file"
-              name="wine_menu_card_image"
-              onChange={handleChange}
-              className="w-full p-2 border rounded mb-4"
-            />
-
             <div className="flex justify-between">
               <button
                 onClick={prevStep}
@@ -571,10 +547,10 @@ const UpdateProfile = () => {
                 Back
               </button>
               <button
-                onClick={handleSubmit}
+                onClick={nextStep}
                 className="bg-primary text-white px-4 py-2 rounded"
               >
-                Submit
+                Next
               </button>
             </div>
           </div>
