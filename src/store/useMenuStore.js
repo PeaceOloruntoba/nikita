@@ -48,14 +48,16 @@ const useMenuStore = create((set) => ({
     }
   },
 
-  updateFoodMenu: async (menuText) => {
+  updateFoodMenu: async (menuArray) => {
     try {
+      const menuText = JSON.stringify(menuArray.join("\n"));
+      console.log(menuText); // Ensure valid JSON format
       const response = await axiosInstance.put("/profile/update-food-menu", {
-        menu_text: menuText,
+        menu_text: menuText, // Proper JSON string
       });
       set({ foodMenu: response.data.data || [] });
       toast.success("Food menu updated successfully!");
-      await useMenuStore.getState().getFoodMenu(); //re-fetch food menu
+      await useMenuStore.getState().getFoodMenu(); // Re-fetch updated menu
     } catch (error) {
       handleError(error);
     }

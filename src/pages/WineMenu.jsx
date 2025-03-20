@@ -2,14 +2,14 @@ import React, { useEffect, useState } from "react";
 import useMenuStore from "../store/useMenuStore";
 import Modal from "../components/ui/Modal";
 
-export default function WineMenu() {
-  const { wineMenu, getWineMenu, updateWineMenu } = useMenuStore();
+export default function FoodMenu() {
+  const { foodMenu, getFoodMenu, updateFoodMenu } = useMenuStore();
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [menuText, setMenuText] = useState("");
 
   useEffect(() => {
-    getWineMenu();
-  }, [getWineMenu]);
+    getFoodMenu();
+  }, [getFoodMenu]);
 
   useEffect(() => {
     if (wineMenu && wineMenu.length > 0) {
@@ -36,22 +36,22 @@ export default function WineMenu() {
   return (
     <div className="max-w-3xl mx-auto bg-white shadow-md rounded-lg p-6 mt-10 m-6">
       <div className="flex items-center justify-between">
-        <h2 className="text-2xl font-semibold text-primary mb-4">Wine Menu</h2>
+        <h2 className="text-2xl font-semibold text-primary mb-4">Food Menu</h2>
         <button
           className="bg-primary text-white px-6 py-1 rounded cursor-pointer focus:bg-primary/70 active:bg-primary/70"
           onClick={handleOpenModal}
         >
-          {wineMenu && wineMenu.length > 0
-            ? "Update Wine Menu"
-            : "Add Wine Menu"}
+          {foodMenu && foodMenu.length > 0
+            ? "Update Food Menu"
+            : "Add Food Menu"}
         </button>
       </div>
 
-      {wineMenu && wineMenu.length === 0 ? (
-        <p className="text-gray-500">No wine items available.</p>
+      {foodMenu && foodMenu.length === 0 ? (
+        <p className="text-gray-500">No menu items available.</p>
       ) : (
         <ul className="space-y-2">
-          {wineMenu.map((item, index) => (
+          {foodMenu?.map((item, index) => (
             <li
               key={index}
               className="p-2 border-b border-gray-300 text-gray-800"
@@ -63,7 +63,7 @@ export default function WineMenu() {
       )}
 
       <Modal isOpen={isModalOpen} onClose={handleCloseModal}>
-        <h3 className="text-lg font-semibold mb-4">Wine Menu</h3>
+        <h3 className="text-lg font-semibold mb-4">Food Menu</h3>
         <textarea
           value={menuText}
           onChange={(e) => setMenuText(e.target.value)}
