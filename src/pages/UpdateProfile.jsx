@@ -33,6 +33,9 @@ const UpdateProfile = () => {
     staff_using_ai: "",
     video_support: false,
     additional_features: "",
+    restaurant_image: null,
+    food_menu_card_image: null,
+    wine_menu_card_image: null,
   });
 
   useEffect(() => {
@@ -71,16 +74,26 @@ const UpdateProfile = () => {
         staff_using_ai: storedProfile.staff_using_ai || "",
         video_support: storedProfile.video_support || false,
         additional_features: storedProfile.additional_features || "",
+        restaurant_image: null,
+        food_menu_card_image: null,
+        wine_menu_card_image: null,
       });
     }
   }, [storedProfile]);
 
   const handleChange = (e) => {
-    const { name, value, type, checked } = e.target;
-    setFormData({
-      ...formData,
-      [name]: type === "checkbox" ? checked : value,
-    });
+    const { name, value, type, checked, files } = e.target;
+    if (type === "file") {
+      setFormData({
+        ...formData,
+        [name]: files[0],
+      });
+    } else {
+      setFormData({
+        ...formData,
+        [name]: type === "checkbox" ? checked : value,
+      });
+    }
   };
 
   const handleCheckboxChange = (e) => {
@@ -96,27 +109,37 @@ const UpdateProfile = () => {
   const nextStep = () => setStep((prev) => prev + 1);
   const prevStep = () => setStep((prev) => prev - 1);
 
-const handleSubmit = (e) => {
-  e.preventDefault();
+  const handleSubmit = (e) => {
+    e.preventDefault();
 
-  const foodMenuArray = formData.menu_text
-    .split("\n")
-    .map((item) => item.trim())
-    .filter((item) => item);
+    const foodMenuArray = formData.menu_text
+      .split("\n")
+      .map((item) => item.trim())
+      .filter((item) => item);
 
-  const wineMenuArray = formData.wine_menu_text
-    .split("\n")
-    .map((item) => item.trim())
-    .filter((item) => item);
+    const wineMenuArray = formData.wine_menu_text
+      .split("\n")
+      .map((item) => item.trim())
+      .filter((item) => item);
 
-  const updatedFormData = {
-    ...formData,
-    food_menu: foodMenuArray,
-    wine_menu: wineMenuArray,
+    const updatedFormData = new FormData();
+    for (const key in formData) {
+      if (key === "menu_text") {
+        updatedFormData.append("food_menu", JSON.stringify(foodMenuArray));
+      } else if (key === "wine_menu_text") {
+        updatedFormData.append("wine_menu", JSON.stringify(wineMenuArray));
+      } else if (key === "ai_languages") {
+        updatedFormData.append(
+          "ai_languages",
+          JSON.stringify(formData.ai_languages)
+        );
+      } else {
+        updatedFormData.append(key, formData[key]);
+      }
+    }
+
+    updateProfile(updatedFormData, navigate);
   };
-
-  updateProfile(updatedFormData, navigate);
-};
 
   return (
     <div className="fixed inset-0 flex items-center justify-center bg-black/50">
@@ -404,7 +427,7 @@ const handleSubmit = (e) => {
         {step === 6 && (
           <div>
             <h3 className="text-primary font-medium mb-4">
-              Step 6: AI Configuration
+              Step 6: AI Configuration & Images
             </h3>
 
             <label className="block text-primary">AI Languages</label>
@@ -512,6 +535,77 @@ const handleSubmit = (e) => {
               type="text"
               name="additional_features"
               value={formData.additional_features}
+              onChange={handleChange}
+              className="w-full p-2 border rounded mb-3"
+            />
+
+            <label className="block text-primary">Restaurant Image</label>
+            <input
+              type="file"
+              name="restaurant_image"
+              onChange={handleChange}
+              className="w-full p-2 border rounded mb-3"
+            />
+
+            <label className="block text-primary">Food Menu Card Image</label>
+            <input
+              type="file"
+              name="food_menu_card_image"
+              onChange={handleChange}
+              className="w-full p-2 border rounded mb-3"
+            />
+
+            <label className="block text-primary">Wine Menu Card Image</label>
+            <input
+              type="file"
+              name="wine_menu_card_image"
+              onChange={handleChange}
+              className="w-full p-2 border rounded mb-4"
+            />
+
+            <div className="flex justify-between">
+              <button
+                onClick={prevStep}
+                className="bg-secondary text-primary px-4 py-2 rounded"
+              >
+                Back
+              </button>
+              <button
+                onClick={handleSubmit}
+                className="bg-primary text-white px-4 py-2 rounded"
+              >
+                Submit
+              </button>
+            </div>
+          </div>
+        )}
+
+        {step === 7 && (
+          <div>
+            <h3 className="text-primary font-medium mb-4">
+              Step 7: Restaurant Images
+            </h3>
+
+            <label className="block text-primary">Restaurant Image</label>
+            <input
+              type="file"
+              name="restaurant_image"
+              onChange={handleChange}
+              className="w-full p-2 border rounded mb-3"
+            />
+
+            <label className="block text-primary">Food Menu Card Image</label>
+            <input
+              type="file"
+              name="food_menu_card_image"
+              onChange={handleChange}
+              className="w-full p-2 border rounded mb-3"
+            />
+
+            <label className="block text-primary">Wine Menu Card Image</label>
+            <input
+              type="file"
+              name="wine_menu_card_image"
               onChange={handleChange}
               className="w-full p-2 border rounded mb-4"
             />

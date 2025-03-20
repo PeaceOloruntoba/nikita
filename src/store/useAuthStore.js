@@ -77,11 +77,14 @@ const signUpUser = async (user, navigate, set) => {
   }
 };
 
-const updateProfile = async (user, navigate, set) => {
-  console.log(user)
+const updateProfile = async (profileData, navigate, set) => {
   set({ isAuthenticating: true });
   try {
-    const response = await axiosInstance.put("/profile/update", user);
+    const response = await axiosInstance.put("/profile", {
+      ...profileData,
+      menu_text: profileData.menu_text || [],
+      wine_menu_text: profileData.wine_menu_text || [],
+    });
     toast.success("Restaurant profile created successfully!");
     navigate("/interface");
   } catch (error) {
@@ -128,7 +131,7 @@ const useAuthStore = create((set) => {
     login: (user, navigate) => loginUser(user, navigate, set),
     signUp: (user, navigate) => signUpUser(user, navigate, set),
     logout: (navigate) => logoutUser(navigate, set),
-    updateProfile: (user, navigate) => updateProfile(user, navigate, set),
+    updateProfile: (profileData, navigate) => updateProfile(profileData, navigate, set),
     getProfile: () => getProfile(set),
   };
 });
