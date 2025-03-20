@@ -59,8 +59,10 @@ const UpdateProfile = () => {
         cuisine_type: storedProfile.cuisine_type || "",
         service_style: storedProfile.service_style || "",
         seating_capacity: storedProfile.seating_capacity || "",
-        menu_text: storedProfile.food_menu
+        menu_text: Array.isArray(storedProfile.food_menu)
           ? storedProfile.food_menu.join("\n")
+          : typeof storedProfile.food_menu === "string"
+          ? storedProfile.food_menu
           : "",
         wine_menu_text: Array.isArray(storedProfile.wine_menu)
           ? storedProfile.wine_menu.join("\n")
@@ -117,72 +119,71 @@ const UpdateProfile = () => {
   const nextStep = () => setStep((prev) => prev + 1);
   const prevStep = () => setStep((prev) => prev - 1);
 
-const handleCloudinaryUpload = async (file, preset) => {
-  if (!file) return null;
+  const handleCloudinaryUpload = async (file, preset) => {
+    if (!file) return null;
 
-  return new Promise((resolve, reject) => {
-    const reader = new FileReader();
+    return new Promise((resolve, reject) => {
+      const reader = new FileReader();
 
-    reader.onloadend = async () => {
-      try {
-        const formData = new FormData();
-        formData.append("file", reader.result);
-        formData.append("upload_preset", preset);
+      reader.onloadend = async () => {
+        try {
+          const formData = new FormData();
+          formData.append("file", reader.result);
+          formData.append("upload_preset", preset);
 
-        const response = await axios.post(
-          `https://api.cloudinary.com/v1_1/${
-            import.meta.env.VITE_CLOUDINARY_CLOUD_NAME
-          }/image/upload`,
-          formData
-        );
+          const response = await axios.post(
+            `https://api.cloudinary.com/v1_1/${
+              import.meta.env.VITE_CLOUDINARY_CLOUD_NAME
+            }/image/upload`,
+            formData
+          );
 
-        resolve(response.data.secure_url);
-      } catch (error) {
-        console.error("Cloudinary upload error:", error);
+          resolve(response.data.secure_url);
+        } catch (error) {
+          console.error("Cloudinary upload error:", error);
+          reject(null);
+        }
+      };
+
+      reader.onerror = () => {
+        console.error("FileReader error");
         reject(null);
-      }
-    };
+      };
 
-    reader.onerror = () => {
-      console.error("FileReader error");
-      reject(null);
-    };
+      reader.readAsDataURL(file);
+    });
+  };
 
-    reader.readAsDataURL(file);
-  });
-};
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    setLoading(true);
 
-const handleSubmit = async (e) => {
-  e.preventDefault();
-  setLoading(true);
+    try {
+      const preset = import.meta.env.VITE_CLOUDINARY_UPLOAD_PRESET;
 
-  try {
-    const preset = import.meta.env.VITE_CLOUDINARY_UPLOAD_PRESET;
+      const [restaurantImageUrl, foodMenuCardImageUrl, wineMenuCardImageUrl] =
+        await Promise.all([
+          handleCloudinaryUpload(formData.restaurant_image, preset),
+          handleCloudinaryUpload(formData.food_menu_card_image, preset),
+          handleCloudinaryUpload(formData.wine_menu_card_image, preset),
+        ]);
 
-    const [restaurantImageUrl, foodMenuCardImageUrl, wineMenuCardImageUrl] =
-      await Promise.all([
-        handleCloudinaryUpload(formData.restaurant_image, preset),
-        handleCloudinaryUpload(formData.food_menu_card_image, preset),
-        handleCloudinaryUpload(formData.wine_menu_card_image, preset),
-      ]);
+      const payload = {
+        ...formData,
+        restaurant_image: restaurantImageUrl || formData.restaurant_image, // Retain existing value if upload fails
+        food_menu_card_image:
+          foodMenuCardImageUrl || formData.food_menu_card_image,
+        wine_menu_card_image:
+          wineMenuCardImageUrl || formData.wine_menu_card_image,
+      };
 
-    const payload = {
-      ...formData,
-      restaurant_image: restaurantImageUrl || formData.restaurant_image, // Retain existing value if upload fails
-      food_menu_card_image:
-        foodMenuCardImageUrl || formData.food_menu_card_image,
-      wine_menu_card_image:
-        wineMenuCardImageUrl || formData.wine_menu_card_image,
-    };
-
-    updateProfile(payload, navigate);
-  } catch (error) {
-    console.error("Error submitting form:", error);
-  } finally {
-    setLoading(false);
-  }
-};
-
+      updateProfile(payload, navigate);
+    } catch (error) {
+      console.error("Error submitting form:", error);
+    } finally {
+      setLoading(false);
+    }
+  };
 
   return (
     <div className="fixed inset-0 flex items-center justify-center bg-black/50">
