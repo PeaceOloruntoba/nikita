@@ -30,6 +30,7 @@ const useMenuStore = create((set) => ({
   getTables: async () => {
     try {
       const response = await axiosInstance.get("/profile/tables");
+      console.log(response);
       set({ tables: response.data.data || [] });
     } catch (error) {
       handleError(error);
@@ -41,6 +42,7 @@ const useMenuStore = create((set) => ({
       const response = await axiosInstance.put("/profile/update-tables", {
         seating_capacity: seatingCapacity,
       });
+      console.log(response);
       set({ tables: response.data.data || [] });
       toast.success("Seating capacity updated successfully!");
       await useMenuStore.getState().getTables(); //re-fetch tables
