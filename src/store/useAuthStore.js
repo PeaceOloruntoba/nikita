@@ -79,11 +79,15 @@ const signUpUser = async (user, navigate, set) => {
 
 const updateProfile = async (profileData, navigate, set) => {
   set({ isAuthenticating: true });
+  console.log(profileData);
+  profileData.forEach((value, key) => {
+    console.log(key, value);
+  });
   try {
-    const response = await axiosInstance.put("/profile/update", {
-      ...profileData,
-      menu_text: profileData.menu_text || [],
-      wine_menu_text: profileData.wine_menu_text || [],
+    const response = await axiosInstance.put("/profile/update", profileData, {
+      headers: {
+        "Content-Type": "multipart/form-data",
+      },
     });
     toast.success("Restaurant profile created successfully!");
     navigate("/interface");
@@ -95,11 +99,10 @@ const updateProfile = async (profileData, navigate, set) => {
 };
 
 const getProfile = async (set) => {
-  console.log("fff")
   set({ isAuthenticating: true });
   try {
     const response = await axiosInstance.get("/profile/get");
-    console.log(response)
+    console.log(response);
     set((state) => ({
       profile: response.data.data,
     }));
@@ -131,7 +134,8 @@ const useAuthStore = create((set) => {
     login: (user, navigate) => loginUser(user, navigate, set),
     signUp: (user, navigate) => signUpUser(user, navigate, set),
     logout: (navigate) => logoutUser(navigate, set),
-    updateProfile: (profileData, navigate) => updateProfile(profileData, navigate, set),
+    updateProfile: (profileData, navigate) =>
+      updateProfile(profileData, navigate, set),
     getProfile: () => getProfile(set),
   };
 });

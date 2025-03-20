@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router";
 import useAuthStore from "../store/useAuthStore";
+import axios from "axios";
 
 const UpdateProfile = () => {
   const navigate = useNavigate();
@@ -54,10 +55,12 @@ const UpdateProfile = () => {
         service_style: storedProfile.service_style || "",
         seating_capacity: storedProfile.seating_capacity || "",
         menu_text: storedProfile.food_menu
-          ? JSON.stringify(storedProfile.food_menu, null, 2)
+          ? storedProfile.food_menu.join("\n")
           : "",
-        wine_menu_text: storedProfile.wine_menu
-          ? JSON.stringify(storedProfile.wine_menu, null, 2)
+        wine_menu_text: Array.isArray(storedProfile.wine_menu)
+          ? storedProfile.wine_menu.join("\n")
+          : typeof storedProfile.wine_menu === "string"
+          ? storedProfile.wine_menu
           : "",
         ai_languages: storedProfile.ai_languages || [],
         ai_communication_style: storedProfile.ai_communication_style || "",
@@ -109,36 +112,69 @@ const UpdateProfile = () => {
   const nextStep = () => setStep((prev) => prev + 1);
   const prevStep = () => setStep((prev) => prev - 1);
 
-  const handleSubmit = (e) => {
+  const handleCloudinaryUpload = async (file, preset) => {
+    if (!file) return null;
+
+    return new Promise((resolve, reject) => {
+      const reader = new FileReader();
+
+      reader.onloadend = async () => {
+        try {
+          const response = await axios.post(
+            `https://api.cloudinary.com/v1_1/${process.env.VITE_CLOUDINARY_CLOUD_NAME}/image/upload`,
+            {
+              file: reader.result,
+              upload_preset: preset,
+            }
+          );
+          resolve(response.data.secure_url);
+        } catch (error) {
+          console.error("Cloudinary upload error:", error);
+          reject(null);
+        }
+      };
+
+      reader.onerror = () => {
+        console.error("FileReader error");
+        reject(null);
+      };
+
+      reader.readAsDataURL(file);
+    });
+  };
+
+  const handleSubmit = async (e) => {
     e.preventDefault();
 
-    const foodMenuArray = formData.menu_text
-      .split("\n")
-      .map((item) => item.trim())
-      .filter((item) => item);
+    try {
+      const restaurantImageUrl = await handleCloudinaryUpload(
+        formData.restaurant_image,
+        process.env.VITE_CLOUDINARY_UPLOAD_PRESET
+      );
+      const foodMenuCardImageUrl = await handleCloudinaryUpload(
+        formData.food_menu_card_image,
+        process.env.VITE_CLOUDINARY_UPLOAD_PRESET
+      );
+      const wineMenuCardImageUrl = await handleCloudinaryUpload(
+        formData.wine_menu_card_image,
+        process.env.VITE_CLOUDINARY_UPLOAD_PRESET
+      );
 
-    const wineMenuArray = formData.wine_menu_text
-      .split("\n")
-      .map((item) => item.trim())
-      .filter((item) => item);
+      const payload = {
+        ...formData,
+        restaurant_image: restaurantImageUrl,
+        food_menu_card_image: foodMenuCardImageUrl,
+        wine_menu_card_image: wineMenuCardImageUrl,
+      };
 
-    const updatedFormData = new FormData();
-    for (const key in formData) {
-      if (key === "menu_text") {
-        updatedFormData.append("food_menu", JSON.stringify(foodMenuArray));
-      } else if (key === "wine_menu_text") {
-        updatedFormData.append("wine_menu", JSON.stringify(wineMenuArray));
-      } else if (key === "ai_languages") {
-        updatedFormData.append(
-          "ai_languages",
-          JSON.stringify(formData.ai_languages)
-        );
-      } else {
-        updatedFormData.append(key, formData[key]);
-      }
+      delete payload.restaurant_image;
+      delete payload.food_menu_card_image;
+      delete payload.wine_menu_card_image;
+
+      updateProfile(payload, navigate);
+    } catch (error) {
+      console.error("Error submitting form:", error);
     }
-
-    updateProfile(updatedFormData, navigate);
   };
 
   return (
