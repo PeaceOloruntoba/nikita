@@ -13,7 +13,7 @@ export default function QrCodes() {
   }, [getTables]);
 
   useEffect(() => {
-    if (tables && tables.length > 0) {
+    if (tables && Array.isArray(tables) && tables.length > 0) {
       setSeatingCapacity(tables.length.toString());
     } else {
       setSeatingCapacity("");
@@ -45,12 +45,12 @@ export default function QrCodes() {
         </button>
       </div>
 
-      {tables && tables.length === 0 ? (
+      {tables && Array.isArray(tables) && tables.length === 0 ? (
         <>
           <p className="text-gray-500">No QR codes available.</p>
           <p className="text-gray-500">Go and add some tables in settings.</p>
         </>
-      ) : (
+      ) : tables && Array.isArray(tables) ? (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
           {tables.map((item) => (
             <div
@@ -67,6 +67,8 @@ export default function QrCodes() {
             </div>
           ))}
         </div>
+      ) : (
+        <p>Loading...</p>
       )}
 
       <Modal isOpen={isModalOpen} onClose={handleCloseModal}>
