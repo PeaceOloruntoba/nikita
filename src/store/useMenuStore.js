@@ -37,7 +37,7 @@ const useMenuStore = create((set) => ({
 
   updateTables: async (seatingCapacity) => {
     try {
-      const response = await axiosInstance.put("/profile/seating", {
+      const response = await axiosInstance.put("/profile/update-tables", {
         seating_capacity: seatingCapacity,
       });
       set({ tables: response.data.data || [] });
@@ -50,7 +50,7 @@ const useMenuStore = create((set) => ({
 
   updateFoodMenu: async (menuText) => {
     try {
-      const response = await axiosInstance.put("/profile/menu", {
+      const response = await axiosInstance.put("/profile/update-food-menu", {
         menu_text: menuText,
       });
       set({ foodMenu: response.data.data || [] });
@@ -63,7 +63,7 @@ const useMenuStore = create((set) => ({
 
   updateWineMenu: async (wineMenuText) => {
     try {
-      const response = await axiosInstance.put("/profile/wine-menu", {
+      const response = await axiosInstance.put("/profile/update-wine-menu", {
         wine_menu_text: wineMenuText,
       });
       set({ wineMenu: response.data.data || [] });
