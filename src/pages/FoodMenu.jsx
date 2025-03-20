@@ -11,13 +11,15 @@ export default function FoodMenu() {
     getFoodMenu();
   }, [getFoodMenu]);
 
-  useEffect(() => {
-    if (foodMenu && foodMenu.length > 0) {
-      setMenuText(foodMenu.join("\n"));
-    } else {
-      setMenuText("");
-    }
-  }, [foodMenu]);
+useEffect(() => {
+  console.log("foodMenu:", foodMenu);
+  if (Array.isArray(foodMenu) && foodMenu.length > 0) {
+    setMenuText(foodMenu.join("\n"));
+  } else {
+    setMenuText("");
+  }
+}, [foodMenu]);
+
 
   const handleOpenModal = () => {
     setIsModalOpen(true);
@@ -47,17 +49,20 @@ export default function FoodMenu() {
         </button>
       </div>
 
-{Array.isArray(foodMenu) && foodMenu.length > 0 ? (
-  <ul className="space-y-2">
-    {foodMenu.map((item, index) => (
-      <li key={index} className="p-2 border-b border-gray-300 text-gray-800">
-        {item}
-      </li>
-    ))}
-  </ul>
-) : (
-  <p className="text-gray-500">No menu items available.</p>
-)}
+      {Array.isArray(foodMenu) && foodMenu.length > 0 ? (
+        <ul className="space-y-2">
+          {foodMenu.map((item, index) => (
+            <li
+              key={index}
+              className="p-2 border-b border-gray-300 text-gray-800"
+            >
+              {item}
+            </li>
+          ))}
+        </ul>
+      ) : (
+        <p className="text-gray-500">No menu items available.</p>
+      )}
 
       <Modal isOpen={isModalOpen} onClose={handleCloseModal}>
         <h3 className="text-lg font-semibold mb-4">Food Menu</h3>
