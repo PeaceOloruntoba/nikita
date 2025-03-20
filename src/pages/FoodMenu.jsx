@@ -11,17 +11,13 @@ export default function FoodMenu() {
     getFoodMenu();
   }, [getFoodMenu]);
 
-useEffect(() => {
-  console.log("foodMenu:", foodMenu);
-  if (Array.isArray(foodMenu) && foodMenu.length > 0) {
-    setMenuText(foodMenu.join("\n"));
-  } else {
-    setMenuText("");
-  }
-}, [foodMenu]);
-
-console.log(foodMenu)
-
+  useEffect(() => {
+    if (Array.isArray(foodMenu)) {
+      setMenuText(foodMenu.join("\n"));
+    } else {
+      setMenuText("");
+    }
+  }, [foodMenu]);
 
   const handleOpenModal = () => {
     setIsModalOpen(true);
@@ -37,6 +33,8 @@ console.log(foodMenu)
     handleCloseModal();
   };
 
+  console.log("foodMenu:", foodMenu);
+
   return (
     <div className="max-w-3xl mx-auto bg-white shadow-md rounded-lg p-6 mt-10 m-6">
       <div className="flex items-center justify-between">
@@ -45,7 +43,7 @@ console.log(foodMenu)
           className="bg-primary text-white px-6 py-1 rounded cursor-pointer focus:bg-primary/70 active:bg-primary/70"
           onClick={handleOpenModal}
         >
-          {foodMenu && foodMenu.length > 0
+          {Array.isArray(foodMenu) && foodMenu.length > 0
             ? "Update Food Menu"
             : "Add Food Menu"}
         </button>
