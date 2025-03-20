@@ -2,14 +2,14 @@ import React, { useEffect, useState } from "react";
 import useMenuStore from "../store/useMenuStore";
 import Modal from "../components/ui/Modal";
 
-export default function FoodMenu() {
-  const { foodMenu, getFoodMenu, updateFoodMenu } = useMenuStore();
+export default function WineMenu() {
+  const { wineMenu, getWineMenu, updateWineMenu } = useMenuStore();
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [menuText, setMenuText] = useState("");
 
   useEffect(() => {
-    getFoodMenu();
-  }, [getFoodMenu]);
+    getWineMenu();
+  }, [getWineMenu]);
 
   useEffect(() => {
     if (wineMenu && wineMenu.length > 0) {
@@ -41,17 +41,17 @@ export default function FoodMenu() {
           className="bg-primary text-white px-6 py-1 rounded cursor-pointer focus:bg-primary/70 active:bg-primary/70"
           onClick={handleOpenModal}
         >
-          {foodMenu && foodMenu.length > 0
+          {wineMenu && wineMenu.length > 0
             ? "Update Food Menu"
             : "Add Food Menu"}
         </button>
       </div>
 
-      {foodMenu && foodMenu.length === 0 ? (
+      {wineMenu && wineMenu.length === 0 ? (
         <p className="text-gray-500">No menu items available.</p>
       ) : (
         <ul className="space-y-2">
-          {foodMenu?.map((item, index) => (
+          {wineMenu?.map((item, index) => (
             <li
               key={index}
               className="p-2 border-b border-gray-300 text-gray-800"
