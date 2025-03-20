@@ -4,7 +4,7 @@ import QRCode from "react-qr-code";
 import Modal from "../components/ui/Modal";
 
 export default function QrCodes() {
-  const { tables, getTables, updateSeatingCapacity } = useMenuStore();
+  const { tables, getTables, updateTables } = useMenuStore();
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [seatingCapacity, setSeatingCapacity] = useState("");
 
@@ -29,7 +29,7 @@ export default function QrCodes() {
   };
 
   const handleSaveSeatingCapacity = () => {
-    updateSeatingCapacity(parseInt(seatingCapacity, 10));
+    updateTables(parseInt(seatingCapacity, 10));
     handleCloseModal();
   };
 
