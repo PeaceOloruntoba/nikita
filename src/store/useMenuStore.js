@@ -11,7 +11,7 @@ const useMenuStore = create((set) => ({
   getFoodMenu: async () => {
     try {
       const response = await axiosInstance.get("/profile/food-menu");
-      console.log(response)
+      console.log(response);
       set({ foodMenu: response.data.data || [] });
     } catch (error) {
       handleError(error);
@@ -49,15 +49,17 @@ const useMenuStore = create((set) => ({
     }
   },
 
-  updateFoodMenu: async (menuArray) => {
+  updateFoodMenu: async (menuText) => {
+    // Change parameter to menuText
     try {
-      if (!Array.isArray(menuArray) || menuArray.length === 0) {
-        toast.error("Menu must be a non-empty array.");
+      if (!menuText) {
+        // Check if menuText is empty
+        toast.error("Menu text cannot be empty.");
         return;
       }
 
       const response = await axiosInstance.put("/profile/update-food-menu", {
-        menu: menuArray, // Send the array directly
+        menu_text: menuText, // Send menuText instead of menu array
       });
 
       set({ foodMenu: response.data.data || [] });
@@ -68,15 +70,15 @@ const useMenuStore = create((set) => ({
     }
   },
 
-  updateWineMenu: async (wineMenuArray) => {
+  updateWineMenu: async (wineMenuText) => {
+    // change parameter to wineMenuText
     try {
-      if (!Array.isArray(wineMenuArray) || wineMenuArray.length === 0) {
-        toast.error("Wine menu must be a non-empty array.");
+      if (!wineMenuText) {
+        toast.error("Wine menu text cannot be empty.");
         return;
       }
-
       const response = await axiosInstance.put("/profile/update-wine-menu", {
-        wine_menu: wineMenuArray, // Send the array directly
+        wine_menu_text: wineMenuText, // Send wineMenuText instead of wine_menu array
       });
 
       set({ wineMenu: response.data.data || [] });
