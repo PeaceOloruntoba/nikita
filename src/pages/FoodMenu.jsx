@@ -51,7 +51,7 @@ export default function FoodMenu() {
         <p className="text-gray-500">No menu items available.</p>
       ) : (
         <ul className="space-y-2">
-          {foodMenu.map((item, index) => (
+          {foodMenu?.map((item, index) => (
             <li
               key={index}
               className="p-2 border-b border-gray-300 text-gray-800"
