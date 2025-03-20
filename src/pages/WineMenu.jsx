@@ -42,8 +42,8 @@ export default function WineMenu() {
           onClick={handleOpenModal}
         >
           {wineMenu && wineMenu.length > 0
-            ? "Update Food Menu"
-            : "Add Food Menu"}
+            ? "Update Wine Menu"
+            : "Add Wine Menu"}
         </button>
       </div>
 
@@ -63,7 +63,7 @@ export default function WineMenu() {
       )}
 
       <Modal isOpen={isModalOpen} onClose={handleCloseModal}>
-        <h3 className="text-lg font-semibold mb-4">Food Menu</h3>
+        <h3 className="text-lg font-semibold mb-4">Wine Menu</h3>
         <textarea
           value={menuText}
           onChange={(e) => setMenuText(e.target.value)}

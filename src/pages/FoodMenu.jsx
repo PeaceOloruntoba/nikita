@@ -20,6 +20,8 @@ useEffect(() => {
   }
 }, [foodMenu]);
 
+console.log(foodMenu)
+
 
   const handleOpenModal = () => {
     setIsModalOpen(true);
