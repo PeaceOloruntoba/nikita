@@ -332,15 +332,28 @@ const UpdateProfile = () => {
               className="w-full p-2 border rounded mb-3"
             />
 
-            <label className="block text-primary">Seasonal Menu</label>
-            <input
-              type="checkbox"
-              name="seasonal_menu"
-              checked={formData.seasonal_menu}
-              onChange={handleChange}
-              className="mr-2"
-            />
-
+            <div className="flex gap-6 mb-3">
+              <div className="flex gap-2 items-center">
+                <label className="block text-primary">Seasonal Menu</label>
+                <input
+                  type="checkbox"
+                  name="seasonal_menu"
+                  checked={formData.seasonal_menu}
+                  onChange={handleChange}
+                  className="mr-2"
+                />
+              </div>
+              <div className="flex gap-2 items-center">
+                <label className="block text-primary">Daily Menu</label>
+                <input
+                  type="checkbox"
+                  name="daily_menu"
+                  checked={formData.daily_menu}
+                  onChange={handleChange}
+                  className="mr-2"
+                />
+              </div>
+            </div>
             <label className="block text-primary">Menu Update Frequency</label>
             <input
               type="text"
@@ -348,15 +361,6 @@ const UpdateProfile = () => {
               value={formData.menu_update_frequency}
               onChange={handleChange}
               className="w-full p-2 border rounded mb-3"
-            />
-
-            <label className="block text-primary">Daily Menu</label>
-            <input
-              type="checkbox"
-              name="daily_menu"
-              checked={formData.daily_menu}
-              onChange={handleChange}
-              className="mr-2"
             />
 
             <label className="block text-primary">Staff Using AI</label>
