@@ -80,7 +80,7 @@ const signUpUser = async (user, navigate, set) => {
 const updateProfile = async (profileData, navigate, set) => {
   set({ isAuthenticating: true });
   try {
-    const response = await axiosInstance.put("/profile", {
+    const response = await axiosInstance.put("/profile/update", {
       ...profileData,
       menu_text: profileData.menu_text || [],
       wine_menu_text: profileData.wine_menu_text || [],
