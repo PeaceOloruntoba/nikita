@@ -50,11 +50,15 @@ const useMenuStore = create((set) => ({
 
   updateFoodMenu: async (menuArray) => {
     try {
-      const menuText = JSON.stringify(menuArray.join("\n"));
-      console.log(menuText); // Ensure valid JSON format
+      if (!Array.isArray(menuArray) || menuArray.length === 0) {
+        toast.error("Menu must be a non-empty array.");
+        return;
+      }
+
       const response = await axiosInstance.put("/profile/update-food-menu", {
-        menu_text: menuText, // Proper JSON string
+        menu: menuArray, // Send the array directly
       });
+
       set({ foodMenu: response.data.data || [] });
       toast.success("Food menu updated successfully!");
       await useMenuStore.getState().getFoodMenu(); // Re-fetch updated menu
@@ -63,14 +67,20 @@ const useMenuStore = create((set) => ({
     }
   },
 
-  updateWineMenu: async (wineMenuText) => {
+  updateWineMenu: async (wineMenuArray) => {
     try {
+      if (!Array.isArray(wineMenuArray) || wineMenuArray.length === 0) {
+        toast.error("Wine menu must be a non-empty array.");
+        return;
+      }
+
       const response = await axiosInstance.put("/profile/update-wine-menu", {
-        wine_menu_text: wineMenuText,
+        wine_menu: wineMenuArray, // Send the array directly
       });
+
       set({ wineMenu: response.data.data || [] });
       toast.success("Wine menu updated successfully!");
-      await useMenuStore.getState().getWineMenu(); //re-fetch wine menu
+      await useMenuStore.getState().getWineMenu(); // Re-fetch wine menu
     } catch (error) {
       handleError(error);
     }
