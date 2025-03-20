@@ -81,11 +81,7 @@ const updateProfile = async (profileData, navigate, set) => {
   set({ isAuthenticating: true });
   console.log(profileData);
   try {
-    const response = await axiosInstance.put("/profile/update", profileData, {
-      headers: {
-        "Content-Type": "multipart/form-data",
-      },
-    });
+    const response = await axiosInstance.put("/profile/update", profileData);
     toast.success("Restaurant profile created successfully!");
     navigate("/interface");
   } catch (error) {
