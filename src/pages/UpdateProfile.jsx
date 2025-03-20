@@ -3,10 +3,15 @@ import { useNavigate } from "react-router";
 import useAuthStore from "../store/useAuthStore";
 import axios from "axios";
 
+const VITE_CLOUDINARY_CLOUD_NAME = import.meta.env.VITE_CLOUDINARY_CLOUD_NAME;
+const VITE_CLOUDINARY_UPLOAD_PRESET = import.meta.env
+  .VITE_CLOUDINARY_UPLOAD_PRESET;
+
 const UpdateProfile = () => {
   const navigate = useNavigate();
   const { updateProfile, getProfile, profile: storedProfile } = useAuthStore();
   const [step, setStep] = useState(1);
+  const [loading, setLoading] = useState(false);
 
   const [formData, setFormData] = useState({
     first_name: "",
@@ -113,6 +118,8 @@ const UpdateProfile = () => {
   const prevStep = () => setStep((prev) => prev - 1);
 
   const handleCloudinaryUpload = async (file, preset) => {
+    console.log("Cloudinary Upload Preset:", VITE_CLOUDINARY_UPLOAD_PRESET);
+
     if (!file) return null;
 
     return new Promise((resolve, reject) => {
@@ -121,7 +128,7 @@ const UpdateProfile = () => {
       reader.onloadend = async () => {
         try {
           const response = await axios.post(
-            `https://api.cloudinary.com/v1_1/${process.env.VITE_CLOUDINARY_CLOUD_NAME}/image/upload`,
+            `https://api.cloudinary.com/v1_1/${VITE_CLOUDINARY_CLOUD_NAME}/image/upload`,
             {
               file: reader.result,
               upload_preset: preset,
@@ -145,19 +152,20 @@ const UpdateProfile = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setLoading(true);
 
     try {
       const restaurantImageUrl = await handleCloudinaryUpload(
         formData.restaurant_image,
-        process.env.VITE_CLOUDINARY_UPLOAD_PRESET
+        VITE_CLOUDINARY_UPLOAD_PRESET
       );
       const foodMenuCardImageUrl = await handleCloudinaryUpload(
         formData.food_menu_card_image,
-        process.env.VITE_CLOUDINARY_UPLOAD_PRESET
+        VITE_CLOUDINARY_UPLOAD_PRESET
       );
       const wineMenuCardImageUrl = await handleCloudinaryUpload(
         formData.wine_menu_card_image,
-        process.env.VITE_CLOUDINARY_UPLOAD_PRESET
+        VITE_CLOUDINARY_UPLOAD_PRESET
       );
 
       const payload = {
@@ -174,6 +182,8 @@ const UpdateProfile = () => {
       updateProfile(payload, navigate);
     } catch (error) {
       console.error("Error submitting form:", error);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -635,9 +645,12 @@ const UpdateProfile = () => {
               </button>
               <button
                 onClick={handleSubmit}
-                className="bg-primary text-white px-4 py-2 rounded"
+                className={`bg-primary text-white px-4 py-2 rounded ${
+                  loading ? "opacity-50 cursor-not-allowed" : ""
+                }`}
+                disabled={loading}
               >
-                Submit
+                {loading ? "Submitting..." : "Submit"}
               </button>
             </div>
           </div>

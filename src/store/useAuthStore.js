@@ -80,9 +80,6 @@ const signUpUser = async (user, navigate, set) => {
 const updateProfile = async (profileData, navigate, set) => {
   set({ isAuthenticating: true });
   console.log(profileData);
-  profileData.forEach((value, key) => {
-    console.log(key, value);
-  });
   try {
     const response = await axiosInstance.put("/profile/update", profileData, {
       headers: {
