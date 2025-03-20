@@ -117,75 +117,72 @@ const UpdateProfile = () => {
   const nextStep = () => setStep((prev) => prev + 1);
   const prevStep = () => setStep((prev) => prev - 1);
 
-  const handleCloudinaryUpload = async (file, preset) => {
-    console.log("Cloudinary Upload Preset:", VITE_CLOUDINARY_UPLOAD_PRESET);
+const handleCloudinaryUpload = async (file, preset) => {
+  if (!file) return null;
 
-    if (!file) return null;
+  return new Promise((resolve, reject) => {
+    const reader = new FileReader();
 
-    return new Promise((resolve, reject) => {
-      const reader = new FileReader();
+    reader.onloadend = async () => {
+      try {
+        const formData = new FormData();
+        formData.append("file", reader.result);
+        formData.append("upload_preset", preset);
 
-      reader.onloadend = async () => {
-        try {
-          const response = await axios.post(
-            `https://api.cloudinary.com/v1_1/${VITE_CLOUDINARY_CLOUD_NAME}/image/upload`,
-            {
-              file: reader.result,
-              upload_preset: preset,
-            }
-          );
-          resolve(response.data.secure_url);
-        } catch (error) {
-          console.error("Cloudinary upload error:", error);
-          reject(null);
-        }
-      };
+        const response = await axios.post(
+          `https://api.cloudinary.com/v1_1/${
+            import.meta.env.VITE_CLOUDINARY_CLOUD_NAME
+          }/image/upload`,
+          formData
+        );
 
-      reader.onerror = () => {
-        console.error("FileReader error");
+        resolve(response.data.secure_url);
+      } catch (error) {
+        console.error("Cloudinary upload error:", error);
         reject(null);
-      };
+      }
+    };
 
-      reader.readAsDataURL(file);
-    });
-  };
+    reader.onerror = () => {
+      console.error("FileReader error");
+      reject(null);
+    };
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    setLoading(true);
+    reader.readAsDataURL(file);
+  });
+};
 
-    try {
-      const restaurantImageUrl = await handleCloudinaryUpload(
-        formData.restaurant_image,
-        VITE_CLOUDINARY_UPLOAD_PRESET
-      );
-      const foodMenuCardImageUrl = await handleCloudinaryUpload(
-        formData.food_menu_card_image,
-        VITE_CLOUDINARY_UPLOAD_PRESET
-      );
-      const wineMenuCardImageUrl = await handleCloudinaryUpload(
-        formData.wine_menu_card_image,
-        VITE_CLOUDINARY_UPLOAD_PRESET
-      );
+const handleSubmit = async (e) => {
+  e.preventDefault();
+  setLoading(true);
 
-      const payload = {
-        ...formData,
-        restaurant_image: restaurantImageUrl,
-        food_menu_card_image: foodMenuCardImageUrl,
-        wine_menu_card_image: wineMenuCardImageUrl,
-      };
+  try {
+    const preset = import.meta.env.VITE_CLOUDINARY_UPLOAD_PRESET;
 
-      delete payload.restaurant_image;
-      delete payload.food_menu_card_image;
-      delete payload.wine_menu_card_image;
+    const [restaurantImageUrl, foodMenuCardImageUrl, wineMenuCardImageUrl] =
+      await Promise.all([
+        handleCloudinaryUpload(formData.restaurant_image, preset),
+        handleCloudinaryUpload(formData.food_menu_card_image, preset),
+        handleCloudinaryUpload(formData.wine_menu_card_image, preset),
+      ]);
 
-      updateProfile(payload, navigate);
-    } catch (error) {
-      console.error("Error submitting form:", error);
-    } finally {
-      setLoading(false);
-    }
-  };
+    const payload = {
+      ...formData,
+      restaurant_image: restaurantImageUrl || formData.restaurant_image, // Retain existing value if upload fails
+      food_menu_card_image:
+        foodMenuCardImageUrl || formData.food_menu_card_image,
+      wine_menu_card_image:
+        wineMenuCardImageUrl || formData.wine_menu_card_image,
+    };
+
+    updateProfile(payload, navigate);
+  } catch (error) {
+    console.error("Error submitting form:", error);
+  } finally {
+    setLoading(false);
+  }
+};
+
 
   return (
     <div className="fixed inset-0 flex items-center justify-center bg-black/50">
