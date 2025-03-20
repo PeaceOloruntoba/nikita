@@ -11,6 +11,7 @@ const useMenuStore = create((set) => ({
   getFoodMenu: async () => {
     try {
       const response = await axiosInstance.get("/profile/food-menu");
+      console.log(response)
       set({ foodMenu: response.data.data || [] });
     } catch (error) {
       handleError(error);
