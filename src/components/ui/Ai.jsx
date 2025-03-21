@@ -1,4 +1,4 @@
-import React, { useState, useRef } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import { annawine } from "../../assets";
 import axiosInstance from "../../utils/axiosConfig";
 import { toast } from "sonner";
@@ -7,29 +7,62 @@ import {
   FaMicrophoneSlash,
   FaVideo,
   FaPaperPlane,
+  FaSpinner,
 } from "react-icons/fa";
 
 export default function Ai() {
   const [message, setMessage] = useState("");
-  const [response, setResponse] = useState("");
+  const [chatMessages, setChatMessages] = useState([]);
   const [isRecording, setIsRecording] = useState(false);
+  const [isSending, setIsSending] = useState(false);
   const mediaRecorder = useRef(null);
   const audioChunks = useRef([]);
   const audioContext = useRef(null);
   const audioSource = useRef(null);
+  const chatContainerRef = useRef(null);
+
+  useEffect(() => {
+    fetchChatHistory();
+  }, []);
+
+  useEffect(() => {
+    if (chatContainerRef.current) {
+      chatContainerRef.current.scrollTop =
+        chatContainerRef.current.scrollHeight;
+    }
+  }, [chatMessages]);
+
+  const fetchChatHistory = async () => {
+    try {
+      const resp = await axiosInstance.get("/ai/messages");
+      setChatMessages(resp.data.messages);
+    } catch (error) {
+      toast.error("Failed to fetch chat history.");
+      console.error("Error fetching chat history:", error);
+    }
+  };
 
   const handleInputChange = (e) => {
     setMessage(e.target.value);
   };
 
   const handleSendMessage = async () => {
+    if (!message.trim()) return;
+
+    setIsSending(true);
     try {
-      const resp = await axiosInstance.post("/chat", { message });
-      setResponse(resp.data.data.response);
+      const resp = await axiosInstance.post("/ai/messages", { message });
+      setChatMessages((prevMessages) => [
+        ...prevMessages,
+        { role: "user", content: message },
+        { role: "assistant", content: resp.data.message },
+      ]);
       setMessage("");
     } catch (error) {
       toast.error("Failed to send message.");
       console.error("Error sending message:", error);
+    } finally {
+      setIsSending(false);
     }
   };
 
@@ -63,59 +96,31 @@ export default function Ai() {
   };
 
   const sendAudio = async (audioBlob) => {
+    setIsSending(true);
     const formData = new FormData();
     formData.append("audio", audioBlob, "audio.wav");
 
     try {
-      const resp = await axiosInstance.post("/chat", formData, {
+      const resp = await axiosInstance.post("/ai/messages", formData, {
         headers: {
           "Content-Type": "multipart/form-data",
         },
       });
-      setResponse(resp.data.data.response);
+      setChatMessages((prevMessages) => [
+        ...prevMessages,
+        { role: "assistant", content: resp.data.message },
+      ]);
     } catch (error) {
       toast.error("Failed to send audio.");
       console.error("Error sending audio:", error);
+    } finally {
+      setIsSending(false);
     }
   };
 
   const handleVideoChat = async () => {
-    try {
-      const stream = await navigator.mediaDevices.getUserMedia({
-        audio: true,
-        video: true,
-      });
-
-      audioContext.current = new AudioContext();
-      audioSource.current =
-        audioContext.current.createMediaStreamSource(stream);
-
-      const responseStream = await axiosInstance.post("/chat", null, {
-        responseType: "stream",
-      });
-
-      const audioDestination =
-        audioContext.current.createMediaStreamDestination();
-      audioSource.current.connect(audioDestination);
-
-      const audioReader = responseStream.data.getReader();
-
-      const processAudio = async () => {
-        const { done, value } = await audioReader.read();
-        if (done) return;
-        audioContext.current.decodeAudioData(value.buffer, (buffer) => {
-          const source = audioContext.current.createBufferSource();
-          source.buffer = buffer;
-          source.connect(audioContext.current.destination);
-          source.start();
-        });
-        processAudio();
-      };
-      processAudio();
-    } catch (error) {
-      toast.error("Failed to start video chat.");
-      console.error("Error starting video chat:", error);
-    }
+    // Implement video chat logic here
+    toast.info("Video chat functionality is not implemented yet.");
   };
 
   return (
@@ -124,9 +129,23 @@ export default function Ai() {
       <div className="absolute w-full bottom-0">
         <div className="bg-transparent p-4 w-full">
           {/* Chat Messages Display */}
-          <div className="mb-4 max-h-60 overflow-y-auto">
-            {response && (
-              <div className="bg-white/40 p-2 rounded-lg mb-2">{response}</div>
+          <div ref={chatContainerRef} className="mb-4 max-h-60 overflow-y-auto">
+            {chatMessages.map((msg, index) => (
+              <div
+                key={index}
+                className={`p-2 rounded-lg mb-2 ${
+                  msg.role === "user"
+                    ? "bg-blue-200 ml-auto w-fit"
+                    : "bg-gray-200 mr-auto w-fit"
+                }`}
+              >
+                {msg.content}
+              </div>
+            ))}
+            {isSending && (
+              <div className="flex items-center justify-center">
+                <FaSpinner className="animate-spin" />
+              </div>
             )}
           </div>
 
@@ -144,7 +163,11 @@ export default function Ai() {
               className="bg-primary text-white p-2 rounded-lg"
               aria-label="Send"
             >
-              <FaPaperPlane />
+              {isSending ? (
+                <FaSpinner className="animate-spin" />
+              ) : (
+                <FaPaperPlane />
+              )}
             </button>
             {isRecording ? (
               <button
