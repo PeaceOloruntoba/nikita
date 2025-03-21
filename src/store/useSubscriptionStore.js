@@ -1,93 +1,44 @@
-import { create } from "zustand";
-import axiosInstance from "../utils/axiosConfig";
-import { toast } from "sonner";
-import { handleError } from "../utils/handleError";
+import create from "zustand";
+import axios from "../utils/axios";
 
-const useSubscriptionStore = create((set) => ({
-  foodMenu: [],
-  wineMenu: [],
-  tables: [],
+const useSubscriptionStore = create((set, get) => ({
+  loading: false,
+  error: null,
 
-  getFoodMenu: async () => {
+  createSubscription: async (stripeToken, priceId) => {
+    set({ loading: true, error: null });
+
     try {
-      const response = await axiosInstance.get("/profile/food-menu");
-      console.log(response);
-      set({ foodMenu: response.data.data || [] });
-    } catch (error) {
-      handleError(error);
-    }
-  },
-
-  getWineMenu: async () => {
-    try {
-      const response = await axiosInstance.get("/profile/wine-menu");
-      set({ wineMenu: response.data.data || [] });
-    } catch (error) {
-      handleError(error);
-    }
-  },
-
-  getTables: async () => {
-    try {
-      const response = await axiosInstance.get("/profile/tables");
-      console.log(response);
-      set({ tables: response.data.data || [] });
-    } catch (error) {
-      handleError(error);
-    }
-  },
-
-  updateTables: async (seatingCapacity) => {
-    try {
-      const response = await axiosInstance.put("/profile/update-tables", {
-        seating_capacity: seatingCapacity,
+      const response = await axios.post("/subscriptions", {
+        stripeToken,
+        priceId,
       });
-      console.log(response);
-      set({ tables: response.data.data || [] });
-      toast.success("Seating capacity updated successfully!");
-      await useSubscriptionStore.getState().getTables(); //re-fetch tables
-    } catch (error) {
-      handleError(error);
+      set({ loading: false });
+      return response.data;
+    } catch (err) {
+      set({
+        loading: false,
+        error: err.response?.data?.message || err.message,
+      });
+      throw err;
     }
   },
 
-  updateFoodMenu: async (menuText) => {
-    // Change parameter to menuText
+  getPlanDetails: async (priceId) => {
+    set({ loading: true, error: null });
+
     try {
-      if (!menuText) {
-        // Check if menuText is empty
-        toast.error("Menu text cannot be empty.");
-        return;
-      }
-
-      const response = await axiosInstance.put("/profile/update-food-menu", {
-        menu_text: menuText, // Send menuText instead of menu array
+      const response = await axios.get(
+        `/subscriptions/plan-details?priceId=${priceId}`
+      );
+      set({ loading: false });
+      return response.data;
+    } catch (err) {
+      set({
+        loading: false,
+        error: err.response?.data?.message || err.message,
       });
-
-      set({ foodMenu: response.data.data || [] });
-      toast.success("Food menu updated successfully!");
-      await useSubscriptionStore.getState().getFoodMenu(); // Re-fetch updated menu
-    } catch (error) {
-      handleError(error);
-    }
-  },
-
-  updateWineMenu: async (wineMenuText) => {
-    // change parameter to wineMenuText
-    try {
-      if (!wineMenuText) {
-        toast.error("Wine menu text cannot be empty.");
-        return;
-      }
-      const response = await axiosInstance.put("/profile/update-wine-menu", {
-        wine_menu_text: wineMenuText, // Send wineMenuText instead of wine_menu array
-      });
-
-      set({ wineMenu: response.data.data || [] });
-      toast.success("Wine menu updated successfully!");
-      await useSubscriptionStore.getState().getWineMenu(); // Re-fetch wine menu
-    } catch (error) {
-      handleError(error);
+      throw err;
     }
   },
 }));
