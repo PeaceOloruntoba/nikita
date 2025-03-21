@@ -7,11 +7,13 @@ import { MdOutlineSpaceDashboard } from "react-icons/md";
 import { CiCalendar, CiShare2, CiLogout } from "react-icons/ci";
 import { FaBookReader } from "react-icons/fa";
 import { BiLogOut } from "react-icons/bi";
+import useAuthStore from "../../store/useAuthStore";
 
 export default function Sidebar() {
+  const { logout } = useAuthStore;
   const navigate = useNavigate();
   function handleLogout() {
-    localStorage.removeItem("*");
+    logout();
     navigate("/login");
   }
   return (
