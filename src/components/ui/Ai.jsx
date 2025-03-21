@@ -37,7 +37,7 @@ export default function Ai() {
       const resp = await axiosInstance.get("/ai/messages");
       setChatMessages(resp.data.messages);
     } catch (error) {
-      toast.error("Failed to fetch chat history.");
+      toast.error(error?.response?.data?.message);
       console.error("Error fetching chat history:", error);
     }
   };
