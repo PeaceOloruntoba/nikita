@@ -13,7 +13,7 @@ export default function Sidebar() {
   const { logout } = useAuthStore;
   const navigate = useNavigate();
   function handleLogout() {
-    logout();
+    logout(navigate);
     navigate("/login");
   }
   return (
