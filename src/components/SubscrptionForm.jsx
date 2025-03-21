@@ -43,8 +43,8 @@ const SubscriptionForm = () => {
         body: JSON.stringify({
           stripeToken: token.id,
           priceId: profile.video_support
-            ? "price_YOUR_VIDEO_SUPPORT_PRICE_ID"
-            : "price_YOUR_BASIC_PRICE_ID", // Replace with your actual price IDs
+            ? "price_1R59e6GWzmbPnUwmidW4eIXH"
+            : "price_1R592oGWzmbPnUwmzJ15hcAm",
         }),
       });
 
@@ -63,7 +63,7 @@ const SubscriptionForm = () => {
   };
 
   return (
-    <div className="max-w-md mx-auto p-6 bg-white rounded-lg shadow-md">
+    <div className="max-w-md mx-auto p-6 bg-white rounded-lg shadow-md mt-12">
       <h2 className="text-2xl font-semibold mb-4 text-primary">
         Subscribe Now
       </h2>
