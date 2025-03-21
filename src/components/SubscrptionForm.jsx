@@ -7,12 +7,13 @@ import useSubscriptionStore from "../store/useSubscriptionStore";
 
 const SubscriptionForm = () => {
   const stripe = useStripe();
+  const[loadin, setLoading] = useState()
   const elements = useElements();
   const navigate = useNavigate();
   const authStore = useAuthStore();
   const profile = authStore.profile;
   const { loading, error, createSubscription, getPlanDetails } =
-    useSubscriptionStore(); // Use the subscription store
+    useSubscriptionStore();
 
   const [planDetails, setPlanDetails] = useState(null);
 
