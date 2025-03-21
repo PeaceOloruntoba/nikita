@@ -15,6 +15,7 @@ import QrCodes from "./pages/QrCodes";
 import Training from "./pages/Training";
 import Reviews from "./pages/Reviews";
 import Support from "./pages/Support";
+import SubscriptionPage from "./pages/Subscription";
 
 export default function App() {
   return (
@@ -34,6 +35,7 @@ export default function App() {
             <Route path="reviews" element={<Reviews />} />
             <Route path="support" element={<Support />} />
             <Route path="settings" element={<Settings />} />
+            <Route path="subscription" element={<SubscriptionPage />} />
           </Route>
         </Route>
         <Route path="login" element={<Login />} />
