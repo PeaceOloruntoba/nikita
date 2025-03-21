@@ -9,7 +9,7 @@ const useSubscriptionStore = create((set, get) => ({
     set({ loading: true, error: null });
 
     try {
-      const response = await axios.post("/subscriptions", {
+      const response = await axios.post("/subscription/subscriptions", {
         stripeToken,
         priceId,
       });
@@ -29,7 +29,7 @@ const useSubscriptionStore = create((set, get) => ({
 
     try {
       const response = await axios.get(
-        `/subscriptions/plan-details?priceId=${priceId}`
+        `/subscription/plan-details/${priceId}`
       );
       set({ loading: false });
       return response.data;
