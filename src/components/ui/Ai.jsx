@@ -95,28 +95,28 @@ export default function Ai() {
     }
   };
 
-  const sendAudio = async (audioBlob) => {
-    setIsSending(true);
-    const formData = new FormData();
-    formData.append("audio", audioBlob, "audio.wav");
+const sendAudio = async (audioBlob) => {
+  setIsSending(true);
+  const formData = new FormData();
+  formData.append("file", audioBlob, "audio.wav"); // Change field name to "file"
 
-    try {
-      const resp = await axiosInstance.post("/ai/messages", formData, {
-        headers: {
-          "Content-Type": "multipart/form-data",
-        },
-      });
-      setChatMessages((prevMessages) => [
-        ...prevMessages,
-        { role: "assistant", content: resp.data.message },
-      ]);
-    } catch (error) {
-      toast.error("Failed to send audio.");
-      console.error("Error sending audio:", error);
-    } finally {
-      setIsSending(false);
-    }
-  };
+  try {
+    const resp = await axiosInstance.post("/ai/messages", formData, {
+      headers: {
+        "Content-Type": "multipart/form-data",
+      },
+    });
+    setChatMessages((prevMessages) => [
+      ...prevMessages,
+      { role: "assistant", content: resp.data.message },
+    ]);
+  } catch (error) {
+    toast.error("Failed to send audio.");
+    console.error("Error sending audio:", error);
+  } finally {
+    setIsSending(false);
+  }
+};
 
   const handleVideoChat = async () => {
     // Implement video chat logic here
