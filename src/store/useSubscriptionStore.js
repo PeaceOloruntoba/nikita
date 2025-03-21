@@ -1,5 +1,5 @@
-import create from "zustand";
-import axios from "../utils/axios";
+import { create } from "zustand";
+import axiosInstance from "../utils/axiosConfig";
 
 const useSubscriptionStore = create((set, get) => ({
   loading: false,
@@ -9,7 +9,7 @@ const useSubscriptionStore = create((set, get) => ({
     set({ loading: true, error: null });
 
     try {
-      const response = await axios.post("/subscription/subscriptions", {
+      const response = await axiosInstance.post("/subscription/subscriptions", {
         stripeToken,
         priceId,
       });
@@ -28,7 +28,7 @@ const useSubscriptionStore = create((set, get) => ({
     set({ loading: true, error: null });
 
     try {
-      const response = await axios.get(
+      const response = await axiosInstance.get(
         `/subscription/plan-details/${priceId}`
       );
       set({ loading: false });
