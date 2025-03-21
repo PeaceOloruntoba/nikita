@@ -129,14 +129,14 @@ export default function Ai() {
       <div className="absolute w-full bottom-0">
         <div className="bg-transparent p-4 w-full">
           {/* Chat Messages Display */}
-          <div ref={chatContainerRef} className="mb-4 max-h-60 overflow-y-auto">
+          <div ref={chatContainerRef} className="my-4 pt-24 max-h-screen overflow-y-scroll hide-scrollbar">
             {chatMessages.map((msg, index) => (
               <div
                 key={index}
                 className={`p-2 rounded-lg mb-2 ${
                   msg.role === "user"
                     ? "bg-blue-200 ml-auto w-fit"
-                    : "bg-gray-200 mr-auto w-fit"
+                    : "bg-gray-200 mr-auto max-w-72 w-fit"
                 }`}
               >
                 {msg.content}
