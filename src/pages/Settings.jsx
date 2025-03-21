@@ -82,16 +82,26 @@ export default function Settings() {
           />
           <ProfileItem
             label="Additional Features"
-            value={profile.additional_features} // changed from custom_ai_features
+            value={profile.additional_features}
           />
 
           {/* Update Button */}
-          <button
-            onClick={() => navigate("/update-profile")}
-            className="w-full bg-primary text-white font-semibold py-2 rounded-md hover:bg-primary-dark transition"
-          >
-            Update Profile
-          </button>
+          <div className="flex items-center gap-6 w-full">
+            <button
+              onClick={() => navigate("/update-profile")}
+              className="w-full bg-primary cursor-pointer text-white font-semibold py-2 rounded-md hover:bg-primary-dark transition"
+            >
+              Update Profile
+            </button>
+            {profile && (
+              <button
+                onClick={() => navigate("/subscription")}
+                className="w-full bg-primary cursor-pointer text-white font-semibold py-2 rounded-md hover:bg-primary-dark transition"
+              >
+                Subscribe to use our AI
+              </button>
+            )}
+          </div>
         </div>
       )}
     </div>
