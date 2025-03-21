@@ -106,7 +106,7 @@ export default function Sidebar() {
             <hr />
             <button
               onClick={() => handleLogout()}
-              className="flex p-2 border rounded-lg gap-2 items-center bg-primary text-white m-4"
+              className="flex p-2 border rounded-lg gap-2 items-center bg-primary text-white m-4 cursor-pointer"
             >
               Logout
               <BiLogOut size={20} />
