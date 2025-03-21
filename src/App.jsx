@@ -25,7 +25,7 @@ export default function App() {
         <Route element={<RootLayout />}>
           <Route element={<AdminGuard />}>
             <Route path="interface" element={<Interface />} />
-            <Route path="" element={<Navigate to={"/interface"} />} />
+            <Route path="/" element={<Navigate to={"/interface"} />} />
             <Route path="update-profile" element={<UpdateProfile />} />
             <Route path="interface/food-menu" element={<FoodMenu />} />
             <Route path="interface/wine-menu" element={<WineMenu />} />

@@ -10,11 +10,10 @@ import { BiLogOut } from "react-icons/bi";
 import useAuthStore from "../../store/useAuthStore";
 
 export default function Sidebar() {
-  const { logout } = useAuthStore;
+  const { logout } = useAuthStore();
   const navigate = useNavigate();
   function handleLogout() {
     logout(navigate);
-    navigate("/login");
   }
   return (
     <div className="h-screen">
@@ -105,7 +104,7 @@ export default function Sidebar() {
           <div className="flex flex-col w-full">
             <hr />
             <button
-              onClick={() => handleLogout()}
+              onClick={handleLogout}
               className="flex p-2 border rounded-lg gap-2 items-center bg-primary text-white m-4 cursor-pointer"
             >
               Logout

@@ -18,6 +18,7 @@ const loadAuthDataFromLocalStorage = () => {
 const clearAuthDataFromLocalStorage = () => {
   localStorage.removeItem("user");
   localStorage.removeItem("token");
+  localStorage.removeItem("profile");
 };
 
 // Authentication Functions
@@ -110,7 +111,7 @@ const logoutUser = (navigate, set) => {
   clearAuthDataFromLocalStorage();
   set({ user: null, token: null, isAuthenticated: false });
   toast.success("Logged out successfully!");
-  navigate("/");
+  navigate("/login");
 };
 
 // Zustand Store
