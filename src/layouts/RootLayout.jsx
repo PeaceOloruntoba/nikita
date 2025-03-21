@@ -13,7 +13,7 @@ export default function RootLayout() {
       <div className="overflow-scroll hide-scrollbar w-5/5">
         <Outlet />
       </div>
-      <div className="w-2/5 h-screen">
+      <div className="w-3/5 h-screen">
         <Ai />
       </div>
     </div>
