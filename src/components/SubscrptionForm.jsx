@@ -1,17 +1,36 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { CardElement, useStripe, useElements } from "@stripe/react-stripe-js";
 import { toast } from "sonner";
 import { useNavigate } from "react-router";
 import useAuthStore from "../store/useAuthStore";
+import useSubscriptionStore from "../store/useSubscriptionStore";
 
 const SubscriptionForm = () => {
   const stripe = useStripe();
   const elements = useElements();
   const navigate = useNavigate();
   const authStore = useAuthStore();
-  const profile = authStore.profile; // Access the profile data from the store
+  const profile = authStore.profile;
+  const { loading, error, createSubscription, getPlanDetails } =
+    useSubscriptionStore(); // Use the subscription store
 
-  const [loading, setLoading] = useState(false);
+  const [planDetails, setPlanDetails] = useState(null);
+
+  useEffect(() => {
+    const fetchPlanDetails = async () => {
+      try {
+        const priceId = profile.video_support
+          ? "price_1R59e6GWzmbPnUwmidW4eIXH"
+          : "price_1R592oGWzmbPnUwmzJ15hcAm";
+        const data = await getPlanDetails(priceId);
+        setPlanDetails(data);
+      } catch (fetchError) {
+        toast.error(error || "Failed to fetch plan details.");
+      }
+    };
+
+    fetchPlanDetails();
+  }, [profile.video_support, getPlanDetails, error]);
 
   const handleSubmit = async (event) => {
     event.preventDefault();
@@ -25,42 +44,31 @@ const SubscriptionForm = () => {
 
     const cardElement = elements.getElement(CardElement);
 
-    const { error, token } = await stripe.createToken(cardElement);
+    const { error: stripeError, token } = await stripe.createToken(cardElement);
 
-    if (error) {
-      toast.error(error.message);
+    if (stripeError) {
+      toast.error(stripeError.message);
       setLoading(false);
       return;
     }
 
     try {
-      const response = await fetch("/subscriptions", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${localStorage.getItem("token")}`, // Assuming you store the token in localStorage
-        },
-        body: JSON.stringify({
-          stripeToken: token.id,
-          priceId: profile.video_support
-            ? "price_1R59e6GWzmbPnUwmidW4eIXH"
-            : "price_1R592oGWzmbPnUwmzJ15hcAm",
-        }),
-      });
-
-      if (response.ok) {
-        toast.success("Subscription successful!");
-        navigate("/interface");
-      } else {
-        const errorData = await response.json();
-        toast.error(errorData.message || "Subscription failed.");
-      }
+      const priceId = profile.video_support
+        ? "price_1R59e6GWzmbPnUwmidW4eIXH"
+        : "price_1R592oGWzmbPnUwmzJ15hcAm";
+      const data = await createSubscription(token.id, priceId);
+      toast.success("Subscription successful!");
+      navigate("/interface");
     } catch (fetchError) {
-      toast.error("Network error. Please try again.");
+      toast.error(error || "Subscription failed.");
     } finally {
       setLoading(false);
     }
   };
+
+  if (!planDetails) {
+    return <p>Loading plan details...</p>;
+  }
 
   return (
     <div className="max-w-md mx-auto p-6 bg-white rounded-lg shadow-md mt-12">
@@ -72,6 +80,17 @@ const SubscriptionForm = () => {
           ? "You've selected the premium plan with video support."
           : "You've selected the basic plan."}
       </p>
+
+      <div className="mb-4">
+        <h3 className="font-semibold text-primary">Plan Details:</h3>
+        <p>Name: {planDetails.product.name}</p>
+        <p>
+          Amount: {planDetails.unit_amount / 100}{" "}
+          {planDetails.currency.toUpperCase()}
+        </p>
+        <p>Interval: {planDetails.recurring.interval}</p>
+      </div>
+
       <form onSubmit={handleSubmit}>
         <div className="mb-4">
           <label className="block text-sm font-medium text-primary">
