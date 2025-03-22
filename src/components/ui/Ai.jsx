@@ -146,8 +146,8 @@ export default function Ai() {
                 key={index}
                 className={`p-2 rounded-lg mb-2 ${
                   msg.role === "user"
-                    ? "bg-blue-200 ml-auto w-fit"
-                    : "bg-gray-200 mr-auto max-w-72 w-fit"
+                    ? "bg-gray-200/30 ml-auto w-fit text-white"
+                    : "bg-gray-200/30 mr-auto max-w-72 w-fit text-white"
                 }`}
               >
                 {msg.content}
