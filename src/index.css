@@ -48,3 +48,7 @@ body{
     scrollbar-width: 2px;
     /* Firefox */
 }
+
+img {
+object-fit: cover;
+} 
