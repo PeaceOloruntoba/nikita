@@ -133,7 +133,7 @@ export default function Ai() {
 
   return (
     <div className="h-screen flex items-center justify-center text-xl font-semibold relative">
-      <img src={annawine} alt="" className="w-full h-full" />
+      <img src={annawine} alt="" className="w-full h-full object-cover" />
       <div className="absolute w-full bottom-0">
         <div className="bg-transparent p-4 w-full">
           {/* Chat Messages Display */}
