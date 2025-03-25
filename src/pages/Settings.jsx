@@ -14,7 +14,7 @@ export default function Settings() {
   return (
     <div className="max-w-3xl mx-auto bg-white shadow-md rounded-lg p-6 mt-10 m-6">
       <h2 className="text-2xl font-semibold text-primary mb-4">
-        Profile Settings
+        Restaurant Settings
       </h2>
 
       {!profile ? (
