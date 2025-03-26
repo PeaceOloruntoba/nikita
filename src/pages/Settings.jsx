@@ -10,7 +10,6 @@ export default function Settings() {
     getProfile();
   }, [getProfile]);
 
-  // console.log(profile)
   return (
     <div className="max-w-3xl mx-auto bg-white shadow-md rounded-lg p-6 mt-10 m-6">
       <h2 className="text-2xl font-semibold text-primary mb-4">
@@ -34,7 +33,6 @@ export default function Settings() {
             value={profile.restaurant_address}
           />
 
-          {/* Additional Fields from Questionnaire */}
           <ProfileItem
             label="Legal Representative"
             value={profile.legal_representative}
@@ -45,7 +43,7 @@ export default function Settings() {
           <ProfileItem label="Service Style" value={profile.service_style} />
           <ProfileItem
             label="Exclusive Dishes/Wines"
-            value={profile.exclusive_dishes} // Corrected this line
+            value={profile.exclusive_dishes}
           />
           <ProfileItem
             label="Seasonal Menu"
@@ -85,7 +83,6 @@ export default function Settings() {
             value={profile.additional_features}
           />
 
-          {/* Update Button */}
           <div className="flex items-center gap-6 w-full">
             <button
               onClick={() => navigate("/update-profile")}
@@ -108,7 +105,6 @@ export default function Settings() {
   );
 }
 
-// Reusable Profile Item Component
 const ProfileItem = ({ label, value }) => (
   <div className="flex justify-between border-b pb-2">
     <span className="text-gray-600">{label}</span>
