@@ -46,7 +46,7 @@ export default function Feedback() {
       : feedbacks?.feedbacks.filter((fb) => fb.is_positive === feedbackStatus);
 
   return (
-    <div className="p-6 text-[#3a3a3a] flex flex-col gap-6">
+    <div className="py-6 text-[#3a3a3a] flex flex-col gap-6">
       <div className="grid grid-cols-3 gap-6">
         {feedbackCard.map((card) => (
           <button
