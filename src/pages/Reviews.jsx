@@ -4,7 +4,7 @@ import { FeedbackTitleCard, FeedbackCard } from "../components/Feedback";
 import useAdminStore from "../store/useAdminStore"; // Import Zustand Store
 import Spinner from "../components/shared/Spinner";
 
-export default function Feedback() {
+export default function Reviews() {
   const { feedbacks, getFeedbacks, isLoading } = useAdminStore();
   const [feedbackStatus, setFeedbackStatus] = useState(null);
 
