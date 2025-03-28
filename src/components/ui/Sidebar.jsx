@@ -7,6 +7,7 @@ import { MdOutlineSpaceDashboard } from "react-icons/md";
 import { CiCalendar, CiShare2, CiLogout } from "react-icons/ci";
 import { FaBookReader } from "react-icons/fa";
 import { BiLogOut } from "react-icons/bi";
+import { MdOutlineReviews } from "react-icons/md";
 import useAuthStore from "../../store/useAuthStore";
 
 export default function Sidebar() {
@@ -75,7 +76,7 @@ export default function Sidebar() {
                   : " w-full text-left p-4 flex gap-2 items-center"
               }
             >
-              <CiCalendar size={20} />
+              <MdOutlineReviews size={20} />
               Reviews
             </NavLink>
             <NavLink
