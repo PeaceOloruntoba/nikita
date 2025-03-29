@@ -3,7 +3,7 @@ import { profilePic } from "../../assets";
 import { NavLink, useNavigate } from "react-router";
 import { IoQrCodeOutline, IoSettingsOutline } from "react-icons/io5";
 import { PiUsersThree } from "react-icons/pi";
-import { MdOutlineSpaceDashboard } from "react-icons/md";
+import { MdOutlineInsights, MdOutlineSpaceDashboard } from "react-icons/md";
 import { CiCalendar, CiShare2, CiLogout } from "react-icons/ci";
 import { FaBookReader } from "react-icons/fa";
 import { BiLogOut, BiSupport } from "react-icons/bi";
@@ -43,7 +43,7 @@ export default function Sidebar() {
                   : " w-full text-left p-4 flex gap-2 items-center"
               }
             >
-              <CiShare2 size={20} />
+              <MdOutlineInsights size={20} />
               AI Insights
             </NavLink>
             <NavLink
