@@ -98,7 +98,7 @@ export default function Sidebar() {
                   : " w-full text-left p-4 flex gap-2 items-center"
               }
             >
-              <CiCalendar size={20} />
+              <IoSettingsOutline size={20} />
               Settings
             </NavLink>
           </div>
