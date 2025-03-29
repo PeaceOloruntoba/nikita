@@ -1,7 +1,7 @@
 import React from "react";
 import { profilePic } from "../../assets";
 import { NavLink, useNavigate } from "react-router";
-import { IoSettingsOutline } from "react-icons/io5";
+import { IoQrCodeOutline, IoSettingsOutline } from "react-icons/io5";
 import { PiUsersThree } from "react-icons/pi";
 import { MdOutlineSpaceDashboard } from "react-icons/md";
 import { CiCalendar, CiShare2, CiLogout } from "react-icons/ci";
@@ -54,7 +54,7 @@ export default function Sidebar() {
                   : " w-full text-left p-4 flex gap-2 items-center"
               }
             >
-              <FaBookReader size={20} />
+              <IoQrCodeOutline size={20} />
               QR Codes
             </NavLink>
             <NavLink
