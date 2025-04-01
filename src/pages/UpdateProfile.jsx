@@ -27,7 +27,6 @@ const UpdateProfile = () => {
     ai_languages: [],
     ai_communication_style: "",
     ai_personality: "",
-    ai_tone: "",
     legal_representative: "",
     contact_phone: "",
     email: "",
@@ -72,7 +71,6 @@ const UpdateProfile = () => {
         ai_languages: storedProfile.ai_languages || [],
         ai_communication_style: storedProfile.ai_communication_style || "",
         ai_personality: storedProfile.ai_personality || "",
-        ai_tone: storedProfile.ai_tone || "",
         legal_representative: storedProfile.legal_representative || "",
         contact_phone: storedProfile.contact_phone || "",
         email: storedProfile.email || "",
@@ -479,68 +477,13 @@ const UpdateProfile = () => {
             </h3>
 
             <label className="block text-primary">AI Languages</label>
-            <div className="mb-3">
-              <label>
-                <input
-                  type="checkbox"
-                  value="Russian"
-                  checked={formData.ai_languages.includes("Russian")}
-                  onChange={handleCheckboxChange}
-                  className="mr-2"
-                />
-                Russian
-              </label>
-              <label className="ml-2">
-                <input
-                  type="checkbox"
-                  value="English"
-                  checked={formData.ai_languages.includes("English")}
-                  onChange={handleCheckboxChange}
-                  className="mr-2"
-                />
-                English
-              </label>
-              <label className="ml-2">
-                <input
-                  type="checkbox"
-                  value="French"
-                  checked={formData.ai_languages.includes("French")}
-                  onChange={handleCheckboxChange}
-                  className="mr-2"
-                />
-                French
-              </label>
-              <label className="ml-2">
-                <input
-                  type="checkbox"
-                  value="Spanish"
-                  checked={formData.ai_languages.includes("Spanish")}
-                  onChange={handleCheckboxChange}
-                  className="mr-2"
-                />
-                Spanish
-              </label>
-              <label className="ml-2">
-                <input
-                  type="checkbox"
-                  value="German"
-                  checked={formData.ai_languages.includes("German")}
-                  onChange={handleCheckboxChange}
-                  className="mr-2"
-                />
-                German
-              </label>
-              <label className="ml-2">
-                <input
-                  type="checkbox"
-                  value="Italian"
-                  checked={formData.ai_languages.includes("Italian")}
-                  onChange={handleCheckboxChange}
-                  className="mr-2"
-                />
-                Italian
-              </label>
-            </div>
+            <input
+              type="text"
+              name="ai_languages"
+              value={formData.ai_languages}
+              onChange={handleChange}
+              className="w-full p-2 border rounded mb-3"
+            />
 
             <label className="block text-primary">AI Communication Style</label>
             <input
@@ -556,15 +499,6 @@ const UpdateProfile = () => {
               type="text"
               name="ai_personality"
               value={formData.ai_personality}
-              onChange={handleChange}
-              className="w-full p-2 border rounded mb-3"
-            />
-
-            <label className="block text-primary">AI Tone</label>
-            <input
-              type="text"
-              name="ai_tone"
-              value={formData.ai_tone}
               onChange={handleChange}
               className="w-full p-2 border rounded mb-3"
             />
