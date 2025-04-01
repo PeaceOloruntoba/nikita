@@ -522,7 +522,7 @@ const UpdateProfile = () => {
                   onChange={handleChange}
                   className="mr-2"
                 />
-                Text
+                Text ($179)
               </label>
               <label className="ml-2">
                 <input
@@ -532,7 +532,7 @@ const UpdateProfile = () => {
                   onChange={handleChange}
                   className="mr-2"
                 />
-                Text + Audio
+                Text + Audio ($)
               </label>
               <label className="ml-2">
                 <input
@@ -542,7 +542,7 @@ const UpdateProfile = () => {
                   onChange={handleChange}
                   className="mr-2"
                 />
-                Text + Audio + Video
+                Text + Audio + Video ($)
               </label> 
             </div>
 
