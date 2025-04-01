@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 import { create } from "zustand";
 import axiosInstance from "../utils/axiosConfig";
 import { toast } from "sonner";
