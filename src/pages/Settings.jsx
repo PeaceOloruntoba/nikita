@@ -20,6 +20,22 @@ export default function Settings() {
         <p className="text-gray-500">Loading profile...</p>
       ) : (
         <div className="space-y-4">
+          <div className="flex items-center gap-6 w-full">
+            <button
+              onClick={() => navigate("/update-profile")}
+              className="w-full bg-primary cursor-pointer text-white font-semibold py-2 rounded-md hover:bg-primary-dark transition"
+            >
+              Update Profile
+            </button>
+            {profile && (
+              <button
+                onClick={() => navigate("/subscription")}
+                className="w-full bg-primary cursor-pointer text-white font-semibold py-2 rounded-md hover:bg-primary-dark transition"
+              >
+                Subscribe to use our AI
+              </button>
+            )}
+          </div>
           {/* General Info */}
           <ProfileItem label="First Name" value={profile.first_name} />
           <ProfileItem label="Last Name" value={profile.last_name} />
@@ -82,23 +98,6 @@ export default function Settings() {
             label="Additional Features"
             value={profile.additional_features}
           />
-
-          <div className="flex items-center gap-6 w-full">
-            <button
-              onClick={() => navigate("/update-profile")}
-              className="w-full bg-primary cursor-pointer text-white font-semibold py-2 rounded-md hover:bg-primary-dark transition"
-            >
-              Update Profile
-            </button>
-            {profile && (
-              <button
-                onClick={() => navigate("/subscription")}
-                className="w-full bg-primary cursor-pointer text-white font-semibold py-2 rounded-md hover:bg-primary-dark transition"
-              >
-                Subscribe to use our AI
-              </button>
-            )}
-          </div>
         </div>
       )}
     </div>
