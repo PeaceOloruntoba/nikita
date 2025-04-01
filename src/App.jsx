@@ -1,4 +1,3 @@
-import React from "react";
 import { Navigate, Route, Routes } from "react-router";
 import RootLayout from "./layouts/RootLayout";
 import Login from "./pages/Login";
