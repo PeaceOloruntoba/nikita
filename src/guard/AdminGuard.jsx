@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 import { Navigate, Outlet, useNavigate } from "react-router";
 import useAuthStore from "../store/useAuthStore";
 import { useEffect } from "react";
