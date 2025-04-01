@@ -32,20 +32,24 @@ const loginUser = async (user, navigate, set, get) => {
       throw new Error("Invalid response from server");
     }
     saveAuthDataToLocalStorage(data.user, data.token);
+    console.log(data.user);
+    if (data.user.role == "superadmin") {
+      navigate("/admin");
+    } else if (data.user.role == "admin") {
+      if (data.message == "Please complete your profile setup") {
+        navigate("/update-profile");
+        toast.warning(data?.message);
+      }
+      navigate("/interface");
+    } else {
+      navigate("/");
+    }
     set((state) => ({
       user: data.user,
       token: data.token,
       isAuthenticated: true,
       isAuthenticating: false,
     }));
-
-    if (data.message == "Please complete your profile setup") {
-      navigate("/update-profile");
-      toast.warning(data?.message);
-    } else {
-      toast.success(`Welcome Back! ${data.user.email}`);
-      navigate("/interface");
-    }
   } catch (error) {
     handleError(error);
     set({ isAuthenticating: false });
