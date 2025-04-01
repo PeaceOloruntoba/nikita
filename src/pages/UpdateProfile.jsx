@@ -365,15 +365,6 @@ const UpdateProfile = () => {
               className="w-full p-2 border rounded mb-3"
             />
 
-            <label className="block text-primary">Exclusive Dishes</label>
-            <input
-              type="text"
-              name="exclusive_dishes"
-              value={formData.exclusive_dishes}
-              onChange={handleChange}
-              className="w-full p-2 border rounded mb-3"
-            />
-
             <div className="flex gap-6 mb-3">
               <div className="flex gap-2 items-center">
                 <label className="block text-primary">Seasonal Menu</label>
@@ -438,6 +429,7 @@ const UpdateProfile = () => {
             </h3>
 
             <label className="block text-primary">Food Menu</label>
+            <input type="file" name="food_menu" id="" />
             <textarea
               name="menu_text"
               value={formData.menu_text}
@@ -446,6 +438,7 @@ const UpdateProfile = () => {
             ></textarea>
 
             <label className="block text-primary">Wine Menu</label>
+            <input type="file" name="wine_menu" id="" />
             <textarea
               name="wine_menu_text"
               value={formData.wine_menu_text}
