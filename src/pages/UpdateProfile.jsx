@@ -503,15 +503,6 @@ const UpdateProfile = () => {
               className="w-full p-2 border rounded mb-3"
             />
 
-            <label className="block text-primary">Video Support</label>
-            <input
-              type="checkbox"
-              name="video_support"
-              checked={formData.video_support}
-              onChange={handleChange}
-              className="mr-2"
-            />
-
             <label className="block text-primary">Additional Features</label>
             <input
               type="text"
@@ -520,6 +511,40 @@ const UpdateProfile = () => {
               onChange={handleChange}
               className="w-full p-2 border rounded mb-3"
             />
+
+            <label className="block text-primary">AI Languages</label>
+            <div className="mb-3">
+              <label>
+                <input
+                  type="checkbox"
+                  name="Russian"
+                  checked={formData.text_support}
+                  onChange={handleChange}
+                  className="mr-2"
+                />
+                Text
+              </label>
+              <label className="ml-2">
+                <input
+                  type="checkbox"
+                  value="English"
+                  checked={formData.audio_support}
+                  onChange={handleChange}
+                  className="mr-2"
+                />
+                Text + Audio
+              </label>
+              <label className="ml-2">
+                <input
+                  type="checkbox"
+                  value="French"
+                  checked={formData.video_support}
+                  onChange={handleChange}
+                  className="mr-2"
+                />
+                Text + Audio + Video
+              </label> 
+            </div>
 
             <div className="flex justify-between">
               <button
