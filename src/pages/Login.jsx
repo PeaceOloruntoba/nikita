@@ -55,7 +55,7 @@ export default function Login() {
             />
             <div className="text-sm text-secondary font-semibold text-right">
               Don't have an account?{" "}
-              <NavLink to="/signup" className="text-primary">
+              <NavLink to="/signup" className="text-white">
                 Sign Up
               </NavLink>
             </div>
