@@ -476,7 +476,7 @@ const UpdateProfile = () => {
               Step 6: AI Configuration & Images
             </h3>
 
-            <label className="block text-primary">AI Languages</label>
+            <label className="block text-primary">Main Languages</label>
             <input
               type="text"
               name="ai_languages"
@@ -485,36 +485,20 @@ const UpdateProfile = () => {
               className="w-full p-2 border rounded mb-3"
             />
 
-            <label className="block text-primary">AI Communication Style</label>
+            <label className="block text-primary">
+              AI Character Instructions
+            </label>
             <input
               type="text"
-              name="ai_communication_style"
-              value={formData.ai_communication_style}
-              onChange={handleChange}
-              className="w-full p-2 border rounded mb-3"
-            />
-
-            <label className="block text-primary">AI Personality</label>
-            <input
-              type="text"
-              name="ai_personality"
-              value={formData.ai_personality}
-              onChange={handleChange}
-              className="w-full p-2 border rounded mb-3"
-            />
-
-            <label className="block text-primary">Additional Features</label>
-            <input
-              type="text"
-              name="additional_features"
-              value={formData.additional_features}
+              name="ai_character_instructions"
+              value={formData.ai_character_instructions}
               onChange={handleChange}
               className="w-full p-2 border rounded mb-3"
             />
 
             <label className="block text-primary">AI Languages</label>
-            <div className="mb-3">
-              <label>
+            <div className="mb-3 flex items-center text-nowrap flex-wrap justify-center w-full">
+              <label className="text-nowrap">
                 <input
                   type="checkbox"
                   name="Russian"
@@ -522,9 +506,9 @@ const UpdateProfile = () => {
                   onChange={handleChange}
                   className="mr-2"
                 />
-                Text ($179)
+                Text ($180)
               </label>
-              <label className="ml-2">
+              <label className="ml-9">
                 <input
                   type="checkbox"
                   value="English"
@@ -532,7 +516,7 @@ const UpdateProfile = () => {
                   onChange={handleChange}
                   className="mr-2"
                 />
-                Text + Audio ($)
+                Text + Audio ($360)
               </label>
               <label className="ml-2">
                 <input
@@ -542,8 +526,8 @@ const UpdateProfile = () => {
                   onChange={handleChange}
                   className="mr-2"
                 />
-                Text + Audio + Video ($)
-              </label> 
+                Text + Audio + Video ($1200)
+              </label>
             </div>
 
             <div className="flex justify-between">
