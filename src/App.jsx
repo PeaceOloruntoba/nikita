@@ -15,14 +15,16 @@ import Training from "./pages/Training";
 import Reviews from "./pages/Reviews";
 import Support from "./pages/Support";
 import SubscriptionPage from "./pages/Subscription";
+import SuperAdminGuard from "./guard/SuperAdminGuard";
+import Home from "./pages/admin/Home";
 
 export default function App() {
   return (
     <>
       <Toaster position="top-right" richColors />
       <Routes>
-        <Route element={<RootLayout />}>
-          <Route element={<AdminGuard />}>
+        <Route element={<AdminGuard />}>
+          <Route element={<RootLayout />}>
             <Route path="interface" element={<Interface />} />
             <Route path="/" element={<Navigate to={"/interface"} />} />
             <Route path="update-profile" element={<UpdateProfile />} />
@@ -35,6 +37,9 @@ export default function App() {
             <Route path="support" element={<Support />} />
             <Route path="settings" element={<Settings />} />
             <Route path="subscription" element={<SubscriptionPage />} />
+          </Route>
+          <Route path="/admin" element={<SuperAdminGuard />}>
+            <Route path="" element={<Home />} />
           </Route>
         </Route>
         <Route path="login" element={<Login />} />
