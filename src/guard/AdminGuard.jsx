@@ -1,14 +1,20 @@
-import React from "react";
-import PageNotFound from "../pages/PageNotFound";
-import { Navigate, Outlet } from "react-router";
+import { Navigate, Outlet, useNavigate } from "react-router";
 import useAuthStore from "../store/useAuthStore";
+import { useEffect } from "react";
 
 export default function AdminGuard() {
   const { user } = useAuthStore();
+  const navigate = useNavigate();
 
-  if (!user?.roles == "admin") {
-    return <Navigate to={'/login'} />;
-  }
+  useEffect(() => {
+    if (!user) {
+      navigate("/login");
+    }
+  }, [user, navigate]); // Depend on user and navigate
+
+  // if (!user || user?.roles !== "admin") {
+  //   return null; // or a loading state. prevent outlet.
+  // }
 
   return <Outlet />;
 }
