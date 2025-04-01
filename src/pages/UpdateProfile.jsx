@@ -496,12 +496,12 @@ const UpdateProfile = () => {
               className="w-full p-2 border rounded mb-3"
             />
 
-            <label className="block text-primary">AI Languages</label>
+            <label className="block text-primary">AI Avatar</label>
             <div className="mb-3 flex items-center text-nowrap flex-wrap justify-center w-full">
               <label className="text-nowrap">
                 <input
                   type="checkbox"
-                  name="Russian"
+                  name="text_support"
                   checked={formData.text_support}
                   onChange={handleChange}
                   className="mr-2"
@@ -511,7 +511,7 @@ const UpdateProfile = () => {
               <label className="ml-9">
                 <input
                   type="checkbox"
-                  value="English"
+                  name="audio_support"
                   checked={formData.audio_support}
                   onChange={handleChange}
                   className="mr-2"
@@ -521,7 +521,7 @@ const UpdateProfile = () => {
               <label className="ml-2">
                 <input
                   type="checkbox"
-                  value="French"
+                  name="video_support"
                   checked={formData.video_support}
                   onChange={handleChange}
                   className="mr-2"
