@@ -7,7 +7,7 @@ import { handleError } from "../utils/handleError";
 const getFeedbacks = async (set) => {
   set({ isLoading: true });
   try {
-    const response = await axiosInstance.get("/feedbacks");
+    const response = await axiosInstance.get("/admin");
     console.log(response)
     const data = response?.data?.data || [];
     set({ feedbacks: data, isLoading: false });
