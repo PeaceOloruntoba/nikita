@@ -3,6 +3,7 @@ import { useNavigate } from "react-router";
 import useAuthStore from "../store/useAuthStore";
 import axios from "axios";
 import Spinner from "../components/shared/Spinner";
+import OpenAI from "openai";
 
 const UpdateProfile = () => {
   const navigate = useNavigate();
@@ -143,63 +144,70 @@ const UpdateProfile = () => {
     });
   };
 
-  const processMenuWithOpenAI = async (file) => {
-    if (!file) return null;
+const openai = new OpenAI({
+  apiKey: import.meta.env.VITE_OPENAI_API_KEY,
+  dangerouslyAllowBrowser: true,
+});
 
-    try {
-      const formData = new FormData();
-      formData.append("file", file);
+const processMenuWithOpenAI = async (file) => {
+  if (!file) return null;
 
-      const response = await axios.post(
-        "https://api.openai.com/v1/files",
-        formData,
-        {
-          headers: {
-            "Content-Type": "multipart/form-data",
-            Authorization: `Bearer ${import.meta.env.VITE_OPENAI_API_KEY}`,
-          },
-        }
-      );
+  try {
+    const formData = new FormData();
+    formData.append("file", file);
+    formData.append("purpose", "assistants"); // Add the purpose here
 
-      const fileId = response.data.id;
-
-      const chatCompletion = await openai.chat.completions.create({
-        model: "gpt-4-vision-preview",
-        messages: [
-          {
-            role: "user",
-            content: [
-              {
-                type: "text",
-                text: "Extract the menu from this document. Output the menu as a javascript array of strings.",
-              },
-              { type: "image_url", image_url: { url: `file-${fileId}` } },
-            ],
-          },
-        ],
-        max_tokens: 1000,
-      });
-
-      await axios.delete(`https://api.openai.com/v1/files/${fileId}`, {
+    const response = await axios.post(
+      "https://api.openai.com/v1/files",
+      formData,
+      {
         headers: {
+          "Content-Type": "multipart/form-data",
           Authorization: `Bearer ${import.meta.env.VITE_OPENAI_API_KEY}`,
         },
-      });
-
-      const menuText = chatCompletion.choices[0].message.content;
-
-      try {
-        const menuArray = JSON.parse(menuText);
-        return menuArray;
-      } catch (e) {
-        console.error("Error parsing menu from OpenAI response:", e);
-        return null;
       }
-    } catch (error) {
-      console.error("OpenAI processing error:", error);
+    );
+
+    const fileId = response.data.id;
+
+    const chatCompletion = await openai.chat.completions.create({
+      model: "gpt-4-vision-preview",
+      messages: [
+        {
+          role: "user",
+          content: [
+            {
+              type: "text",
+              text: "Extract the menu from this document. Output the menu as a javascript array of strings.",
+            },
+            { type: "image_url", image_url: { url: `file-${fileId}` } },
+          ],
+        },
+      ],
+      max_tokens: 1000,
+    });
+
+    await axios.delete(`https://api.openai.com/v1/files/${fileId}`, {
+      headers: {
+        Authorization: `Bearer ${import.meta.env.VITE_OPENAI_API_KEY}`,
+      },
+    });
+
+    const menuText = chatCompletion.choices[0].message.content;
+
+    try {
+      const menuArray = JSON.parse(menuText);
+      return menuArray;
+    } catch (e) {
+      console.error("Error parsing menu from OpenAI response:", e);
       return null;
     }
-  };
+  } catch (error) {
+    console.error("OpenAI processing error:", error);
+    return null;
+  }
+};
+
 
   const handleSubmit = async (e) => {
     e.preventDefault();
