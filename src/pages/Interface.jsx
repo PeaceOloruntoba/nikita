@@ -4,7 +4,7 @@ import { useNavigate } from "react-router";
 import useAuthStore from "../store/useAuthStore";
 
 export default function Interface() {
-  const { profile, getProfile, getUser, user } = useAuthStore(); // Include user from the store
+  const { profile, getProfile, getUser, user } = useAuthStore();
   const navigate = useNavigate();
 
   const fetchProfile = async () => {
@@ -19,15 +19,13 @@ export default function Interface() {
     navigate(dir);
   }
 
-  console.log(profile);
-
   return (
     <div className="flex flex-col w-full items-center justify-center gap-8 p-8">
       <span className="w-full text-2xl font-semibold">
         {profile?.restaurant_name || "Restaurant Name"}
       </span>
       <img
-        src={profile?.restaurant_image || restaurant} // Use profile image if available
+        src={profile?.restaurant_image || restaurant}
         alt={profile?.restaurant_name || "Restaurant"}
         className="w-full rounded-2xl h-64"
       />
@@ -40,7 +38,7 @@ export default function Interface() {
         >
           <span className="text-lg font-semibold">Food Menu</span>
           <img
-            src={profile?.food_menu_card_image || menu} // Use profile menu image if available
+            src={profile?.food_menu_card_image || menu}
             alt="Food Menu"
             className="w-full rounded-2xl h-44"
           />
