@@ -49,7 +49,7 @@ const MakePayment = () => {
     }
 
     try {
-      const response = await axios.post("/api/create-payment", {
+      const response = await axiosInstance.post("/sub/create-payment", {
         token: token.id,
         priceId: priceId,
       });
