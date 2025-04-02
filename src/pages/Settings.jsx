@@ -80,11 +80,11 @@ export default function Settings() {
           <ProfileItem label="Staff Using AI" value={profile.staff_using_ai} />
           <ProfileItem
             label="AI Language Support"
-            value={profile.ai_languages?.join(", ")}
+            value={profile.ai_languages}
           />
           <ProfileItem
-            label="AI Communication Style"
-            value={profile.ai_communication_style}
+            label="AI Character Instruction"
+            value={profile.ai_character_instructions}
           />
           <ProfileItem
             label="Video Support"
@@ -93,10 +93,6 @@ export default function Settings() {
           <ProfileItem
             label="Menu Update Frequency"
             value={profile.menu_update_frequency}
-          />
-          <ProfileItem
-            label="Additional Features"
-            value={profile.additional_features}
           />
         </div>
       )}
