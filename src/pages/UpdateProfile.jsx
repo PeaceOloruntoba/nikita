@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router";
 import useAuthStore from "../store/useAuthStore";
 import axios from "axios";
+import Spinner from "../components/shared/Spinner";
 
 const UpdateProfile = () => {
   const navigate = useNavigate();
@@ -642,7 +643,7 @@ const UpdateProfile = () => {
                 }`}
                 disabled={loading}
               >
-                {loading ? "Submitting..." : "Submit"}
+                {loading ? <Spinner /> : "Submit"}
               </button>
             </div>
           </div>
