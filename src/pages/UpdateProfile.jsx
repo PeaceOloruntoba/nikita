@@ -18,8 +18,8 @@ const UpdateProfile = () => {
     cuisine_type: "",
     service_style: "",
     seating_capacity: "",
-    food_menu: "",
-    wine_menu: "",
+    food_menu: "", // Will be an array after OpenAI processing
+    wine_menu: "", // Will be an array after OpenAI processing
     ai_languages: "",
     legal_representative: "",
     contact_phone: "",
@@ -34,6 +34,8 @@ const UpdateProfile = () => {
     audio_support: false,
     text_support: false,
     restaurant_image: null,
+    food_menu_file: null, // Store the file for OpenAI
+    wine_menu_file: null, // Store the file for OpenAI
     food_menu_card_image: null,
     wine_menu_card_image: null,
   });
@@ -77,6 +79,8 @@ const UpdateProfile = () => {
         audio_support: storedProfile.audio_support || false,
         text_support: storedProfile.text_support || false,
         restaurant_image: null,
+        food_menu_file: null,
+        wine_menu_file: null,
         food_menu_card_image: null,
         wine_menu_card_image: null,
       });
@@ -136,6 +140,64 @@ const UpdateProfile = () => {
     });
   };
 
+  const processMenuWithOpenAI = async (file) => {
+    if (!file) return null;
+
+    try {
+      const formData = new FormData();
+      formData.append("file", file);
+
+      const response = await axios.post(
+        "https://api.openai.com/v1/files",
+        formData,
+        {
+          headers: {
+            "Content-Type": "multipart/form-data",
+            Authorization: `Bearer ${import.meta.env.VITE_OPENAI_API_KEY}`,
+          },
+        }
+      );
+
+      const fileId = response.data.id;
+
+      const chatCompletion = await openai.chat.completions.create({
+        model: "gpt-4-vision-preview",
+        messages: [
+          {
+            role: "user",
+            content: [
+              {
+                type: "text",
+                text: "Extract the menu from this document. Output the menu as a javascript array of strings.",
+              },
+              { type: "image_url", image_url: { url: `file-${fileId}` } },
+            ],
+          },
+        ],
+        max_tokens: 1000,
+      });
+
+      await axios.delete(`https://api.openai.com/v1/files/${fileId}`, {
+        headers: {
+          Authorization: `Bearer ${import.meta.env.VITE_OPENAI_API_KEY}`,
+        },
+      });
+
+      const menuText = chatCompletion.choices[0].message.content;
+
+      try {
+        const menuArray = JSON.parse(menuText);
+        return menuArray;
+      } catch (e) {
+        console.error("Error parsing menu from OpenAI response:", e);
+        return null;
+      }
+    } catch (error) {
+      console.error("OpenAI processing error:", error);
+      return null;
+    }
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
@@ -143,16 +205,25 @@ const UpdateProfile = () => {
     try {
       const preset = import.meta.env.VITE_CLOUDINARY_UPLOAD_PRESET;
 
-      const [restaurantImageUrl, foodMenuCardImageUrl, wineMenuCardImageUrl] =
-        await Promise.all([
-          handleCloudinaryUpload(formData.restaurant_image, preset),
-          handleCloudinaryUpload(formData.food_menu_card_image, preset),
-          handleCloudinaryUpload(formData.wine_menu_card_image, preset),
-        ]);
+      const [
+        restaurantImageUrl,
+        foodMenuCardImageUrl,
+        wineMenuCardImageUrl,
+        foodMenuArray,
+        wineMenuArray,
+      ] = await Promise.all([
+        handleCloudinaryUpload(formData.restaurant_image, preset),
+        handleCloudinaryUpload(formData.food_menu_card_image, preset),
+        handleCloudinaryUpload(formData.wine_menu_card_image, preset),
+        processMenuWithOpenAI(formData.food_menu_file),
+        processMenuWithOpenAI(formData.wine_menu_file),
+      ]);
 
       const payload = {
         ...formData,
-        restaurant_image: restaurantImageUrl || formData.restaurant_image, // Retain existing value if upload fails
+        restaurant_image: restaurantImageUrl || formData.restaurant_image,
+        food_menu: foodMenuArray || formData.food_menu,
+        wine_menu: wineMenuArray || formData.wine_menu,
         food_menu_card_image:
           foodMenuCardImageUrl || formData.food_menu_card_image,
         wine_menu_card_image:
@@ -416,16 +487,18 @@ const UpdateProfile = () => {
 
             <label className="block text-primary">Food Menu</label>
             <input
+              onChange={handleChange}
               type="file"
-              name="food_menu"
+              name="food_menu_file"
               id=""
               className="w-full p-2 border border-primary rounded mb-3"
             />
 
             <label className="block text-primary">Wine Menu</label>
             <input
+              onChange={handleChange}
               type="file"
-              name="wine_menu"
+              name="wine_menu_file"
               id=""
               className="w-full p-2 border border-primary rounded mb-3"
             />
