@@ -154,22 +154,15 @@ const UpdateProfile = () => {
     if (!file) return null;
 
     try {
-      const formData = new FormData();
-      formData.append("file", file);
-      formData.append("purpose", "user_data");
-
-      const response = await axios.post(
-        "https://api.openai.com/v1/files",
-        formData,
-        {
-          headers: {
-            "Content-Type": "multipart/form-data",
-            Authorization: `Bearer ${import.meta.env.VITE_OPENAI_API_KEY}`,
-          },
-        }
+      const cloudinaryUrl = await handleCloudinaryUpload(
+        file,
+        import.meta.env.VITE_CLOUDINARY_UPLOAD_PRESET
       );
 
-      const fileId = response.data.id;
+      if (!cloudinaryUrl) {
+        console.error("Failed to upload menu to Cloudinary.");
+        return null;
+      }
 
       const chatCompletion = await openai.chat.completions.create({
         model: "gpt-4o",
@@ -181,17 +174,11 @@ const UpdateProfile = () => {
                 type: "text",
                 text: "Extract the menu from this document. Output the menu as a javascript array of strings.",
               },
-              { type: "image_url", image_url: { url: `file-${fileId}` } },
+              { type: "image_url", image_url: { url: cloudinaryUrl } },
             ],
           },
         ],
         max_tokens: 1000,
-      });
-
-      await axios.delete(`https://api.openai.com/v1/files/${fileId}`, {
-        headers: {
-          Authorization: `Bearer ${import.meta.env.VITE_OPENAI_API_KEY}`,
-        },
       });
 
       const menuText = chatCompletion.choices[0].message.content;
