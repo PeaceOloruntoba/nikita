@@ -119,7 +119,6 @@ const getUser = async (set) => {
   set({ isAuthenticating: true });
   try {
     const response = await axiosInstance.get("/auth/user");
-    console.log(response);
     set((state) => ({
       user: response.data.data,
     }));
