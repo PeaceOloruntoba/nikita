@@ -9,7 +9,7 @@ const MakePayment = () => {
   const elements = useElements();
   const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
-  const priceId = "price_1R9KrgP7PZBSVcUMoNOF2NwK"; // Manually input your price ID
+  const priceId = "price_1R9KrgP7PZBSVcUMoNOF2NwK";
   const [productDetails, setProductDetails] = useState(null);
 
   useEffect(() => {
@@ -57,18 +57,15 @@ const MakePayment = () => {
         }
       );
 
-      if (response.data.success) {
-        await axiosInstance.post("/subscription/update-onetime-payment", {
-          customerId: response.data.customerId,
-        });
-        toast.success("Payment successful!");
-        navigate("/interface");
-      } else {
-        toast.error("Payment failed. Please try again.");
-      }
+      const dodd = await axiosInstance.post("/subscription/update-onetime-payment", {
+        customerId: response.data.customerId,
+      });
+      console.log(dodd)
+      toast.success("Payment successful!");
+      navigate("/interface");
     } catch (error) {
-      console.error("Payment error:", error);
-      console.error("Payment error response:", error.response);
+      console.log("Payment error:", error);
+      console.log("Payment error response:", error.response);
       toast.error("Payment failed. Please try again.");
     } finally {
       setLoading(false);
