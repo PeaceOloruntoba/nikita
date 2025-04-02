@@ -36,9 +36,13 @@ const loginUser = async (user, navigate, set, get) => {
     if (data.user.role == "superadmin") {
       navigate("/admin");
     } else if (data.user.role == "admin") {
-      if (data.message == "Please complete your profile setup") {
-        navigate("/update-profile");
-        toast.warning(data?.message);
+      if (!data.user.onetimePayment) {
+        navigate("/make-payment");
+      } else {
+        if (data.message == "Please complete your profile setup") {
+          navigate("/update-profile");
+          toast.warning(data?.message);
+        }
       }
       navigate("/interface");
     } else {

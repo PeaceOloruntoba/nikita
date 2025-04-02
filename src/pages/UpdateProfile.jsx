@@ -22,6 +22,7 @@ const UpdateProfile = () => {
     food_menu: "", // Will be an array after OpenAI processing
     wine_menu: "", // Will be an array after OpenAI processing
     ai_languages: "",
+    ai_character_instructions: "",
     legal_representative: "",
     contact_phone: "",
     email: "",
@@ -67,6 +68,7 @@ const UpdateProfile = () => {
           ? storedProfile.wine_menu
           : "",
         ai_languages: storedProfile.ai_languages || "",
+        ai_character_instructions: storedProfile.ai_character_instructions || "",
         legal_representative: storedProfile.legal_representative || "",
         contact_phone: storedProfile.contact_phone || "",
         email: storedProfile.email || "",
