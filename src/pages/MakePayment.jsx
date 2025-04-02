@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from "react";
 import { CardElement, useStripe, useElements } from "@stripe/react-stripe-js";
 import { toast } from "sonner";
-import { useNavigate } from "react-router-dom";
-import axios from "axios";
+import { useNavigate } from "react-router";
+import axiosInstance from "../utils/axiosConfig";
 
 const MakePayment = () => {
   const stripe = useStripe();
@@ -15,7 +15,9 @@ const MakePayment = () => {
   useEffect(() => {
     const fetchProductDetails = async () => {
       try {
-        const response = await axios.get(`/api/product-details/${priceId}`);
+        const response = await axiosInstance.get(
+          `/api/product-details/${priceId}`
+        );
         setProductDetails(response.data);
       } catch (error) {
         console.error("Error fetching product details:", error);
