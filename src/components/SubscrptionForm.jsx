@@ -7,7 +7,7 @@ import useSubscriptionStore from "../store/useSubscriptionStore";
 
 const SubscriptionForm = () => {
   const stripe = useStripe();
-  const[loadin, setLoading] = useState()
+  const [loadin, setLoading] = useState();
   const elements = useElements();
   const navigate = useNavigate();
   const authStore = useAuthStore();
@@ -20,9 +20,16 @@ const SubscriptionForm = () => {
   useEffect(() => {
     const fetchPlanDetails = async () => {
       try {
-        const priceId = profile.video_support
-          ? "price_1R59e6GWzmbPnUwmidW4eIXH"
-          : "price_1R592oGWzmbPnUwmzJ15hcAm";
+        let priceId;
+        if (profile.video_support) {
+          priceId = "price_1R59e6GWzmbPnUwmidW4eIXH"; // Video support
+        } else if (profile.audio_support) {
+          priceId = "price_audio_support_id"; // Replace with your audio support price ID
+        } else if (profile.text_support) {
+          priceId = "price_text_support_id"; // Replace with your text support price ID
+        } else {
+          priceId = "price_basic_id"; // Replace with your basic price ID
+        }
         const data = await getPlanDetails(priceId);
         setPlanDetails(data);
       } catch (fetchError) {
@@ -31,7 +38,13 @@ const SubscriptionForm = () => {
     };
 
     fetchPlanDetails();
-  }, [profile.video_support, getPlanDetails, error]);
+  }, [
+    profile.video_support,
+    profile.audio_support,
+    profile.text_support,
+    getPlanDetails,
+    error,
+  ]);
 
   const handleSubmit = async (event) => {
     event.preventDefault();
@@ -54,9 +67,16 @@ const SubscriptionForm = () => {
     }
 
     try {
-      const priceId = profile.video_support
-        ? "price_1R59e6GWzmbPnUwmidW4eIXH"
-        : "price_1R592oGWzmbPnUwmzJ15hcAm";
+      let priceId;
+      if (profile.video_support) {
+        priceId = "price_1R59e6GWzmbPnUwmidW4eIXH"; // Video support
+      } else if (profile.audio_support) {
+        priceId = "price_audio_support_id"; // Replace with your audio support price ID
+      } else if (profile.text_support) {
+        priceId = "price_text_support_id"; // Replace with your text support price ID
+      } else {
+        priceId = "price_basic_id"; // Replace with your basic price ID
+      }
       const data = await createSubscription(token.id, priceId);
       toast.success("Subscription successful!");
       navigate("/interface");
@@ -79,6 +99,10 @@ const SubscriptionForm = () => {
       <p className="mb-4 text-primary">
         {profile.video_support
           ? "You've selected the premium plan with video support."
+          : profile.audio_support
+          ? "You've selected the plan with audio support."
+          : profile.text_support
+          ? "You've selected the plan with text support."
           : "You've selected the basic plan."}
       </p>
 
