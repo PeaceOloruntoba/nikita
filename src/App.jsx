@@ -17,6 +17,7 @@ import Support from "./pages/Support";
 import SubscriptionPage from "./pages/Subscription";
 import SuperAdminGuard from "./guard/SuperAdminGuard";
 import Home from "./pages/admin/Home";
+import MakePayment from "./pages/MakePayment";
 
 export default function App() {
   return (
@@ -37,6 +38,7 @@ export default function App() {
             <Route path="support" element={<Support />} />
             <Route path="settings" element={<Settings />} />
             <Route path="subscription" element={<SubscriptionPage />} />
+            <Route path="make-payment" element={<MakePayment />} />
           </Route>
           <Route path="/admin" element={<SuperAdminGuard />}>
             <Route path="" element={<Home />} />
