@@ -28,8 +28,6 @@ const MakePayment = () => {
     fetchProductDetails();
   }, [priceId]);
 
-  console.log(productDetails)
-
   const handleSubmit = async (event) => {
     event.preventDefault();
 
@@ -59,12 +57,8 @@ const MakePayment = () => {
         }
       );
 
-      if (response.data.success) {
-        toast.success("Payment successful!");
-        navigate("/interface");
-      } else {
-        toast.error("Payment failed. Please try again.");
-      }
+      toast.success("Payment successful!");
+      navigate("/interface");
     } catch (error) {
       console.error("Payment error:", error);
       toast.error("Payment failed. Please try again.");
