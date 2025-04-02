@@ -11,6 +11,7 @@ const MakePayment = () => {
   const [loading, setLoading] = useState(false);
   const priceId = "price_1R9KrgP7PZBSVcUMoNOF2NwK";
   const [productDetails, setProductDetails] = useState(null);
+  const [customerId, setCustomerId] = useState(null);
 
   useEffect(() => {
     const fetchProductDetails = async () => {
@@ -25,14 +26,27 @@ const MakePayment = () => {
       }
     };
 
+    const createStripeCustomer = async () => {
+      try {
+        const response = await axiosInstance.post(
+          "/subscription/create-stripe-customer"
+        );
+        setCustomerId(response.data.customerId);
+      } catch (error) {
+        console.error("Error creating Stripe customer:", error);
+        toast.error("Failed to create Stripe customer.");
+      }
+    };
+
     fetchProductDetails();
+    createStripeCustomer();
   }, [priceId]);
 
   const handleSubmit = async (event) => {
     event.preventDefault();
 
-    if (!stripe || !elements) {
-      toast.error("Stripe.js has not loaded yet.");
+    if (!stripe || !elements || !customerId) {
+      toast.error("Stripe.js has not loaded or customerId is missing.");
       return;
     }
 
@@ -40,7 +54,12 @@ const MakePayment = () => {
 
     const cardElement = elements.getElement(CardElement);
 
-    const { error: stripeError, token } = await stripe.createToken(cardElement);
+    const { error: stripeError, token } = await stripe.createToken(
+      cardElement,
+      {
+        customer: customerId,
+      }
+    );
 
     if (stripeError) {
       toast.error(stripeError.message);
@@ -57,15 +76,15 @@ const MakePayment = () => {
         }
       );
 
-      const dodd = await axiosInstance.post("/subscription/update-onetime-payment", {
-        customerId: response.data.customerId,
-      });
-      console.log(dodd)
-      toast.success("Payment successful!");
-      navigate("/interface");
+      if (response.data.success) {
+        toast.success("Payment successful!");
+        navigate("/interface");
+      } else {
+        toast.error("Payment failed. Please try again.");
+      }
     } catch (error) {
-      console.log("Payment error:", error);
-      console.log("Payment error response:", error.response);
+      console.error("Payment error:", error);
+      console.error("Payment error response:", error.response);
       toast.error("Payment failed. Please try again.");
     } finally {
       setLoading(false);
