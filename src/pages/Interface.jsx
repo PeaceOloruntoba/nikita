@@ -4,11 +4,12 @@ import { useNavigate } from "react-router";
 import useAuthStore from "../store/useAuthStore";
 
 export default function Interface() {
-  const { profile, getProfile, user } = useAuthStore(); // Include user from the store
+  const { profile, getProfile, getUser, user } = useAuthStore(); // Include user from the store
   const navigate = useNavigate();
 
   const fetchProfile = async () => {
     await getProfile();
+    await getUser();
   };
   useEffect(() => {
     fetchProfile();

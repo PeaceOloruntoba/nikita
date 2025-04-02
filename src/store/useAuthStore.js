@@ -105,9 +105,23 @@ const getProfile = async (set) => {
   set({ isAuthenticating: true });
   try {
     const response = await axiosInstance.get("/profile/get");
-    console.log(response);
     set((state) => ({
       profile: response.data.data,
+    }));
+  } catch (error) {
+    handleError(error);
+  } finally {
+    set({ isAuthenticating: false });
+  }
+};
+
+const getUser = async (set) => {
+  set({ isAuthenticating: true });
+  try {
+    const response = await axiosInstance.get("/auth/user");
+    console.log(response);
+    set((state) => ({
+      user: response.data.data,
     }));
   } catch (error) {
     handleError(error);
@@ -140,6 +154,7 @@ const useAuthStore = create((set) => {
     updateProfile: (profileData, navigate) =>
       updateProfile(profileData, navigate, set),
     getProfile: () => getProfile(set),
+    getUser: () => getUser(set),
   };
 });
 
