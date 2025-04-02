@@ -172,7 +172,7 @@ const UpdateProfile = () => {
       const fileId = response.data.id;
 
       const chatCompletion = await openai.chat.completions.create({
-        model: "gpt-4-vision-preview",
+        model: "gpt-4o",
         messages: [
           {
             role: "user",
