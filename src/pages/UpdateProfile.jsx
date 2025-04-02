@@ -3,10 +3,6 @@ import { useNavigate } from "react-router";
 import useAuthStore from "../store/useAuthStore";
 import axios from "axios";
 
-const VITE_CLOUDINARY_CLOUD_NAME = import.meta.env.VITE_CLOUDINARY_CLOUD_NAME;
-const VITE_CLOUDINARY_UPLOAD_PRESET = import.meta.env
-  .VITE_CLOUDINARY_UPLOAD_PRESET;
-
 const UpdateProfile = () => {
   const navigate = useNavigate();
   const { updateProfile, getProfile, profile: storedProfile } = useAuthStore();
@@ -22,11 +18,9 @@ const UpdateProfile = () => {
     cuisine_type: "",
     service_style: "",
     seating_capacity: "",
-    menu_text: "",
-    wine_menu_text: "",
-    ai_languages: [],
-    ai_communication_style: "",
-    ai_personality: "",
+    food_menu: "",
+    wine_menu: "",
+    ai_languages: "",
     legal_representative: "",
     contact_phone: "",
     email: "",
@@ -37,7 +31,8 @@ const UpdateProfile = () => {
     daily_menu: false,
     staff_using_ai: "",
     video_support: false,
-    additional_features: "",
+    audio_support: false,
+    text_support: false,
     restaurant_image: null,
     food_menu_card_image: null,
     wine_menu_card_image: null,
@@ -58,19 +53,17 @@ const UpdateProfile = () => {
         cuisine_type: storedProfile.cuisine_type || "",
         service_style: storedProfile.service_style || "",
         seating_capacity: storedProfile.seating_capacity || "",
-        menu_text: Array.isArray(storedProfile.food_menu)
+        food_menu: Array.isArray(storedProfile.food_menu)
           ? storedProfile.food_menu.join("\n")
           : typeof storedProfile.food_menu === "string"
           ? storedProfile.food_menu
           : "",
-        wine_menu_text: Array.isArray(storedProfile.wine_menu)
+        wine_menu: Array.isArray(storedProfile.wine_menu)
           ? storedProfile.wine_menu.join("\n")
           : typeof storedProfile.wine_menu === "string"
           ? storedProfile.wine_menu
           : "",
-        ai_languages: storedProfile.ai_languages || [],
-        ai_communication_style: storedProfile.ai_communication_style || "",
-        ai_personality: storedProfile.ai_personality || "",
+        ai_languages: storedProfile.ai_languages || "",
         legal_representative: storedProfile.legal_representative || "",
         contact_phone: storedProfile.contact_phone || "",
         email: storedProfile.email || "",
@@ -81,7 +74,8 @@ const UpdateProfile = () => {
         daily_menu: storedProfile.daily_menu || false,
         staff_using_ai: storedProfile.staff_using_ai || "",
         video_support: storedProfile.video_support || false,
-        additional_features: storedProfile.additional_features || "",
+        audio_support: storedProfile.audio_support || false,
+        text_support: storedProfile.text_support || false,
         restaurant_image: null,
         food_menu_card_image: null,
         wine_menu_card_image: null,
@@ -102,16 +96,6 @@ const UpdateProfile = () => {
         [name]: type === "checkbox" ? checked : value,
       });
     }
-  };
-
-  const handleCheckboxChange = (e) => {
-    const { value, checked } = e.target;
-    setFormData((prevData) => ({
-      ...prevData,
-      ai_languages: checked
-        ? [...prevData.ai_languages, value]
-        : prevData.ai_languages.filter((lang) => lang !== value),
-    }));
   };
 
   const nextStep = () => setStep((prev) => prev + 1);
@@ -359,6 +343,7 @@ const UpdateProfile = () => {
             <label className="block text-primary">Seating Capacity</label>
             <input
               type="number"
+              placeholder="Number of tables you have"
               name="seating_capacity"
               value={formData.seating_capacity}
               onChange={handleChange}
@@ -402,6 +387,7 @@ const UpdateProfile = () => {
               name="staff_using_ai"
               value={formData.staff_using_ai}
               onChange={handleChange}
+              placeholder="Name Surname"
               className="w-full p-2 border rounded mb-4"
             />
 
@@ -429,22 +415,20 @@ const UpdateProfile = () => {
             </h3>
 
             <label className="block text-primary">Food Menu</label>
-            <input type="file" name="food_menu" id="" />
-            <textarea
-              name="menu_text"
-              value={formData.menu_text}
-              onChange={handleChange}
-              className="w-full p-2 border rounded mb-3"
-            ></textarea>
+            <input
+              type="file"
+              name="food_menu"
+              id=""
+              className="w-full p-2 border border-primary rounded mb-3"
+            />
 
             <label className="block text-primary">Wine Menu</label>
-            <input type="file" name="wine_menu" id="" />
-            <textarea
-              name="wine_menu_text"
-              value={formData.wine_menu_text}
-              onChange={handleChange}
-              className="w-full p-2 border rounded mb-3"
-            ></textarea>
+            <input
+              type="file"
+              name="wine_menu"
+              id=""
+              className="w-full p-2 border border-primary rounded mb-3"
+            />
 
             <div className="flex justify-between">
               <button
@@ -483,6 +467,7 @@ const UpdateProfile = () => {
             </label>
             <input
               type="text"
+              placeholder="Character, Tone..."
               name="ai_character_instructions"
               value={formData.ai_character_instructions}
               onChange={handleChange}
