@@ -12,6 +12,7 @@ const SubscriptionForm = () => {
   const navigate = useNavigate();
   const authStore = useAuthStore();
   const profile = authStore.profile;
+  const getProfile = authStore.getProfile;
   const { loading, error, createSubscription, getPlanDetails } =
     useSubscriptionStore();
 
@@ -19,6 +20,7 @@ const SubscriptionForm = () => {
 
   useEffect(() => {
     const fetchPlanDetails = async () => {
+      await getProfile();
       try {
         let priceId;
         if (profile.video_support) {
@@ -69,13 +71,13 @@ const SubscriptionForm = () => {
     try {
       let priceId;
       if (profile.video_support) {
-        priceId = "price_1R59e6GWzmbPnUwmidW4eIXH"; // Video support
+        priceId = "price_1R9KxDP7PZBSVcUMMgQjFVWQ"; // Video support
       } else if (profile.audio_support) {
-        priceId = "price_audio_support_id"; // Replace with your audio support price ID
+        priceId = "price_1R9KwNP7PZBSVcUMmpueWXMX"; // Replace with your audio support price ID
       } else if (profile.text_support) {
-        priceId = "price_text_support_id"; // Replace with your text support price ID
+        priceId = "price_1R9KvRP7PZBSVcUMcnvCdbBL"; // Replace with your text support price ID
       } else {
-        priceId = "price_basic_id"; // Replace with your basic price ID
+        priceId = "price_1R9KvRP7PZBSVcUMcnvCdbBL"; // Replace with your basic price ID
       }
       const data = await createSubscription(token.id, priceId);
       toast.success("Subscription successful!");
