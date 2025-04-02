@@ -22,13 +22,13 @@ const SubscriptionForm = () => {
       try {
         let priceId;
         if (profile.video_support) {
-          priceId = "price_1R59e6GWzmbPnUwmidW4eIXH"; // Video support
+          priceId = "price_1R59e6GWzmbPnUwmidW4eIXH";
         } else if (profile.audio_support) {
-          priceId = "price_audio_support_id"; // Replace with your audio support price ID
+          priceId = "price_audio_support_id";
         } else if (profile.text_support) {
-          priceId = "price_text_support_id"; // Replace with your text support price ID
+          priceId = "price_text_support_id";
         } else {
-          priceId = "price_basic_id"; // Replace with your basic price ID
+          priceId = "price_basic_id";
         }
         const data = await getPlanDetails(priceId);
         setPlanDetails(data);
