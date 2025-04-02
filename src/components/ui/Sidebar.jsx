@@ -1,5 +1,5 @@
 import React from "react";
-import { profilePic } from "../../assets";
+import { iconn } from "../../assets";
 import { NavLink, useNavigate } from "react-router";
 import { IoQrCodeOutline, IoSettingsOutline } from "react-icons/io5";
 import { MdOutlineInsights, MdOutlineModelTraining } from "react-icons/md";
@@ -18,7 +18,7 @@ export default function Sidebar() {
     <div className="h-screen">
       <div className="flex flex-col w-full gap-4 h-full">
         <div className="flex">
-          <img src={profilePic} className="rouded-full px-12 py-4" alt="" />
+          <img src={iconn} className="rounded-full pb-4" alt="" />
         </div>
         <div className="flex flex-col items-center justify-between text-primary text-md font-semibold h-full">
           <div className="flex flex-col w-full">
