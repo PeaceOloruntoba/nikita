@@ -28,6 +28,8 @@ const MakePayment = () => {
     fetchProductDetails();
   }, [priceId]);
 
+  console.log(productDetails)
+
   const handleSubmit = async (event) => {
     event.preventDefault();
 
@@ -84,9 +86,10 @@ const MakePayment = () => {
       <h2 className="text-2xl font-semibold mb-4 text-primary">
         One-Time Payment
       </h2>
-      <p className="mb-4 text-primary">{productDetails.description}</p>
+      <p className="mb-4 text-primary">{productDetails.product.name}</p>
+      <p className="mb-4 text-primary">{productDetails.product.description}</p>
       <p className="mb-4 text-primary">
-        Amount: ${productDetails.amount / 100}{" "}
+        Amount: #{productDetails.unit_amount / 100}{" "}
         {productDetails.currency.toUpperCase()}
       </p>
 
