@@ -5,6 +5,93 @@ import axios from "axios";
 import Spinner from "../components/shared/Spinner";
 import OpenAI from "openai";
 import axiosInstance from "../utils/axiosConfig";
+import Tesseract from "tesseract.js";
+import * as pdfjsLib from "pdfjs-dist/build/pdf";
+import mammoth from "mammoth";
+
+const extractTextFromDOCX = async (file) => {
+  if (!file) return null;
+
+  return new Promise((resolve, reject) => {
+    const reader = new FileReader();
+
+    reader.onload = async (event) => {
+      try {
+        const result = await mammoth.extractRawText({
+          arrayBuffer: event.target.result,
+        });
+        resolve(result.value.trim());
+      } catch (error) {
+        reject(error);
+      }
+    };
+
+    reader.onerror = (error) => reject(error);
+    reader.readAsArrayBuffer(file);
+  });
+};
+
+const extractTextFromPDF = async (file) => {
+  if (!file) return null;
+
+  try {
+    const reader = new FileReader();
+
+    return new Promise((resolve, reject) => {
+      reader.onload = async () => {
+        try {
+          const typedArray = new Uint8Array(reader.result);
+          const pdf = await pdfjsLib.getDocument({ data: typedArray }).promise;
+          let extractedText = "";
+
+          for (let i = 1; i <= pdf.numPages; i++) {
+            const page = await pdf.getPage(i);
+            const textContent = await page.getTextContent();
+            extractedText +=
+              textContent.items.map((item) => item.str).join(" ") + "\n";
+          }
+
+          resolve(extractedText.trim());
+        } catch (error) {
+          reject(error);
+        }
+      };
+
+      reader.onerror = (error) => reject(error);
+      reader.readAsArrayBuffer(file);
+    });
+  } catch (error) {
+    console.error("Error extracting text from PDF:", error);
+    return null;
+  }
+};
+
+const extractTextFromTXT = (file) => {
+  if (!file) return null;
+
+  return new Promise((resolve, reject) => {
+    const reader = new FileReader();
+
+    reader.onload = () => resolve(reader.result.trim());
+    reader.onerror = (error) => reject(error);
+
+    reader.readAsText(file);
+  });
+};
+
+
+const extractTextFromImage = async (file) => {
+  if (!file) return null;
+
+  try {
+    const { data } = await Tesseract.recognize(file, "eng");
+    return data.text.trim();
+  } catch (error) {
+    console.error("Error extracting text from image:", error);
+    return null;
+  }
+};
+
 
 const UpdateProfile = () => {
   const navigate = useNavigate();
@@ -151,55 +238,44 @@ const UpdateProfile = () => {
     dangerouslyAllowBrowser: true,
   });
 
-const processMenuWithOpenAI = async (file) => {
-  if (!file) return null;
-
-  try {
-    const formData = new FormData();
-    formData.append("file", file);
-
-    const response = await axiosInstance.post("/upload-and-process", formData, {
-      headers: { "Content-Type": "multipart/form-data" },
-    });
-
-    const cloudinaryUrl = response.data.imageUrl;
-
-    if (!cloudinaryUrl) {
-      console.error("Failed to get Cloudinary URL.");
-      return null;
-    }
-
-    const chatCompletion = await openai.chat.completions.create({
-      model: "gpt-4o",
-      messages: [
-        {
-          role: "user",
-          content: [
-            {
-              type: "text",
-              text: "Extract the menu from this document. Output the menu as a javascript array of strings.",
-            },
-            { type: "image_url", image_url: { url: cloudinaryUrl } },
-          ],
-        },
-      ],
-      max_tokens: 1000,
-    });
-
-    const menuText = chatCompletion.choices[0].message.content;
+  const processMenuWithOpenAI = async (file) => {
+    if (!file) return null;
 
     try {
-      const menuArray = JSON.parse(menuText);
-      return menuArray;
-    } catch (e) {
-      console.error("Error parsing menu from OpenAI response:", e);
+      const formData = new FormData();
+      formData.append("file", file);
+
+      const response = await axiosInstance.post("extract-content", formData, {
+        headers: { "Content-Type": "multipart/form-data" },
+      });
+
+      const extractedText = response.data.text;
+
+      const chatCompletion = await openai.chat.completions.create({
+        model: "gpt-4o",
+        messages: [
+          {
+            role: "user",
+            content: `Extract the menu from this text: ${extractedText}. Output the menu as a javascript array of strings.`,
+          },
+        ],
+        max_tokens: 1000,
+      });
+
+      const menuText = chatCompletion.choices[0].message.content;
+
+      try {
+        const menuArray = JSON.parse(menuText);
+        return menuArray;
+      } catch (e) {
+        console.error("Error parsing menu from OpenAI response:", e);
+        return null;
+      }
+    } catch (error) {
+      console.error("OpenAI processing error:", error);
       return null;
     }
-  } catch (error) {
-    console.error("OpenAI processing error:", error);
-    return null;
-  }
-};
+  };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
