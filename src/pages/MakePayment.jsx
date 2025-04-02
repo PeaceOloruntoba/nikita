@@ -16,7 +16,7 @@ const MakePayment = () => {
     const fetchProductDetails = async () => {
       try {
         const response = await axiosInstance.get(
-          `/api/product-details/${priceId}`
+          `/subscription/product-details/${priceId}`
         );
         setProductDetails(response.data);
       } catch (error) {
@@ -49,10 +49,13 @@ const MakePayment = () => {
     }
 
     try {
-      const response = await axiosInstance.post("/sub/create-payment", {
-        token: token.id,
-        priceId: priceId,
-      });
+      const response = await axiosInstance.post(
+        "/subscription/onetime-payment",
+        {
+          token: token.id,
+          priceId: priceId,
+        }
+      );
 
       if (response.data.success) {
         toast.success("Payment successful!");
