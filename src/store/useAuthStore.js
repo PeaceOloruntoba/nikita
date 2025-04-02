@@ -1,7 +1,6 @@
 // useInsightStore.js
 import { create } from "zustand";
 import axiosInstance from "../utils/axiosConfig";
-import { toast } from "sonner";
 import { handleError } from "../utils/handleError";
 
 const useInsightStore = create((set) => ({
