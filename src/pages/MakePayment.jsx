@@ -1,13 +1,13 @@
 import React, { useState, useEffect } from "react";
-import { CardElement, useStripe, useElements } from "@stripe/react-stripe-js";
 import { toast } from "sonner";
-import { useNavigate } from "react-router";
+import { useNavigate, useLocation } from "react-router";
 import axiosInstance from "../utils/axiosConfig";
+import Stripe from "stripe";
+import Spinner from "../components/shared/Spinner";
 
 const MakePayment = () => {
-  const stripe = useStripe();
-  const elements = useElements();
   const navigate = useNavigate();
+  const location = useLocation();
   const [loading, setLoading] = useState(false);
   const priceId = "price_1R9KrgP7PZBSVcUMoNOF2NwK"; // Manually input your price ID
   const [productDetails, setProductDetails] = useState(null);
@@ -31,34 +31,19 @@ const MakePayment = () => {
   const handleSubmit = async (event) => {
     event.preventDefault();
 
-    if (!stripe || !elements) {
-      toast.error("Stripe.js has not loaded yet.");
-      return;
-    }
-
     setLoading(true);
-
-    const cardElement = elements.getElement(CardElement);
-
-    const { error: stripeError, token } = await stripe.createToken(cardElement);
-
-    if (stripeError) {
-      toast.error(stripeError.message);
-      setLoading(false);
-      return;
-    }
 
     try {
       const response = await axiosInstance.post(
-        "/subscription/onetime-payment",
-        {
-          token: token.id,
-          priceId: priceId,
-        }
+        "/subscription/onetime-payment"
       );
 
-      toast.success("Payment successful!");
-      navigate("/interface");
+      if (response.data && response.data.sessionId) {
+        // Redirect to Stripe Checkout
+        window.location.href = `https://checkout.stripe.com/pay/${response.data.sessionId}`;
+      } else {
+        toast.error("Failed to create payment session.");
+      }
     } catch (error) {
       console.error("Payment error:", error);
       toast.error("Payment failed. Please try again.");
@@ -66,6 +51,32 @@ const MakePayment = () => {
       setLoading(false);
     }
   };
+
+  useEffect(() => {
+    const searchParams = new URLSearchParams(location.search);
+    const sessionId = searchParams.get("session_id");
+
+    const updatePaymentStatus = async () => {
+      if (sessionId) {
+        try {
+          const stripe = new Stripe(process.env.REACT_APP_STRIPE_PUBLIC_KEY);
+          const session = await stripe.checkout.sessions.retrieve(sessionId);
+          const customerId = session.customer;
+
+          await axiosInstance.post("/subscription/update-onetime-payment", {
+            customerId,
+          });
+          toast.success("Payment confirmed!");
+          navigate("/interface");
+        } catch (error) {
+          console.error("Error updating payment status:", error);
+          toast.error("Failed to confirm payment.");
+          navigate("/make-payment");
+        }
+      }
+    };
+    updatePaymentStatus();
+  }, [location.search, navigate]);
 
   if (!productDetails) {
     return (
@@ -88,14 +99,6 @@ const MakePayment = () => {
       </p>
 
       <form onSubmit={handleSubmit}>
-        <div className="mb-4">
-          <label className="block text-sm font-medium text-primary">
-            Card details
-          </label>
-          <div className="border rounded-md p-2">
-            <CardElement options={{ style: { base: { fontSize: "16px" } } }} />
-          </div>
-        </div>
         <button
           type="submit"
           className={`w-full py-2 px-4 rounded-md text-white ${
@@ -103,7 +106,7 @@ const MakePayment = () => {
           }`}
           disabled={loading}
         >
-          {loading ? "Processing..." : "Pay Now"}
+          {loading ? <Spinner /> : "Pay Now"}
         </button>
       </form>
     </div>
