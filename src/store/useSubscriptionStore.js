@@ -29,7 +29,7 @@ const useSubscriptionStore = create((set, get) => ({
 
     try {
       const response = await axiosInstance.get(
-        `/subscription/plan-details/${priceId}`
+        `/subscription/product-details/${priceId}`
       );
       set({ loading: false });
       return response.data;

@@ -22,13 +22,13 @@ const SubscriptionForm = () => {
       try {
         let priceId;
         if (profile.video_support) {
-          priceId = "price_1R59e6GWzmbPnUwmidW4eIXH";
+          priceId = "price_1R9KxDP7PZBSVcUMMgQjFVWQ";
         } else if (profile.audio_support) {
-          priceId = "price_audio_support_id";
+          priceId = "price_1R9KwNP7PZBSVcUMmpueWXMX";
         } else if (profile.text_support) {
-          priceId = "price_text_support_id";
+          priceId = "price_1R9KvRP7PZBSVcUMcnvCdbBL";
         } else {
-          priceId = "price_basic_id";
+          priceId = "price_1R9KvRP7PZBSVcUMcnvCdbBL";
         }
         const data = await getPlanDetails(priceId);
         setPlanDetails(data);
@@ -50,7 +50,7 @@ const SubscriptionForm = () => {
     event.preventDefault();
 
     if (!stripe || !elements) {
-      toast.error("Stripe.js has not loaded yet.");
+      toast.error("Stripe has not loaded yet.");
       return;
     }
 
