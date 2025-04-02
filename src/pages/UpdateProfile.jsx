@@ -552,33 +552,79 @@ const UpdateProfile = () => {
             <div className="mb-3 flex items-center text-nowrap flex-wrap justify-center w-full">
               <label className="text-nowrap">
                 <input
-                  type="checkbox"
-                  name="text_support"
+                  type="radio"
+                  name="ai_avatar_type"
+                  value="text"
                   checked={formData.text_support}
-                  onChange={handleChange}
+                  onChange={() =>
+                    setFormData({
+                      ...formData,
+                      text_support: true,
+                      audio_support: false,
+                      video_support: false,
+                    })
+                  }
                   className="mr-2"
                 />
                 Text ($180)
               </label>
               <label className="ml-9">
                 <input
-                  type="checkbox"
-                  name="audio_support"
+                  type="radio"
+                  name="ai_avatar_type"
+                  value="audio"
                   checked={formData.audio_support}
-                  onChange={handleChange}
+                  onChange={() =>
+                    setFormData({
+                      ...formData,
+                      text_support: false,
+                      audio_support: true,
+                      video_support: false,
+                    })
+                  }
                   className="mr-2"
                 />
                 Text + Audio ($360)
               </label>
               <label className="ml-2">
                 <input
-                  type="checkbox"
-                  name="video_support"
+                  type="radio"
+                  name="ai_avatar_type"
+                  value="video"
                   checked={formData.video_support}
-                  onChange={handleChange}
+                  onChange={() =>
+                    setFormData({
+                      ...formData,
+                      text_support: false,
+                      audio_support: false,
+                      video_support: true,
+                    })
+                  }
                   className="mr-2"
                 />
                 Text + Audio + Video ($1200)
+              </label>
+              <label className="ml-2">
+                <input
+                  type="radio"
+                  name="ai_avatar_type"
+                  value="none"
+                  checked={
+                    !formData.text_support &&
+                    !formData.audio_support &&
+                    !formData.video_support
+                  }
+                  onChange={() =>
+                    setFormData({
+                      ...formData,
+                      text_support: false,
+                      audio_support: false,
+                      video_support: false,
+                    })
+                  }
+                  className="mr-2"
+                />
+                None
               </label>
             </div>
 
