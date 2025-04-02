@@ -4,7 +4,6 @@ import useAuthStore from "../store/useAuthStore";
 import axios from "axios";
 import Spinner from "../components/shared/Spinner";
 import OpenAI from "openai";
-import axiosInstance from "../utils/axiosConfig";
 import Tesseract from "tesseract.js";
 import * as pdfjsLib from "pdfjs-dist/build/pdf";
 import mammoth from "mammoth";
@@ -79,7 +78,6 @@ const extractTextFromTXT = (file) => {
   });
 };
 
-
 const extractTextFromImage = async (file) => {
   if (!file) return null;
 
@@ -91,7 +89,6 @@ const extractTextFromImage = async (file) => {
     return null;
   }
 };
-
 
 const UpdateProfile = () => {
   const navigate = useNavigate();
@@ -238,41 +235,54 @@ const UpdateProfile = () => {
     dangerouslyAllowBrowser: true,
   });
 
-  const processMenuWithOpenAI = async (file) => {
+  const processMenuFile = async (file) => {
     if (!file) return null;
 
+    const fileType = file.type;
+    let extractedText = null;
+
     try {
-      const formData = new FormData();
-      formData.append("file", file);
+      if (fileType.includes("image")) {
+        extractedText = await extractTextFromImage(file);
+      } else if (fileType.includes("pdf")) {
+        extractedText = await extractTextFromPDF(file);
+      } else if (fileType.includes("text/plain")) {
+        extractedText = await extractTextFromTXT(file);
+      } else if (
+        fileType.includes("officedocument.wordprocessingml.document")
+      ) {
+        extractedText = await extractTextFromDOCX(file);
+      } else {
+        console.error("Unsupported file type:", fileType);
+        return null;
+      }
 
-      const response = await axiosInstance.post("extract-content", formData, {
-        headers: { "Content-Type": "multipart/form-data" },
-      });
+      if (!extractedText) return null;
 
-      const extractedText = response.data.text;
-
+      // Send extracted text to OpenAI
       const chatCompletion = await openai.chat.completions.create({
         model: "gpt-4o",
         messages: [
           {
             role: "user",
-            content: `Extract the menu from this text: ${extractedText}. Output the menu as a javascript array of strings.`,
+            content: `Extract a structured menu from the following text. Return only a JSON array of menu items: \n\n${extractedText}`,
           },
         ],
         max_tokens: 1000,
       });
 
-      const menuText = chatCompletion.choices[0].message.content;
+      const menuText = chatCompletion.choices[0].message.content.trim();
 
       try {
         const menuArray = JSON.parse(menuText);
+        if (!Array.isArray(menuArray)) throw new Error("Not an array");
         return menuArray;
       } catch (e) {
-        console.error("Error parsing menu from OpenAI response:", e);
+        console.error("Failed to parse OpenAI response:", e);
         return null;
       }
     } catch (error) {
-      console.error("OpenAI processing error:", error);
+      console.error("Error processing menu file:", error);
       return null;
     }
   };
@@ -294,8 +304,8 @@ const UpdateProfile = () => {
         handleCloudinaryUpload(formData.restaurant_image, preset),
         handleCloudinaryUpload(formData.food_menu_card_image, preset),
         handleCloudinaryUpload(formData.wine_menu_card_image, preset),
-        processMenuWithOpenAI(formData.food_menu_file),
-        processMenuWithOpenAI(formData.wine_menu_file),
+        processMenuFile(formData.food_menu_file),
+        processMenuFile(formData.wine_menu_file),
       ]);
 
       const payload = {
