@@ -4,6 +4,7 @@ import useAuthStore from "../store/useAuthStore";
 import axios from "axios";
 import Spinner from "../components/shared/Spinner";
 import OpenAI from "openai";
+import axiosInstance from "../utils/axiosConfig";
 
 const UpdateProfile = () => {
   const navigate = useNavigate();
@@ -150,51 +151,55 @@ const UpdateProfile = () => {
     dangerouslyAllowBrowser: true,
   });
 
-  const processMenuWithOpenAI = async (file) => {
-    if (!file) return null;
+const processMenuWithOpenAI = async (file) => {
+  if (!file) return null;
 
-    try {
-      const cloudinaryUrl = await handleCloudinaryUpload(
-        file,
-        import.meta.env.VITE_CLOUDINARY_UPLOAD_PRESET
-      );
+  try {
+    const formData = new FormData();
+    formData.append("file", file);
 
-      if (!cloudinaryUrl) {
-        console.error("Failed to upload menu to Cloudinary.");
-        return null;
-      }
+    const response = await axiosInstance.post("/upload-and-process", formData, {
+      headers: { "Content-Type": "multipart/form-data" },
+    });
 
-      const chatCompletion = await openai.chat.completions.create({
-        model: "gpt-4o",
-        messages: [
-          {
-            role: "user",
-            content: [
-              {
-                type: "text",
-                text: "Extract the menu from this document. Output the menu as a javascript array of strings.",
-              },
-              { type: "image_url", image_url: { url: cloudinaryUrl } },
-            ],
-          },
-        ],
-        max_tokens: 1000,
-      });
+    const cloudinaryUrl = response.data.imageUrl;
 
-      const menuText = chatCompletion.choices[0].message.content;
-
-      try {
-        const menuArray = JSON.parse(menuText);
-        return menuArray;
-      } catch (e) {
-        console.error("Error parsing menu from OpenAI response:", e);
-        return null;
-      }
-    } catch (error) {
-      console.error("OpenAI processing error:", error);
+    if (!cloudinaryUrl) {
+      console.error("Failed to get Cloudinary URL.");
       return null;
     }
-  };
+
+    const chatCompletion = await openai.chat.completions.create({
+      model: "gpt-4o",
+      messages: [
+        {
+          role: "user",
+          content: [
+            {
+              type: "text",
+              text: "Extract the menu from this document. Output the menu as a javascript array of strings.",
+            },
+            { type: "image_url", image_url: { url: cloudinaryUrl } },
+          ],
+        },
+      ],
+      max_tokens: 1000,
+    });
+
+    const menuText = chatCompletion.choices[0].message.content;
+
+    try {
+      const menuArray = JSON.parse(menuText);
+      return menuArray;
+    } catch (e) {
+      console.error("Error parsing menu from OpenAI response:", e);
+      return null;
+    }
+  } catch (error) {
+    console.error("OpenAI processing error:", error);
+    return null;
+  }
+};
 
   const handleSubmit = async (e) => {
     e.preventDefault();
