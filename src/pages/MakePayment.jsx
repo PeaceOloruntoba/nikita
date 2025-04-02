@@ -9,7 +9,7 @@ const MakePayment = () => {
   const elements = useElements();
   const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
-  const priceId = "YOUR_PRICE_ID_HERE"; // Manually input your price ID
+  const priceId = "price_1R9KrgP7PZBSVcUMoNOF2NwK"; // Manually input your price ID
   const [productDetails, setProductDetails] = useState(null);
 
   useEffect(() => {
