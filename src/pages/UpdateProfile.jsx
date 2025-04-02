@@ -69,7 +69,8 @@ const UpdateProfile = () => {
           ? storedProfile.wine_menu
           : "",
         ai_languages: storedProfile.ai_languages || "",
-        ai_character_instructions: storedProfile.ai_character_instructions || "",
+        ai_character_instructions:
+          storedProfile.ai_character_instructions || "",
         legal_representative: storedProfile.legal_representative || "",
         contact_phone: storedProfile.contact_phone || "",
         email: storedProfile.email || "",
@@ -119,7 +120,7 @@ const UpdateProfile = () => {
         try {
           const formData = new FormData();
           formData.append("file", reader.result);
-          formData.append("upload_preset", preset);
+          formData.append("upload_preset", preset); // Ensure preset is used
 
           const response = await axios.post(
             `https://api.cloudinary.com/v1_1/${
@@ -144,70 +145,69 @@ const UpdateProfile = () => {
     });
   };
 
-const openai = new OpenAI({
-  apiKey: import.meta.env.VITE_OPENAI_API_KEY,
-  dangerouslyAllowBrowser: true,
-});
+  const openai = new OpenAI({
+    apiKey: import.meta.env.VITE_OPENAI_API_KEY,
+    dangerouslyAllowBrowser: true,
+  });
 
-const processMenuWithOpenAI = async (file) => {
-  if (!file) return null;
-
-  try {
-    const formData = new FormData();
-    formData.append("file", file);
-    formData.append("purpose", "assistants"); // Add the purpose here
-
-    const response = await axios.post(
-      "https://api.openai.com/v1/files",
-      formData,
-      {
-        headers: {
-          "Content-Type": "multipart/form-data",
-          Authorization: `Bearer ${import.meta.env.VITE_OPENAI_API_KEY}`,
-        },
-      }
-    );
-
-    const fileId = response.data.id;
-
-    const chatCompletion = await openai.chat.completions.create({
-      model: "gpt-4-vision-preview",
-      messages: [
-        {
-          role: "user",
-          content: [
-            {
-              type: "text",
-              text: "Extract the menu from this document. Output the menu as a javascript array of strings.",
-            },
-            { type: "image_url", image_url: { url: `file-${fileId}` } },
-          ],
-        },
-      ],
-      max_tokens: 1000,
-    });
-
-    await axios.delete(`https://api.openai.com/v1/files/${fileId}`, {
-      headers: {
-        Authorization: `Bearer ${import.meta.env.VITE_OPENAI_API_KEY}`,
-      },
-    });
-
-    const menuText = chatCompletion.choices[0].message.content;
+  const processMenuWithOpenAI = async (file) => {
+    if (!file) return null;
 
     try {
-      const menuArray = JSON.parse(menuText);
-      return menuArray;
-    } catch (e) {
-      console.error("Error parsing menu from OpenAI response:", e);
+      const formData = new FormData();
+      formData.append("file", file);
+      formData.append("purpose", "user_data");
+
+      const response = await axios.post(
+        "https://api.openai.com/v1/files",
+        formData,
+        {
+          headers: {
+            "Content-Type": "multipart/form-data",
+            Authorization: `Bearer ${import.meta.env.VITE_OPENAI_API_KEY}`,
+          },
+        }
+      );
+
+      const fileId = response.data.id;
+
+      const chatCompletion = await openai.chat.completions.create({
+        model: "gpt-4-vision-preview",
+        messages: [
+          {
+            role: "user",
+            content: [
+              {
+                type: "text",
+                text: "Extract the menu from this document. Output the menu as a javascript array of strings.",
+              },
+              { type: "image_url", image_url: { url: `file-${fileId}` } },
+            ],
+          },
+        ],
+        max_tokens: 1000,
+      });
+
+      await axios.delete(`https://api.openai.com/v1/files/${fileId}`, {
+        headers: {
+          Authorization: `Bearer ${import.meta.env.VITE_OPENAI_API_KEY}`,
+        },
+      });
+
+      const menuText = chatCompletion.choices[0].message.content;
+
+      try {
+        const menuArray = JSON.parse(menuText);
+        return menuArray;
+      } catch (e) {
+        console.error("Error parsing menu from OpenAI response:", e);
+        return null;
+      }
+    } catch (error) {
+      console.error("OpenAI processing error:", error);
       return null;
     }
-  } catch (error) {
-    console.error("OpenAI processing error:", error);
-    return null;
-  }
-};
-
+  };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
