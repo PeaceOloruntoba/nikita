@@ -10,10 +10,6 @@ export default function AdminGuard() {
   useEffect(() => {
     if (!user || user?.role !== "admin") {
       navigate("/login");
-    } else if (!user?.onetime_payment) {
-      navigate("/make-payment");
-    } else {
-      navigate("/interface");
     }
   }, [user, navigate]); // Depend on user and navigate
 
