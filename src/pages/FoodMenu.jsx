@@ -6,6 +6,7 @@ export default function FoodMenu() {
   const { foodMenu, getFoodMenu, updateFoodMenu } = useMenuStore();
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [menuText, setMenuText] = useState("");
+  const [menuTextD, setMenuTextD] = useState("");
   const [menuFile, setMenuFile] = useState(null);
   const fileInputRef = useRef(null);
 
@@ -13,13 +14,10 @@ export default function FoodMenu() {
     getFoodMenu();
   }, [getFoodMenu]);
 
-  useEffect(() => {
-    if (Array.isArray(foodMenu)) {
-      setMenuText(foodMenu.join("\n"));
-    } else {
-      setMenuText("");
-    }
-  }, [foodMenu]);
+    useEffect(() => {
+        setMenuTextD(foodMenu.map((menuItem) => menuItem.item).join("\n"));
+    }, [foodMenu]);
+
 
   const handleOpenModal = () => {
     setIsModalOpen(true);
@@ -93,7 +91,7 @@ export default function FoodMenu() {
               key={index}
               className="p-2 border-b border-gray-300 text-gray-800"
             >
-              {item}
+              {item?.item}
             </li>
           ))}
         </ul>
