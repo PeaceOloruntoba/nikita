@@ -35,7 +35,7 @@ export default function Restaurants() {
             </tr>
           </thead>
           <tbody className="divide-y divide-gray-200">
-            {restaurants.map((restaurant) => (
+            {restaurants?.map((restaurant) => (
               <tr key={restaurant.id}>
                 <td className="py-4 px-6 whitespace-nowrap text-sm text-gray-500">
                   {restaurant.id}
