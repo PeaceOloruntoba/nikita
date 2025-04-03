@@ -20,6 +20,7 @@ import Home from "./pages/admin/Home";
 import MakePayment from "./pages/MakePayment";
 import { loadStripe } from "@stripe/stripe-js";
 import { Elements } from "@stripe/react-stripe-js";
+import AdminLayout from "./layouts/AdminLayout";
 
 const stripePromise = loadStripe(
   "pk_test_51R9KnzP7PZBSVcUMr2gYSKBnYYRtYfWEEx4LBTdRvawHgdsKi1JNkPk7FNza78zgPDSQoq9zZphqgNerBKuMPQcJ003enJ5gDD"
@@ -49,7 +50,9 @@ export default function App() {
             </Route>
           </Route>
           <Route path="/admin" element={<SuperAdminGuard />}>
-            <Route path="" element={<Home />} />
+            <Route element={<AdminLayout />}>
+              <Route path="" element={<Home />} />
+            </Route>
           </Route>
           <Route path="login" element={<Login />} />
           <Route path="signup" element={<Signup />} />

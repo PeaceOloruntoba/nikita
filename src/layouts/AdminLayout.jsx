@@ -2,7 +2,7 @@ import React from "react";
 import Sidebar from "../components/ui/Sidebar";
 import { Outlet } from "react-router";
 
-export default function RootLayout() {
+export default function AdminLayout() {
   return (
     <div className="w-screen h-screen flex bg-[#F2EBF0]">
       <div className="w-1/4">
