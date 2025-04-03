@@ -10,14 +10,11 @@ export default function SuperAdminGuard() {
   console.log(user);
 
   useEffect(() => {
-    if (user.role !== "superadmin") {
+    console.log("endd");
+    if (!user.role == "superadmin") {
       navigate("/login");
     }
-  }, [user, navigate]); // Depend on user and navigate
-
-  // if (!user || user?.roles !== "admin") {
-  //   return null; // or a loading state. prevent outlet.
-  // }
+  }, [user, navigate]);
 
   return <Outlet />;
 }

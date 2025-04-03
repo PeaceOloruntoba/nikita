@@ -47,9 +47,9 @@ export default function App() {
               <Route path="subscription" element={<SubscriptionPage />} />
               <Route path="make-payment" element={<MakePayment />} />
             </Route>
-            <Route path="/admin" element={<SuperAdminGuard />}>
-              <Route path="" element={<Home />} />
-            </Route>
+          </Route>
+          <Route path="/admin" element={<SuperAdminGuard />}>
+            <Route path="" element={<Home />} />
           </Route>
           <Route path="login" element={<Login />} />
           <Route path="signup" element={<Signup />} />
