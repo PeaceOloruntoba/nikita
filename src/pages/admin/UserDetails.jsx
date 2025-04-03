@@ -1,8 +1,7 @@
-// UserDetails.jsx
 import React, { useEffect } from "react";
 import { useParams } from "react-router-dom";
-import useAdminStore from "../hooks/useAdminStore";
 import { Link } from "react-router-dom";
+import useAdminStore from "../../store/useAdminStore";
 
 export default function UserDetails() {
   const { userId } = useParams();
