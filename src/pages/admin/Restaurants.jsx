@@ -1,7 +1,6 @@
-// Restaurants.jsx
 import React, { useEffect } from "react";
-import useAdminStore from "../hooks/useAdminStore";
 import { Link } from "react-router-dom";
+import useAdminStore from "../../store/useAdminStore";
 
 export default function Restaurants() {
   const { restaurants, getRestaurants, isAdminRequesting } = useAdminStore();
