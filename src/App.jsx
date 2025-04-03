@@ -51,7 +51,10 @@ export default function App() {
           </Route>
           <Route path="/admin" element={<SuperAdminGuard />}>
             <Route element={<AdminLayout />}>
-              <Route path="/dashboard" element={<Home />} />
+              <Route path="dashboard" element={<Home />} />
+              <Route path="restaurants" element={<Home />} />
+              <Route path="users" element={<Home />} />
+              <Route path="support" element={<Home />} />
             </Route>
           </Route>
           <Route path="login" element={<Login />} />

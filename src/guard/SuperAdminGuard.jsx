@@ -7,10 +7,7 @@ export default function SuperAdminGuard() {
   const { user } = useAuthStore();
   const navigate = useNavigate();
 
-  console.log(user);
-
   useEffect(() => {
-    console.log("endd");
     if (!user.role == "superadmin") {
       navigate("/login");
     }
