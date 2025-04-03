@@ -1,8 +1,7 @@
-// Dashboard.jsx
 import React, { useEffect } from "react";
-import useAdminStore from "../hooks/useAdminStore";
 import { Bar } from "react-chartjs-2";
 import { Chart, registerables } from "chart.js";
+import useAdminStore from "../../store/useAdminStore";
 
 Chart.register(...registerables);
 
