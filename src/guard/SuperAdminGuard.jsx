@@ -8,7 +8,7 @@ export default function SuperAdminGuard() {
   const navigate = useNavigate();
 
   useEffect(() => {
-    if (!user.role == "superadmin") {
+    if (!user?.role == "superadmin") {
       navigate("/login");
     }
   }, [user, navigate]);
