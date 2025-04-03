@@ -34,7 +34,7 @@ const loginUser = async (user, navigate, set, get) => {
     saveAuthDataToLocalStorage(data.user, data.token);
     console.log(data.user);
     if (data.user.role == "superadmin") {
-      navigate("/admin");
+      navigate("/admin/dashboard");
     } else if (data.user.role == "admin") {
       if (!data.user.onetimePayment) {
         navigate("/make-payment");
