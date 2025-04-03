@@ -23,18 +23,7 @@ export default function AdminSidebar() {
         <div className="flex flex-col items-center justify-between text-primary text-md font-semibold h-full">
           <div className="flex flex-col w-full">
             <NavLink
-              to={"/interface"}
-              className={({ isActive }) =>
-                isActive
-                  ? "bg-gray-100 w-full text-left p-3 px-6 flex gap-2 items-center"
-                  : " w-full text-left p-4 flex gap-2 items-center"
-              }
-            >
-              <FaBookReader size={20} />
-              Interface
-            </NavLink>
-            <NavLink
-              to={"/insights"}
+              to={"/admin/dashboard"}
               className={({ isActive }) =>
                 isActive
                   ? "bg-gray-100 w-full text-left p-4 px-6 flex gap-2 items-center"
@@ -42,21 +31,21 @@ export default function AdminSidebar() {
               }
             >
               <MdOutlineInsights size={20} />
-              AI Insights
+              Dashboard
             </NavLink>
             <NavLink
-              to={"/qr-codes"}
+              to={"/admin/restaurants"}
               className={({ isActive }) =>
                 isActive
                   ? "bg-gray-100 w-full text-left p-3 px-6 flex gap-2 items-center"
                   : " w-full text-left p-4 flex gap-2 items-center"
               }
             >
-              <IoQrCodeOutline size={20} />
-              QR Codes
+              <FaBookReader size={20} />
+              Restaurants
             </NavLink>
             <NavLink
-              to={"/training"}
+              to={"/admin/users"}
               className={({ isActive }) =>
                 isActive
                   ? "bg-gray-100 w-full text-left p-4 px-6 flex gap-2 items-center"
@@ -64,21 +53,10 @@ export default function AdminSidebar() {
               }
             >
               <MdOutlineModelTraining size={20} />
-              AI Training
+              Users
             </NavLink>
             <NavLink
-              to={"/reviews"}
-              className={({ isActive }) =>
-                isActive
-                  ? "bg-gray-100 w-full text-left p-4 px-6 flex gap-2 items-center"
-                  : " w-full text-left p-4 flex gap-2 items-center"
-              }
-            >
-              <MdOutlineReviews size={20} />
-              Reviews
-            </NavLink>
-            <NavLink
-              to={"/support"}
+              to={"/admin/support"}
               className={({ isActive }) =>
                 isActive
                   ? "bg-gray-100 w-full text-left p-4 px-6 flex gap-2 items-center"
@@ -87,17 +65,6 @@ export default function AdminSidebar() {
             >
               <BiSupport size={20} />
               Support
-            </NavLink>
-            <NavLink
-              to={"/settings"}
-              className={({ isActive }) =>
-                isActive
-                  ? "bg-gray-100 w-full text-left p-4 px-6 flex gap-2 items-center"
-                  : " w-full text-left p-4 flex gap-2 items-center"
-              }
-            >
-              <IoSettingsOutline size={20} />
-              Settings
             </NavLink>
           </div>
           <div className="flex flex-col w-full">
