@@ -22,6 +22,10 @@ import { loadStripe } from "@stripe/stripe-js";
 import { Elements } from "@stripe/react-stripe-js";
 import AdminLayout from "./layouts/AdminLayout";
 import Dashboard from "./pages/admin/Dashboard";
+import Restaurants from "./pages/admin/Restaurants";
+import Users from "./pages/admin/Users";
+import RestaurantDetails from "./pages/admin/RestaurantDetails";
+import UserDetails from "./pages/admin/UserDetails";
 
 const stripePromise = loadStripe(
   "pk_test_51R9KnzP7PZBSVcUMr2gYSKBnYYRtYfWEEx4LBTdRvawHgdsKi1JNkPk7FNza78zgPDSQoq9zZphqgNerBKuMPQcJ003enJ5gDD"
@@ -53,8 +57,13 @@ export default function App() {
           <Route path="/admin" element={<SuperAdminGuard />}>
             <Route element={<AdminLayout />}>
               <Route path="dashboard" element={<Dashboard />} />
-              <Route path="restaurants" element={<Home />} />
-              <Route path="users" element={<Home />} />
+              <Route path="restaurants" element={<Restaurants />} />
+              <Route
+                path="restaurants/:restaurantId"
+                element={<RestaurantDetails />}
+              />
+              <Route path="users" element={<Users />} />
+              <Route path="users/:userId" element={<UserDetails />} />
               <Route path="support" element={<Home />} />
             </Route>
           </Route>
