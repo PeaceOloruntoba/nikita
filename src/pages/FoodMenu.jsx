@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import useMenuStore from "../store/useMenuStore";
 import Modal from "../components/ui/Modal";
 
@@ -6,6 +6,8 @@ export default function FoodMenu() {
   const { foodMenu, getFoodMenu, updateFoodMenu } = useMenuStore();
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [menuText, setMenuText] = useState("");
+  const [menuFile, setMenuFile] = useState(null);
+  const fileInputRef = useRef(null);
 
   useEffect(() => {
     getFoodMenu();
@@ -21,16 +23,51 @@ export default function FoodMenu() {
 
   const handleOpenModal = () => {
     setIsModalOpen(true);
+    setMenuFile(null);
   };
 
   const handleCloseModal = () => {
     setIsModalOpen(false);
+    setMenuText(Array.isArray(foodMenu) ? foodMenu.join("\n") : "");
+    setMenuFile(null);
   };
 
-  const handleSaveMenu = () => {
-    const newMenu = menuText.split("\n").filter((item) => item.trim() !== "");
-    updateFoodMenu(newMenu);
-    handleCloseModal();
+  const handleTextChange = (e) => {
+    setMenuText(e.target.value);
+    setMenuFile(null);
+  };
+
+  const handleFileChange = (e) => {
+    setMenuFile(e.target.files[0]);
+    setMenuText("");
+  };
+
+  const handleSaveMenu = async () => {
+    if (menuFile) {
+      console.log("File selected:", menuFile);
+      const reader = new FileReader();
+      reader.onload = (event) => {
+        const fileContent = event.target.result;
+        console.log("File content:", fileContent);
+        const newMenuFromFile = fileContent
+          .split("\n")
+          .filter((item) => item.trim() !== "");
+        updateFoodMenu(newMenuFromFile);
+        handleCloseModal();
+      };
+      reader.onerror = (error) => {
+        console.error("Error reading file:", error);
+      };
+      reader.readAsText(menuFile);
+    } else {
+      const newMenu = menuText.split("\n").filter((item) => item.trim() !== "");
+      updateFoodMenu(newMenu);
+      handleCloseModal();
+    }
+  };
+
+  const handleOpenFileDialog = () => {
+    fileInputRef.current.click();
   };
 
   console.log("foodMenu:", foodMenu);
@@ -65,11 +102,30 @@ export default function FoodMenu() {
       )}
 
       <Modal isOpen={isModalOpen} onClose={handleCloseModal}>
-        <h3 className="text-lg font-semibold mb-4">Food Menu</h3>
+        <h3 className="text-lg font-semibold mb-4">Update Food Menu</h3>
+        <div className="mb-2">
+          <button
+            onClick={handleOpenFileDialog}
+            className="bg-secondary text-primary px-4 py-2 rounded-md mr-2"
+          >
+            Upload File
+          </button>
+          <input
+            type="file"
+            accept=".txt,.pdf,.docx,.doc,.png,.jpg,.jpeg"
+            onChange={handleFileChange}
+            className="hidden"
+            ref={fileInputRef}
+          />
+          {menuFile && (
+            <span className="text-gray-600 ml-2">{menuFile.name}</span>
+          )}
+        </div>
         <textarea
           value={menuText}
-          onChange={(e) => setMenuText(e.target.value)}
+          onChange={handleTextChange}
           className="w-full h-48 p-2 border rounded-md"
+          placeholder="Or enter menu text here..."
         />
         <div className="mt-4 flex justify-end">
           <button
