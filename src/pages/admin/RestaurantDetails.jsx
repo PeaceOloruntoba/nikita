@@ -1,8 +1,7 @@
-// RestaurantDetails.jsx
 import React, { useEffect } from "react";
 import { useParams } from "react-router-dom";
-import useAdminStore from "../hooks/useAdminStore";
 import { Link } from "react-router-dom";
+import useAdminStore from "../../store/useAdminStore";
 
 export default function RestaurantDetails() {
   const { restaurantId } = useParams();
@@ -45,7 +44,6 @@ export default function RestaurantDetails() {
           {new Date(selectedRestaurant.created_at).toLocaleDateString()}{" "}
           {new Date(selectedRestaurant.created_at).toLocaleTimeString()}
         </p>
-        {/* Add more restaurant details as needed */}
         <Link
           to="/admin/restaurants"
           className="inline-block mt-4 bg-gray-200 hover:bg-gray-300 text-gray-800 font-semibold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
