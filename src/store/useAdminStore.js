@@ -8,7 +8,7 @@ import { handleError } from "../utils/handleError";
 const fetchUsers = async (set) => {
   set({ isAdminRequesting: true });
   try {
-    const response = await axiosInstance.get("/admin/users");
+    const response = await axiosInstance.post("/admin/users");
     set({ users: response.data.users, isAdminRequesting: false });
   } catch (error) {
     handleError(error);
@@ -19,7 +19,7 @@ const fetchUsers = async (set) => {
 const fetchUser = async (userId, set) => {
   set({ isAdminRequesting: true });
   try {
-    const response = await axiosInstance.get(`/admin/users/${userId}`);
+    const response = await axiosInstance.post(`/admin/users/${userId}`);
     set({ selectedUser: response.data.user, isAdminRequesting: false });
   } catch (error) {
     handleError(error);
@@ -31,7 +31,7 @@ const fetchUser = async (userId, set) => {
 const fetchRestaurants = async (set) => {
   set({ isAdminRequesting: true });
   try {
-    const response = await axiosInstance.get("/admin/restaurants");
+    const response = await axiosInstance.post("/admin/restaurants");
     set({ restaurants: response.data.restaurants, isAdminRequesting: false });
   } catch (error) {
     handleError(error);
@@ -42,7 +42,7 @@ const fetchRestaurants = async (set) => {
 const fetchRestaurant = async (restaurantId, set) => {
   set({ isAdminRequesting: true });
   try {
-    const response = await axiosInstance.get(
+    const response = await axiosInstance.post(
       `/admin/restaurants/${restaurantId}`
     );
     set({
@@ -59,7 +59,7 @@ const fetchRestaurant = async (restaurantId, set) => {
 const fetchDashboard = async (set) => {
   set({ isAdminRequesting: true });
   try {
-    const response = await axiosInstance.get("/admin/dashboard");
+    const response = await axiosInstance.post("/admin/dashboard");
     set({ dashboardData: response.data, isAdminRequesting: false });
   } catch (error) {
     handleError(error);
@@ -84,3 +84,4 @@ const useAdminStore = create((set) => ({
 }));
 
 export default useAdminStore;
+
