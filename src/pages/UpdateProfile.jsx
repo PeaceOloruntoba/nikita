@@ -9,29 +9,46 @@ import * as pdfjsLib from "pdfjs-dist/build/pdf";
 import mammoth from "mammoth";
 
 const extractTextFromDOCX = async (file) => {
-  if (!file) return null;
+  console.log("extractTextFromDOCX called with file:", file);
+  if (!file) {
+    console.log("extractTextFromDOCX: No file provided.");
+    return null;
+  }
 
   return new Promise((resolve, reject) => {
     const reader = new FileReader();
 
     reader.onload = async (event) => {
       try {
+        console.log("extractTextFromDOCX: FileReader loaded.");
         const result = await mammoth.extractRawText({
           arrayBuffer: event.target.result,
         });
+        console.log(
+          "extractTextFromDOCX: Extraction result:",
+          result.value.trim()
+        );
         resolve(result.value.trim());
       } catch (error) {
+        console.error("extractTextFromDOCX: Error during extraction:", error);
         reject(error);
       }
     };
 
-    reader.onerror = (error) => reject(error);
+    reader.onerror = (error) => {
+      console.error("extractTextFromDOCX: FileReader error:", error);
+      reject(error);
+    };
     reader.readAsArrayBuffer(file);
   });
 };
 
 const extractTextFromPDF = async (file) => {
-  if (!file) return null;
+  console.log("extractTextFromPDF called with file:", file);
+  if (!file) {
+    console.log("extractTextFromPDF: No file provided.");
+    return null;
+  }
 
   try {
     const reader = new FileReader();
@@ -39,24 +56,38 @@ const extractTextFromPDF = async (file) => {
     return new Promise((resolve, reject) => {
       reader.onload = async () => {
         try {
+          console.log("extractTextFromPDF: FileReader loaded.");
           const typedArray = new Uint8Array(reader.result);
           const pdf = await pdfjsLib.getDocument({ data: typedArray }).promise;
+          console.log(
+            "extractTextFromPDF: PDF loaded, numPages:",
+            pdf.numPages
+          );
           let extractedText = "";
 
           for (let i = 1; i <= pdf.numPages; i++) {
             const page = await pdf.getPage(i);
             const textContent = await page.getTextContent();
-            extractedText +=
-              textContent.items.map((item) => item.str).join(" ") + "\n";
+            const pageText = textContent.items
+              .map((item) => item.str)
+              .join(" ");
+            extractedText += pageText + "\n";
+            console.log(`extractTextFromPDF: Page ${i} text:`, pageText);
           }
 
-          resolve(extractedText.trim());
+          const trimmedText = extractedText.trim();
+          console.log("extractTextFromPDF: Extracted text:", trimmedText);
+          resolve(trimmedText);
         } catch (error) {
+          console.error("extractTextFromPDF: Error processing PDF:", error);
           reject(error);
         }
       };
 
-      reader.onerror = (error) => reject(error);
+      reader.onerror = (error) => {
+        console.error("extractTextFromPDF: FileReader error:", error);
+        reject(error);
+      };
       reader.readAsArrayBuffer(file);
     });
   } catch (error) {
@@ -66,24 +97,45 @@ const extractTextFromPDF = async (file) => {
 };
 
 const extractTextFromTXT = (file) => {
-  if (!file) return null;
+  console.log("extractTextFromTXT called with file:", file);
+  if (!file) {
+    console.log("extractTextFromTXT: No file provided.");
+    return null;
+  }
 
   return new Promise((resolve, reject) => {
     const reader = new FileReader();
 
-    reader.onload = () => resolve(reader.result.trim());
-    reader.onerror = (error) => reject(error);
+    reader.onload = () => {
+      console.log(
+        "extractTextFromTXT: FileReader loaded, result:",
+        reader.result.trim()
+      );
+      resolve(reader.result.trim());
+    };
+    reader.onerror = (error) => {
+      console.error("extractTextFromTXT: FileReader error:", error);
+      reject(error);
+    };
 
     reader.readAsText(file);
   });
 };
 
 const extractTextFromImage = async (file) => {
-  if (!file) return null;
+  console.log("extractTextFromImage called with file:", file);
+  if (!file) {
+    console.log("extractTextFromImage: No file provided.");
+    return null;
+  }
 
   try {
+    console.log("extractTextFromImage: Starting Tesseract recognition.");
     const { data } = await Tesseract.recognize(file, "eng");
-    return data.text.trim();
+    const trimmedText = data.text.trim();
+    console.log("extractTextFromImage: Tesseract data:", data);
+    console.log("extractTextFromImage: Extracted text:", trimmedText);
+    return trimmedText;
   } catch (error) {
     console.error("Error extracting text from image:", error);
     return null;
@@ -236,10 +288,15 @@ const UpdateProfile = () => {
   });
 
   const processMenuFile = async (file) => {
-    if (!file) return null;
+    console.log("processMenuFile called with file:", file);
+    if (!file) {
+      console.log("processMenuFile: No file provided.");
+      return null;
+    }
 
     const fileType = file.type;
     let extractedText = null;
+    console.log("processMenuFile: File type:", fileType);
 
     try {
       if (fileType.includes("image")) {
@@ -253,11 +310,19 @@ const UpdateProfile = () => {
       ) {
         extractedText = await extractTextFromDOCX(file);
       } else {
-        console.error("Unsupported file type:", fileType);
+        console.error("processMenuFile: Unsupported file type:", fileType);
         return null;
       }
 
-      if (!extractedText) return null;
+      if (!extractedText) {
+        console.log("processMenuFile: Extracted text is null.");
+        return null;
+      }
+
+      console.log(
+        "processMenuFile: Extracted text before OpenAI:",
+        extractedText
+      );
 
       // Send extracted text to OpenAI
       const chatCompletion = await openai.chat.completions.create({
@@ -265,24 +330,32 @@ const UpdateProfile = () => {
         messages: [
           {
             role: "user",
-            content: `Extract a structured menu from the following text. Return only a JSON array of menu items: \n\n${extractedText}`,
+            content: `Extract a structured menu from the following text. Return only a JSON array of menu items. Do not include any markdown formatting or code blocks in your response: \n\n${extractedText}`,
           },
         ],
         max_tokens: 1000,
       });
 
-      const menuText = chatCompletion.choices[0].message.content.trim();
+      let menuText = chatCompletion.choices[0].message.content.trim();
+      console.log("processMenuFile: OpenAI raw response:", menuText);
+
+      // Remove markdown formatting if present
+      if (menuText.startsWith("```json") && menuText.endsWith("```")) {
+        menuText = menuText.substring(7, menuText.length - 3).trim();
+        console.log("processMenuFile: Stripped markdown:", menuText);
+      }
 
       try {
         const menuArray = JSON.parse(menuText);
         if (!Array.isArray(menuArray)) throw new Error("Not an array");
+        console.log("processMenuFile: Parsed menu array:", menuArray);
         return menuArray;
       } catch (e) {
-        console.error("Failed to parse OpenAI response:", e);
+        console.error("processMenuFile: Failed to parse OpenAI response:", e);
         return null;
       }
     } catch (error) {
-      console.error("Error processing menu file:", error);
+      console.error("processMenuFile: Error processing menu file:", error);
       return null;
     }
   };
