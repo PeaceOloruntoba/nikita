@@ -91,7 +91,7 @@ export default function FoodMenu() {
               key={index}
               className="p-2 border-b border-gray-300 text-gray-800"
             >
-              {item?.item}
+              {item}
             </li>
           ))}
         </ul>
