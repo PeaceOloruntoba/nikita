@@ -7,6 +7,8 @@ const useMenuStore = create((set) => ({
   foodMenu: [],
   wineMenu: [],
   tables: [],
+  feedbacks: [],
+  isLoading: false,
 
   getFoodMenu: async () => {
     try {
@@ -88,6 +90,19 @@ const useMenuStore = create((set) => ({
       await useMenuStore.getState().getWineMenu(); // Re-fetch wine menu
     } catch (error) {
       handleError(error);
+    }
+  },
+
+  getFeedbacks: async (set) => {
+    set({ isLoading: true });
+    try {
+      const response = await axiosInstance.get("/profile/reviews");
+      console.log(response);
+      const data = response?.data?.data || [];
+      set({ feedbacks: data, isLoading: false });
+    } catch (error) {
+      handleError(error);
+      set({ isLoading: false });
     }
   },
 }));
