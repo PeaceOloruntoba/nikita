@@ -99,6 +99,17 @@ export default function Sidebar() {
               <IoSettingsOutline size={20} />
               Settings
             </NavLink>
+            <NavLink
+              to={"/make-payment"}
+              className={({ isActive }) =>
+                isActive
+                  ? "bg-gray-100 w-full text-left p-4 px-6 flex gap-2 items-center"
+                  : " w-full text-left p-4 flex gap-2 items-center"
+              }
+            >
+              <IoSettingsOutline size={20} />
+              One-time Subscription
+            </NavLink>
           </div>
           <div className="flex flex-col w-full">
             <hr />
