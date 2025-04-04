@@ -108,7 +108,7 @@ export default function Sidebar() {
               }
             >
               <IoSettingsOutline size={20} />
-              One-time Payment
+              Subscription
             </NavLink>
           </div>
           <div className="flex flex-col w-full">
