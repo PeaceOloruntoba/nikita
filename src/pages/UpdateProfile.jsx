@@ -5,8 +5,8 @@ import axios from "axios";
 import Spinner from "../components/shared/Spinner";
 import OpenAI from "openai";
 import Tesseract from "tesseract.js";
-import * as pdfjsLib from "pdfjs-dist/build/pdf";
 import mammoth from "mammoth";
+import * as pdfjsLib from "pdfjs-dist/build/pdf";
 
 const extractTextFromDOCX = async (file) => {
   console.log("extractTextFromDOCX called with file:", file);
@@ -43,6 +43,59 @@ const extractTextFromDOCX = async (file) => {
   });
 };
 
+// const extractTextFromPDF = async (file) => {
+//   console.log("extractTextFromPDF called with file:", file);
+//   if (!file) {
+//     console.log("extractTextFromPDF: No file provided.");
+//     return null;
+//   }
+// 
+//   try {
+//     const reader = new FileReader();
+// 
+//     return new Promise((resolve, reject) => {
+//       reader.onload = async () => {
+//         try {
+//           console.log("extractTextFromPDF: FileReader loaded.");
+//           const typedArray = new Uint8Array(reader.result);
+//           const pdf = await pdfjsLib.getDocument({ data: typedArray }).promise;
+//           console.log(
+//             "extractTextFromPDF: PDF loaded, numPages:",
+//             pdf.numPages
+//           );
+//           let extractedText = "";
+// 
+//           for (let i = 1; i <= pdf.numPages; i++) {
+//             const page = await pdf.getPage(i);
+//             const textContent = await page.getTextContent();
+//             const pageText = textContent.items
+//               .map((item) => item.str)
+//               .join(" ");
+//             extractedText += pageText + "\n";
+//             console.log(`extractTextFromPDF: Page ${i} text:`, pageText);
+//           }
+// 
+//           const trimmedText = extractedText.trim();
+//           console.log("extractTextFromPDF: Extracted text:", trimmedText);
+//           resolve(trimmedText);
+//         } catch (error) {
+//           console.log("extractTextFromPDF: Error processing PDF:", error);
+//           reject(error);
+//         }
+//       };
+// 
+//       reader.onerror = (error) => {
+//         console.log("extractTextFromPDF: FileReader error:", error);
+//         reject(error);
+//       };
+//       reader.readAsArrayBuffer(file);
+//     });
+//   } catch (error) {
+//     console.log("Error extracting text from PDF:", error);
+//     return null;
+//   }
+// };
+
 const extractTextFromPDF = async (file) => {
   console.log("extractTextFromPDF called with file:", file);
   if (!file) {
@@ -59,6 +112,7 @@ const extractTextFromPDF = async (file) => {
           console.log("extractTextFromPDF: FileReader loaded.");
           const typedArray = new Uint8Array(reader.result);
           const pdf = await pdfjsLib.getDocument({ data: typedArray }).promise;
+          // ... rest of your PDF extraction code
           console.log(
             "extractTextFromPDF: PDF loaded, numPages:",
             pdf.numPages
@@ -79,19 +133,19 @@ const extractTextFromPDF = async (file) => {
           console.log("extractTextFromPDF: Extracted text:", trimmedText);
           resolve(trimmedText);
         } catch (error) {
-          console.error("extractTextFromPDF: Error processing PDF:", error);
+          console.log("extractTextFromPDF: Error processing PDF:", error);
           reject(error);
         }
       };
 
       reader.onerror = (error) => {
-        console.error("extractTextFromPDF: FileReader error:", error);
+        console.log("extractTextFromPDF: FileReader error:", error);
         reject(error);
       };
       reader.readAsArrayBuffer(file);
     });
   } catch (error) {
-    console.error("Error extracting text from PDF:", error);
+    console.log("Error extracting text from PDF:", error);
     return null;
   }
 };
@@ -143,6 +197,10 @@ const extractTextFromImage = async (file) => {
 };
 
 const UpdateProfile = () => {
+  useEffect(() => {
+    // Set the worker source using import.meta.url
+    pdfjsLib.GlobalWorkerOptions.workerSrc = "./pdf.worker.mjs";
+  }, []);
   const navigate = useNavigate();
   const { updateProfile, getProfile, profile: storedProfile } = useAuthStore();
   const [step, setStep] = useState(1);
