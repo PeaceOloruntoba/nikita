@@ -77,8 +77,8 @@ const MakePayment = () => {
       );
 
       if (response.data.success) {
-        toast.success("Payment successful!");
-        navigate("/interface");
+        toast.success("Payment successful! Please update your restaurant profile");
+        navigate("/update-profile");
       } else {
         toast.error("Payment failed. Please try again.");
       }

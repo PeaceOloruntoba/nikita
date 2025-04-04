@@ -77,9 +77,9 @@ const signUpUser = async (user, navigate, set) => {
       isAuthenticating: false,
     }));
     toast.success(
-      "Restaurant created successfully! Please complete your profile."
+      "Restaurant created successfully! Please make a one-time payment to use our system."
     );
-    navigate("/update-profile");
+    navigate("/make-payment");
   } catch (error) {
     handleError(error);
   } finally {
