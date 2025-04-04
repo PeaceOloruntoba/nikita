@@ -1,11 +1,11 @@
 import React, { useEffect, useState } from "react";
 import { negativeFeedback, positiveFeedback, totalFeedback } from "../assets";
 import { FeedbackTitleCard, FeedbackCard } from "../components/Feedback";
-import useAdminStore from "../store/useAdminStore"; // Import Zustand Store
 import Spinner from "../components/shared/Spinner";
+import useMenuStore from "../store/useMenuStore";
 
 export default function Reviews() {
-  const { feedbacks, getFeedbacks, isLoading } = useAdminStore();
+  const { feedbacks, getFeedbacks, isLoading } = useMenuStore();
   const [feedbackStatus, setFeedbackStatus] = useState(null);
 
   useEffect(() => {
