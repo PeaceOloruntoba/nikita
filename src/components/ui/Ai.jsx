@@ -7,8 +7,11 @@ import {
   FaMicrophoneSlash,
   FaVideo,
   FaPaperPlane,
+  FaRegStopCircle,
   FaSpinner,
 } from "react-icons/fa";
+import { FaRegCircleStop } from "react-icons/fa6";
+
 
 export default function Ai() {
   const [message, setMessage] = useState("");
@@ -186,7 +189,7 @@ export default function Ai() {
                 className="bg-red-500 text-white p-2 rounded-lg"
                 aria-label="Stop Recording"
               >
-                <FaMicrophoneSlash />
+                <FaRegStopCircle />
               </button>
             ) : (
               <button
