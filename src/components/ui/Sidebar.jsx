@@ -5,7 +5,7 @@ import { IoQrCodeOutline, IoSettingsOutline } from "react-icons/io5";
 import { MdOutlineInsights, MdOutlineModelTraining } from "react-icons/md";
 import { FaBookReader } from "react-icons/fa";
 import { BiLogOut, BiSupport } from "react-icons/bi";
-import { MdOutlineReviews } from "react-icons/md";
+import { MdOutlineReviews, MdOutlinePayments } from "react-icons/md";
 import useAuthStore from "../../store/useAuthStore";
 
 export default function Sidebar() {
@@ -107,7 +107,7 @@ export default function Sidebar() {
                   : " w-full text-left p-4 flex gap-2 items-center"
               }
             >
-              <IoSettingsOutline size={20} />
+              <MdOutlinePayments size={20} />
               Subscription
             </NavLink>
           </div>
