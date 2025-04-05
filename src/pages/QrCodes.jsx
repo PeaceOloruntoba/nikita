@@ -99,8 +99,7 @@ export default function QrCodes() {
                   className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded mt-2"
                   onClick={() =>
                     handlePrintQRCode(
-                      `profileId=${profile.user_id}&tableNumber=${item.table_number}`,
-                      `AIAgent=${profile.ai_agent_id}`
+                      `profileId=${profile.user_id}&tableNumber=${item.table_number}&AIAgent=${profile.ai_agent_id}`
                     )
                   }
                 >
