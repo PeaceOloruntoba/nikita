@@ -17,6 +17,8 @@ export default function QrCodes() {
     getProfile();
   }, [getTables]);
 
+  console.log(profile)
+
   useEffect(() => {
     if (tables && Array.isArray(tables) && tables.length > 0) {
       setSeatingCapacity(tables.length.toString());
@@ -97,7 +99,7 @@ export default function QrCodes() {
                   className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded mt-2"
                   onClick={() =>
                     handlePrintQRCode(
-                      `profileId=${item.profile_id}&tableNumber=${item.table_number}`,
+                      `profileId=${profile.user_id}&tableNumber=${item.table_number}`,
                       `AIAgent=${profile.ai_agent_id}`
                     )
                   }
