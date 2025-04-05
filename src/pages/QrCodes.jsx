@@ -4,14 +4,17 @@ import QRCode from "react-qr-code";
 import Modal from "../components/ui/Modal";
 import { jsPDF } from "jspdf";
 import qrcode from "qrcode";
+import useAuthStore from "../store/useAuthStore";
 
 export default function QrCodes() {
   const { tables, getTables, updateTables } = useMenuStore();
+  const { getProfile, profile } = useAuthStore();
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [seatingCapacity, setSeatingCapacity] = useState("");
 
   useEffect(() => {
     getTables();
+    getProfile();
   }, [getTables]);
 
   useEffect(() => {
@@ -95,7 +98,7 @@ export default function QrCodes() {
                   onClick={() =>
                     handlePrintQRCode(
                       `profileId=${item.profile_id}&tableNumber=${item.table_number}`,
-                      `Table ${item.table_number}`
+                      `AIAgent=${profile.ai_agent_id}`
                     )
                   }
                 >
