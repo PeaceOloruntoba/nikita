@@ -49,10 +49,10 @@ const extractTextFromDOCX = async (file) => {
 //     console.log("extractTextFromPDF: No file provided.");
 //     return null;
 //   }
-// 
+//
 //   try {
 //     const reader = new FileReader();
-// 
+//
 //     return new Promise((resolve, reject) => {
 //       reader.onload = async () => {
 //         try {
@@ -64,7 +64,7 @@ const extractTextFromDOCX = async (file) => {
 //             pdf.numPages
 //           );
 //           let extractedText = "";
-// 
+//
 //           for (let i = 1; i <= pdf.numPages; i++) {
 //             const page = await pdf.getPage(i);
 //             const textContent = await page.getTextContent();
@@ -74,7 +74,7 @@ const extractTextFromDOCX = async (file) => {
 //             extractedText += pageText + "\n";
 //             console.log(`extractTextFromPDF: Page ${i} text:`, pageText);
 //           }
-// 
+//
 //           const trimmedText = extractedText.trim();
 //           console.log("extractTextFromPDF: Extracted text:", trimmedText);
 //           resolve(trimmedText);
@@ -83,7 +83,7 @@ const extractTextFromDOCX = async (file) => {
 //           reject(error);
 //         }
 //       };
-// 
+//
 //       reader.onerror = (error) => {
 //         console.log("extractTextFromPDF: FileReader error:", error);
 //         reject(error);
@@ -197,10 +197,6 @@ const extractTextFromImage = async (file) => {
 };
 
 const UpdateProfile = () => {
-  useEffect(() => {
-    // Set the worker source using import.meta.url
-    pdfjsLib.GlobalWorkerOptions.workerSrc = "./pdf.worker.mjs";
-  }, []);
   const navigate = useNavigate();
   const { updateProfile, getProfile, profile: storedProfile } = useAuthStore();
   const [step, setStep] = useState(1);
@@ -345,118 +341,155 @@ const UpdateProfile = () => {
     dangerouslyAllowBrowser: true,
   });
 
-  const processMenuFile = async (file) => {
-    console.log("processMenuFile called with file:", file);
-    if (!file) {
-      console.log("processMenuFile: No file provided.");
-      return null;
-    }
+  // Helper function to read file as ArrayBuffer
+  const readFileAsArrayBuffer = (file) => {
+    return new Promise((resolve, reject) => {
+      const reader = new FileReader();
+      reader.onload = () => resolve(reader.result);
+      reader.onerror = (error) => reject(error);
+      reader.readAsArrayBuffer(file);
+    });
+  };
 
+  // Helper function to read file as text
+  const readFileAsText = (file) => {
+    return new Promise((resolve, reject) => {
+      const reader = new FileReader();
+      reader.onload = () => resolve(reader.result);
+      reader.onerror = (error) => reject(error);
+      reader.readAsText(file);
+    });
+  };
+
+const processMenuFile = async (file, menuType = "food") => {
+  console.log(`processMenuFile called with file:`, file, `for type:`, menuType);
+  if (!file) {
+    console.log("processMenuFile: No file provided.");
+    return null;
+  }
+
+  try {
+    let fileContent;
     const fileType = file.type;
-    let extractedText = null;
-    console.log("processMenuFile: File type:", fileType);
 
-    try {
-      if (fileType.includes("image")) {
-        extractedText = await extractTextFromImage(file);
-      } else if (fileType.includes("pdf")) {
-        extractedText = await extractTextFromPDF(file);
-      } else if (fileType.includes("text/plain")) {
-        extractedText = await extractTextFromTXT(file);
-      } else if (
-        fileType.includes("officedocument.wordprocessingml.document")
-      ) {
-        extractedText = await extractTextFromDOCX(file);
-      } else {
-        console.error("processMenuFile: Unsupported file type:", fileType);
-        return null;
+    if (fileType.includes("image") || fileType.includes("pdf")) {
+      const arrayBuffer = await readFileAsArrayBuffer(file);
+      let binaryString = "";
+      const bytes = new Uint8Array(arrayBuffer);
+      const len = bytes.byteLength;
+      for (let i = 0; i < len; i++) {
+        binaryString += String.fromCharCode(bytes[i]);
       }
+      fileContent = btoa(binaryString);
+    } else {
+      fileContent = await readFileAsText(file);
+    }
 
-      if (!extractedText) {
-        console.log("processMenuFile: Extracted text is null.");
-        return null;
-      }
-
-      console.log(
-        "processMenuFile: Extracted text before OpenAI:",
-        extractedText
-      );
-
-      // Send extracted text to OpenAI
-      const chatCompletion = await openai.chat.completions.create({
-        model: "gpt-4o",
-        messages: [
-          {
-            role: "user",
-            content: `Extract a structured menu from the following text. Return only a JSON array of menu items. Do not include any markdown formatting or code blocks in your response: \n\n${extractedText}`,
-          },
-        ],
-        max_tokens: 1000,
-      });
-
-      let menuText = chatCompletion.choices[0].message.content.trim();
-      console.log("processMenuFile: OpenAI raw response:", menuText);
-
-      // Remove markdown formatting if present
-      if (menuText.startsWith("```json") && menuText.endsWith("```")) {
-        menuText = menuText.substring(7, menuText.length - 3).trim();
-        console.log("processMenuFile: Stripped markdown:", menuText);
-      }
-
-      try {
-        const menuArray = JSON.parse(menuText);
-        if (!Array.isArray(menuArray)) throw new Error("Not an array");
-        console.log("processMenuFile: Parsed menu array:", menuArray);
-        return menuArray;
-      } catch (e) {
-        console.error("processMenuFile: Failed to parse OpenAI response:", e);
-        return null;
-      }
-    } catch (error) {
-      console.error("processMenuFile: Error processing menu file:", error);
+    if (!fileContent) {
+      console.log("processMenuFile: Could not read file content.");
       return null;
     }
-  };
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    setLoading(true);
+    const prompt = `Extract the ${menuType} menu items from the following document. Return the result as a JSON array of menu items ONLY. Do not include any introductory or concluding sentences, markdown formatting, or code blocks. If the document contains both food and wine menus, please extract only the ${menuType} menu. If the document is an image or PDF, the content is provided as a base64 encoded string, do your best to interpret the text.\n\n${fileContent}`;
+
+    const chatCompletion = await openai.chat.completions.create({
+      model: "gpt-4o",
+      messages: [{ role: "user", content: prompt }],
+      max_tokens: 1500, // Adjust as needed
+    });
+
+    let menuText = chatCompletion.choices[0].message.content.trim();
+    console.log(
+      `processMenuFile (${menuType}): OpenAI raw response:`,
+      menuText
+    );
 
     try {
-      const preset = import.meta.env.VITE_CLOUDINARY_UPLOAD_PRESET;
-
-      const [
-        restaurantImageUrl,
-        foodMenuCardImageUrl,
-        wineMenuCardImageUrl,
-        foodMenuArray,
-        wineMenuArray,
-      ] = await Promise.all([
-        handleCloudinaryUpload(formData.restaurant_image, preset),
-        handleCloudinaryUpload(formData.food_menu_card_image, preset),
-        handleCloudinaryUpload(formData.wine_menu_card_image, preset),
-        processMenuFile(formData.food_menu_file),
-        processMenuFile(formData.wine_menu_file),
-      ]);
-
-      const payload = {
-        ...formData,
-        restaurant_image: restaurantImageUrl || formData.restaurant_image,
-        food_menu: foodMenuArray || formData.food_menu,
-        wine_menu: wineMenuArray || formData.wine_menu,
-        food_menu_card_image:
-          foodMenuCardImageUrl || formData.food_menu_card_image,
-        wine_menu_card_image:
-          wineMenuCardImageUrl || formData.wine_menu_card_image,
-      };
-
-      updateProfile(payload, navigate);
-    } catch (error) {
-      console.error("Error submitting form:", error);
-    } finally {
-      setLoading(false);
+      const menuArray = JSON.parse(menuText);
+      if (!Array.isArray(menuArray)) throw new Error("Not a JSON array");
+      console.log(
+        `processMenuFile (${menuType}): Parsed menu array:`,
+        menuArray
+      );
+      return menuArray;
+    } catch (e) {
+      console.error(
+        `processMenuFile (${menuType}): Failed to parse OpenAI response:`,
+        e
+      );
+      console.log(
+        `processMenuFile (${menuType}): Attempting to clean and re-parse...`
+      );
+      try {
+        const cleanedMenuText = menuText
+          .replace(/(\r\n|\n|\r)/gm, "")
+          .replace(/```json/g, "")
+          .replace(/```/g, "")
+          .trim();
+        const menuArray = JSON.parse(cleanedMenuText);
+        if (!Array.isArray(menuArray))
+          throw new Error("Still not a JSON array after cleaning");
+        console.log(
+          `processMenuFile (${menuType}): Parsed after cleaning:`,
+          menuArray
+        );
+        return menuArray;
+      } catch (e2) {
+        console.error(
+          `processMenuFile (${menuType}): Failed to parse even after cleaning:`,
+          e2
+        );
+        return null;
+      }
     }
-  };
+  } catch (error) {
+    console.error(
+      `processMenuFile (${menuType}): Error processing file with OpenAI:`,
+      error
+    );
+    return null;
+  }
+};
+
+const handleSubmit = async (e) => {
+  e.preventDefault();
+  setLoading(true);
+
+  try {
+    const preset = import.meta.env.VITE_CLOUDINARY_UPLOAD_PRESET;
+
+    const [
+      restaurantImageUrl,
+      foodMenuCardImageUrl,
+      wineMenuCardImageUrl,
+      foodMenuArray,
+      wineMenuArray,
+    ] = await Promise.all([
+      handleCloudinaryUpload(formData.restaurant_image, preset),
+      handleCloudinaryUpload(formData.food_menu_card_image, preset),
+      handleCloudinaryUpload(formData.wine_menu_card_image, preset),
+      processMenuFile(formData.food_menu_file, "food"),
+      processMenuFile(formData.wine_menu_file, "wine"),
+    ]);
+
+    const payload = {
+      ...formData,
+      restaurant_image: restaurantImageUrl || formData.restaurant_image,
+      food_menu: foodMenuArray || formData.food_menu,
+      wine_menu: wineMenuArray || formData.wine_menu,
+      food_menu_card_image:
+        foodMenuCardImageUrl || formData.food_menu_card_image,
+      wine_menu_card_image:
+        wineMenuCardImageUrl || formData.wine_menu_card_image,
+    };
+
+    updateProfile(payload, navigate);
+  } catch (error) {
+    console.error("Error submitting form:", error);
+  } finally {
+    setLoading(false);
+  }
+};
 
   return (
     <div className="fixed inset-0 flex items-center justify-center bg-black/50 z-50">
