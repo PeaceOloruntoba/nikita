@@ -15,9 +15,9 @@ export default function QrCodes() {
   useEffect(() => {
     getTables();
     getProfile();
-  }, [getTables]);
+  }, [getTables, getProfile]); // Added getProfile to dependency array
 
-  console.log(profile)
+  console.log("Profile data in QrCodes:", profile);
 
   useEffect(() => {
     if (tables && Array.isArray(tables) && tables.length > 0) {
@@ -75,12 +75,16 @@ export default function QrCodes() {
         </button>
       </div>
 
-      {tables && Array.isArray(tables) && tables.length === 0 ? (
+      {!profile?.user_id ? (
+        <p>Loading profile information...</p>
+      ) : !tables ? (
+        <p>Loading tables...</p>
+      ) : tables.length === 0 ? (
         <>
           <p className="text-gray-500">No QR codes available.</p>
           <p className="text-gray-500">Go and add some tables in settings.</p>
         </>
-      ) : tables && Array.isArray(tables) ? (
+      ) : (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
           {tables.map((item) => (
             <div
@@ -89,7 +93,7 @@ export default function QrCodes() {
             >
               <div className="flex flex-col items-center">
                 <QRCode
-                  value={`profileId=${item.profile_id}&tableNumber=${item.table_number}`}
+                  value={`restaurantId=${profile.user_id}&tableId=${item.table_number}&aiAgentId=${profile.ai_agent_id}`}
                   size={128}
                 />
                 <p className="mt-2 text-lg font-semibold">
@@ -99,7 +103,8 @@ export default function QrCodes() {
                   className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded mt-2"
                   onClick={() =>
                     handlePrintQRCode(
-                      `profileId=${profile.user_id}&tableNumber=${item.table_number}&AIAgent=${profile.ai_agent_id}`
+                      `restaurantId=${profile.user_id}&tableId=${item.table_number}&aiAgentId=${profile.ai_agent_id}`,
+                      `Table ${item.table_number}`
                     )
                   }
                 >
@@ -109,8 +114,6 @@ export default function QrCodes() {
             </div>
           ))}
         </div>
-      ) : (
-        <p>Loading...</p>
       )}
 
       <Modal isOpen={isModalOpen} onClose={handleCloseModal}>
