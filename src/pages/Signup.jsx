@@ -1,7 +1,8 @@
-import React, { useState } from "react";
+import React from "react";
 import { loginBg } from "../assets";
 import { NavLink, useNavigate } from "react-router";
 import Button from "../components/shared/Button";
+import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 import useAuthStore from "../store/useAuthStore";
 import Spinner from "../components/shared/Spinner";
@@ -9,34 +10,29 @@ import Spinner from "../components/shared/Spinner";
 export default function Signup() {
   const navigate = useNavigate();
   const { signUp, isAuthenticating } = useAuthStore();
-
-  const [user, setUser] = useState({
-    email: "",
-    password: "",
-    confirm_password: "",
-    terms_accepted: false,
-    role: "admin"
+  const {
+    register,
+    handleSubmit,
+    watch,
+    formState: { errors },
+  } = useForm({
+    defaultValues: {
+      role: "admin", // Set the default role
+    },
   });
 
-  function handleChange(e) {
-    const { name, value, type, checked } = e.target;
-    setUser((prev) => ({
-      ...prev,
-      [name]: type === "checkbox" ? checked : value,
-    }));
-  }
+  const password = watch("password"); // Watch password field for comparison
 
-  async function handleSubmit(e) {
-    e.preventDefault();
-    if (user.password !== user.confirm_password) {
+  async function onSubmit(data) {
+    if (data.password !== data.confirm_password) {
       toast.error("Passwords do not match!");
       return;
     }
-    if (!user.terms_accepted) {
+    if (!data.terms_accepted) {
       toast.error("You must agree to the terms and conditions!");
       return;
     }
-    await signUp(user, navigate);
+    await signUp(data, navigate);
   }
 
   return (
@@ -51,47 +47,88 @@ export default function Signup() {
           <span className="text-primary text-3xl font-bold text-center">
             Signup
           </span>
-          <form className="flex flex-col gap-6" onSubmit={handleSubmit}>
-            <input
-              required
-              type="email"
-              name="email"
-              value={user.email}
-              onChange={handleChange}
-              className="bg-white outline-none border p-3 rounded-xl"
-              placeholder="Enter your email"
-            />
-            <input
-              required
-              type="password"
-              name="password"
-              value={user.password}
-              onChange={handleChange}
-              className="bg-white outline-none border p-3 rounded-xl"
-              placeholder="Enter your password"
-            />
-            <input
-              required
-              type="password"
-              name="confirm_password"
-              value={user.confirm_password}
-              onChange={handleChange}
-              className="bg-white outline-none border p-3 rounded-xl"
-              placeholder="Confirm your password"
-            />
+          <form
+            className="flex flex-col gap-4"
+            onSubmit={handleSubmit(onSubmit)}
+          >
+            <div>
+              <input
+                type="email"
+                name="email"
+                {...register("email", {
+                  required: "Email is required",
+                  pattern: {
+                    value: /^[^\s@]+@[^\s@]+\.[^\s@]+$/i,
+                    message: "Invalid email address",
+                  },
+                })}
+                className="bg-white outline-none border p-3 rounded-xl w-full"
+                placeholder="Enter your email"
+              />
+              {errors.email && (
+                <span className="text-red-500 text-sm mt-1">
+                  {errors.email.message}
+                </span>
+              )}
+            </div>
+            <div>
+              <input
+                type="password"
+                name="password"
+                {...register("password", {
+                  required: "Password is required",
+                  minLength: {
+                    value: 6,
+                    message: "Password must be at least 6 characters",
+                  },
+                })}
+                className="bg-white outline-none border p-3 rounded-xl w-full"
+                placeholder="Enter your password"
+              />
+              {errors.password && (
+                <span className="text-red-500 text-sm mt-1">
+                  {errors.password.message}
+                </span>
+              )}
+            </div>
+            <div>
+              <input
+                type="password"
+                name="confirm_password"
+                {...register("confirm_password", {
+                  required: "Confirm password is required",
+                  validate: (value) =>
+                    value === password || "Passwords do not match",
+                })}
+                className="bg-white outline-none border p-3 rounded-xl w-full"
+                placeholder="Confirm your password"
+              />
+              {errors.confirm_password && (
+                <span className="text-red-500 text-sm mt-1">
+                  {errors.confirm_password.message}
+                </span>
+              )}
+            </div>
             <div className="flex items-center gap-2">
               <input
-                required
                 type="checkbox"
                 name="terms_accepted"
-                checked={user.terms_accepted}
-                onChange={handleChange}
+                {...register("terms_accepted", {
+                  required: "You must agree to the terms and conditions",
+                })}
                 className="w-4 h-4"
               />
               <span className="text-sm">
                 I agree to the terms and conditions.
               </span>
+              {errors.terms_accepted && (
+                <span className="text-red-500 text-sm ml-1">
+                  {errors.terms_accepted.message}
+                </span>
+              )}
             </div>
+            {/* Hidden role input */}
+            <input type="hidden" name="role" {...register("role")} />
             <div className="text-sm text-secondary font-semibold text-right">
               Already have an account?{" "}
               <NavLink to="/login" className="text-white">
