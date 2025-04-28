@@ -11,7 +11,8 @@ import {
   FaSpinner,
 } from "react-icons/fa";
 import { FaRegCircleStop } from "react-icons/fa6";
-
+import ReactMarkdown from "react-markdown";
+import remarkGfm from "remark-gfm";
 
 export default function Ai() {
   const [message, setMessage] = useState("");
@@ -102,7 +103,7 @@ export default function Ai() {
     setIsSending(true);
     const formData = new FormData();
     formData.append("audio", audioBlob, "audio.wav");
-    
+
     try {
       const resp = await axiosInstance.post("/audio/transcribe", formData, {
         headers: { "Content-Type": "multipart/form-data" },
@@ -153,7 +154,13 @@ export default function Ai() {
                     : "bg-gray-200/30 mr-auto max-w-72 w-fit text-white"
                 }`}
               >
-                {msg.content}
+                {msg.role === "assistant" ? (
+                  <ReactMarkdown remarkPlugins={[remarkGfm]}>
+                    {msg.content}
+                  </ReactMarkdown>
+                ) : (
+                  msg.content
+                )}
               </div>
             ))}
             {isSending && (
