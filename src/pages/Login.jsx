@@ -1,25 +1,23 @@
-import React, { useState } from "react";
+import React from "react";
 import { loginBg } from "../assets";
 import { NavLink, useNavigate } from "react-router";
 import Button from "../components/shared/Button";
 import useAuthStore from "../store/useAuthStore";
+import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 import Spinner from "../components/shared/Spinner";
 
 export default function Login() {
   const navigate = useNavigate();
   const { login, isAuthenticating } = useAuthStore();
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm();
 
-  const [user, setUser] = useState({ email: "", password: "" });
-
-  function handleChange(e) {
-    const { name, value } = e.target;
-    setUser((prev) => ({ ...prev, [name]: value }));
-  }
-
-  async function handleSubmit(e) {
-    e.preventDefault();
-    await login(user, navigate);
+  async function onSubmit(data) {
+    await login(data, navigate);
   }
 
   return (
@@ -34,25 +32,44 @@ export default function Login() {
           <span className="text-primary text-3xl font-bold text-center">
             Login
           </span>
-          <form className="flex flex-col gap-6" onSubmit={handleSubmit}>
-            <input
-              required
-              type="email"
-              name="email"
-              value={user.email}
-              onChange={handleChange}
-              className="bg-white outline-none border p-3 rounded-xl"
-              placeholder="Enter your email or username"
-            />
-            <input
-              required
-              type="password"
-              name="password"
-              value={user.password}
-              onChange={handleChange}
-              className="bg-white outline-none border p-3 rounded-xl"
-              placeholder="Enter your password"
-            />
+          <form
+            className="flex flex-col gap-4"
+            onSubmit={handleSubmit(onSubmit)}
+          >
+            <div>
+              <input
+                type="email"
+                name="email"
+                {...register("email", {
+                  required: "Email is required",
+                  pattern: {
+                    value: /^[^\s@]+@[^\s@]+\.[^\s@]+$/i,
+                    message: "Invalid email address",
+                  },
+                })}
+                className="bg-white outline-none border p-3 rounded-xl w-full"
+                placeholder="Enter your email or username"
+              />
+              {errors.email && (
+                <span className="text-red-500 text-sm mt-1">
+                  {errors.email.message}
+                </span>
+              )}
+            </div>
+            <div>
+              <input
+                type="password"
+                name="password"
+                {...register("password", { required: "Password is required" })}
+                className="bg-white outline-none border p-3 rounded-xl w-full"
+                placeholder="Enter your password"
+              />
+              {errors.password && (
+                <span className="text-red-500 text-sm mt-1">
+                  {errors.password.message}
+                </span>
+              )}
+            </div>
             <div className="text-sm text-secondary font-semibold text-right">
               Don't have an account?{" "}
               <NavLink to="/signup" className="text-white">
