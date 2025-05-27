@@ -24,6 +24,7 @@ export default function QRScanner() {
           const restaurantId = params.get("restaurantId");
           const tableId = params.get("tableId");
           const aiAgentId = params.get("aiAgentId");
+          console.log(restaurantId)
 
           if (restaurantId) {
             try {

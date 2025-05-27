@@ -11,6 +11,7 @@ const useUserStore = create((set) => ({
     set({ isLoading: true });
     try {
       const response = await axiosInstance.get(`/profile/get/${restaurantId}`);
+      console.log(response)
       set({ restaurantData: response.data.data });
       return response.data.data;
     } catch (error) {
