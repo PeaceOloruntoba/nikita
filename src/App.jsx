@@ -1,4 +1,4 @@
-import { Navigate, Route, Routes } from "react-router";
+import { Navigate, Route, Routes } from "react-router-dom";
 import RootLayout from "./layouts/RootLayout";
 import Login from "./pages/Login";
 import Settings from "./pages/Settings";
@@ -26,6 +26,9 @@ import Restaurants from "./pages/admin/Restaurants";
 import Users from "./pages/admin/Users";
 import RestaurantDetails from "./pages/admin/RestaurantDetails";
 import UserDetails from "./pages/admin/UserDetails";
+import UserGuard from "./guard/UserGuard";
+import QRScanner from "./pages/QRScanner";
+import AIScreen from "./pages/AIScreen";
 
 const stripePromise = loadStripe(
   "pk_test_51R9KnzP7PZBSVcUMr2gYSKBnYYRtYfWEEx4LBTdRvawHgdsKi1JNkPk7FNza78zgPDSQoq9zZphqgNerBKuMPQcJ003enJ5gDD"
@@ -67,8 +70,13 @@ export default function App() {
               <Route path="support" element={<Home />} />
             </Route>
           </Route>
+          <Route element={<UserGuard />}>
+            <Route path="scanqr" element={<QRScanner />} />
+            <Route path="ai" element={<AIScreen />} />
+          </Route>
           <Route path="login" element={<Login />} />
           <Route path="signup" element={<Signup />} />
+          <Route path="/" element={<Navigate to="/login" />} />
         </Routes>
       </Elements>
     </>
