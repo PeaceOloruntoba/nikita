@@ -22,7 +22,7 @@ export default function AIScreen() {
     const newMessages = [...messages, { from: "user", text: input }];
     setMessages(newMessages);
     setInput("");
-    const aiResponse = await sendChat setMessages([...newMessages, { from: "ai", text: aiResponse }]);
+    const aiResponse = await sendChat; setMessages([...newMessages, { from: "ai", text: aiResponse }]);
   };
 
   const handleSubmitReview = async () => {
