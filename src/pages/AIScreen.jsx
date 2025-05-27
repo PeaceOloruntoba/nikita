@@ -1,12 +1,24 @@
-import React, { useState } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { useLocation, useNavigate } from "react-router";
 import { toast } from "sonner";
 import useUserStore from "../store/useUserStore";
+import { annawine } from "../assets";
+import {
+  FaMicrophone,
+  FaMicrophoneSlash,
+  FaVideo,
+  FaPaperPlane,
+  FaRegStopCircle,
+  FaSpinner,
+} from "react-icons/fa";
+import ReactMarkdown from "react-markdown";
+import remarkGfm from "remark-gfm";
 
 export default function AIScreen() {
   const navigate = useNavigate();
   const location = useLocation();
-  const { restaurant_id, table_id, ai_agent_id, userData } = location.state || {};
+  const { restaurant_id, table_id, ai_agent_id, userData } =
+    location.state || {};
   const { sendChatMessage, postReview, isLoading } = useUserStore();
   const [input, setInput] = useState("");
   const [messages, setMessages] = useState([
@@ -16,13 +28,147 @@ export default function AIScreen() {
   const [isReviewModalOpen, setIsReviewModalOpen] = useState(false);
   const [reviewType, setReviewType] = useState("positive");
   const [reviewMessage, setReviewMessage] = useState("");
+  const [supportsText, setSupportsText] = useState(false);
+  const [supportsAudio, setSupportsAudio] = useState(false);
+  const [supportsVideo, setSupportsVideo] = useState(false);
+  const [isRecording, setIsRecording] = useState(false);
+  const [isSending, setIsSending] = useState(false);
+  const mediaRecorder = useRef(null);
+  const audioChunks = useRef([]);
+  const chatContainerRef = useRef(null);
+
+  useEffect(() => {
+    if (userData?.restaurant) {
+      setSupportsText(
+        userData.restaurant.text_support ||
+          userData.restaurant.audio_support ||
+          userData.restaurant.video_support
+      );
+      setSupportsAudio(
+        userData.restaurant.audio_support || userData.restaurant.video_support
+      );
+      setSupportsVideo(userData.restaurant.video_support);
+    }
+    fetchChatHistory();
+  }, [userData]);
+
+  useEffect(() => {
+    if (chatContainerRef.current) {
+      chatContainerRef.current.scrollTop =
+        chatContainerRef.current.scrollHeight;
+    }
+  }, [messages]);
+
+  const fetchChatHistory = async () => {
+    try {
+      const resp = await axiosInstance.get("/ai/messages");
+      setMessages(
+        resp.data.messages.map((msg) => ({
+          from: msg.role,
+          text: msg.content,
+        }))
+      );
+    } catch (error) {
+      toast.error(
+        error?.response?.data?.message || "Failed to fetch chat history"
+      );
+    }
+  };
 
   const handleSend = async () => {
-    if (!input.trim()) return;
+    if (!input.trim() || !supportsText) {
+      if (!supportsText) {
+        toast.error("Text chat is not supported by this restaurant");
+      }
+      return;
+    }
     const newMessages = [...messages, { from: "user", text: input }];
     setMessages(newMessages);
     setInput("");
-    const aiResponse = await sendChat; setMessages([...newMessages, { from: "ai", text: aiResponse }]);
+    setIsSending(true);
+    try {
+      const aiResponse = await sendChatMessage(input, ai_agent_id);
+      setMessages([...newMessages, { from: "ai", text: aiResponse }]);
+    } catch (error) {
+      toast.error("Failed to send message");
+      setMessages([
+        ...newMessages,
+        { from: "ai", text: "Sorry, something went wrong. Try again!" },
+      ]);
+    } finally {
+      setIsSending(false);
+    }
+  };
+
+  const startRecording = async () => {
+    if (!supportsAudio) {
+      toast.error("Audio chat is not supported by this restaurant");
+      return;
+    }
+    try {
+      const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+      mediaRecorder.current = new MediaRecorder(stream);
+      mediaRecorder.current.ondataavailable = (event) => {
+        if (event.data.size > 0) {
+          audioChunks.current.push(event.data);
+        }
+      };
+      mediaRecorder.current.onstop = () => {
+        const audioBlob = new Blob(audioChunks.current, { type: "audio/wav" });
+        sendAudio(audioBlob);
+        audioChunks.current = [];
+      };
+      mediaRecorder.current.start();
+      setIsRecording(true);
+      toast.info("Recording started");
+    } catch (error) {
+      toast.error("Failed to start recording");
+    }
+  };
+
+  const stopRecording = () => {
+    if (mediaRecorder.current) {
+      mediaRecorder.current.stop();
+      setIsRecording(false);
+      toast.info("Recording stopped");
+    }
+  };
+
+  const sendAudio = async (audioBlob) => {
+    setIsSending(true);
+    const formData = new FormData();
+    formData.append("audio", audioBlob, "audio.wav");
+
+    try {
+      const resp = await axiosInstance.post("/audio/transcribe", formData, {
+        headers: { "Content-Type": "multipart/form-data" },
+      });
+      const transcribedText = resp.data.transcribedText;
+      const newMessages = [
+        ...messages,
+        { from: "user", text: transcribedText },
+      ];
+      setMessages(newMessages);
+
+      const aiResp = await sendChatMessage(transcribedText, ai_agent_id);
+      setMessages([...newMessages, { from: "ai", text: aiResp }]);
+    } catch (error) {
+      toast.error("Failed to transcribe or send audio");
+      setMessages([
+        ...messages,
+        { from: "ai", text: "Sorry, something went wrong. Try again!" },
+      ]);
+    } finally {
+      setIsSending(false);
+    }
+  };
+
+  const handleVideoChat = () => {
+    if (!supportsVideo) {
+      toast.error("Video chat is not supported by this restaurant");
+      return;
+    }
+    toast.info("Video chat functionality is not implemented yet");
   };
 
   const handleSubmitReview = async () => {
@@ -41,110 +187,17 @@ export default function AIScreen() {
   };
 
   return (
-    <div className="min-h-screen bg-cover bg-center flex flex-col" style={{ backgroundImage: "ur[](https://images.unsplash.com/photo-1517248135467-4c7edcad34c4)" }}>
-      <div className="bg-black/30 p-4 flex items-center justify-between">
-        <button onClick={() => navigate("/scanqr")}>
-          <svg
-            className="h-6 w-6 text-white"
-            xmlns="http://www.w3.org/2000/svg"
-            fill="none"
-            viewBox="0 0 24 24"
-            stroke="currentColor"
-          >
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              strokeWidth="2"
-              d="M15 19l-7-7 7-7"
-            />
-          </svg>
-        </button>
-        <button onClick={() => setIsMenuOpen(!isMenuOpen)}>
-          <svg
-            className="h-6 w-6 text-white"
-            xmlns="http://www.w3.org/2000/svg"
-            fill="none"
-            viewBox="0 0 24 24"
-            stroke="currentColor"
-          >
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              strokeWidth="2"
-              d="M12 5v.01M12 12v.01M12 19v.01M12 6a1 1 0 110-2 1 1 0 010 2zm0 7a1 1 0 110-2 1 1 0 010 2zm0 7a1 1 0 110-2 1 1 0 010 2z"
-            />
-          </svg>
-        </button>
-        {isMenuOpen && (
-          <div className="absolute top-16 right-4 bg-white rounded-lg shadow-lg p-2">
-            <button
-              onClick={() => {
-                setIsMenuOpen(false);
-                setIsReviewModalOpen(true);
-              }}
-              className="block px-4 py-2 text-gray-700 hover:bg-gray-100 w-full text-left"
-            >
-              Post Review
-            </button>
-          </div>
-        )}
-      </div>
-      <div className="flex-1 p-4 overflow-y-auto">
-        {messages.map((msg, index) => (
-          <div
-            key={index}
-            className={`max-w-[80%] p-3 rounded-lg mb-2 ${
-              msg.from === "user"
-                ? "ml-auto bg-primary text-white"
-                : "mr-auto bg-white/80 text-gray-800"
-            }`}
-          >
-            {msg.text}
-          </div>
-        ))}
-        {isLoading && (
-          <div className="flex justify-center">
+    <div className="min-h-screen flex flex-col relative">
+      <img
+        src={annawine}
+        alt="Background"
+        className="w-full h-full object-cover absolute"
+      />
+      <div className="absolute w-full h-full flex flex-col">
+        <div className="bg-black/30 p-4 flex items-center justify-between">
+          <button onClick={() => navigate("/scanqr")}>
             <svg
-              className="animate-spin h-5 w-5 text-primary"
-              xmlns="http://www.w3.org/2000/svg"
-              fill="none"
-              viewBox="0 0 24 24"
-            >
-              <circle
-                className="opacity-25"
-                cx="12"
-                cy="12"
-                r="10"
-                stroke="currentColor"
-                strokeWidth="4"
-              ></circle>
-              <path
-                className="opacity-75"
-                fill="currentColor"
-                d="M4 12a8 8 0 018-8v4a4 4 0 00-4 4H4z"
-              ></path>
-            </svg>
-          </div>
-        )}
-      </div>
-      <div className="p-4 bg-white/80 rounded-t-3xl">
-        <div className="flex items-center gap-2">
-          <input
-            type="text"
-            value={input}
-            onChange={(e) => setInput(e.target.value)}
-            onKeyPress={(e) => e.key === "Enter" && handleSend()}
-            placeholder="Ask something..."
-            className="flex-1 p-3 rounded-xl border bg-white focus:outline-none focus:ring-2 focus:ring-primary"
-            disabled={isLoading}
-          />
-          <button
-            onClick={handleSend}
-            disabled={isLoading}
-            className="p-3 rounded-full bg-primary text-white hover:bg-primary-dark disabled:opacity-50"
-          >
-            <svg
-              className="h-6 w-6"
+              className="h-6 w-6 text-white"
               xmlns="http://www.w3.org/2000/svg"
               fill="none"
               viewBox="0 0 24 24"
@@ -154,16 +207,121 @@ export default function AIScreen() {
                 strokeLinecap="round"
                 strokeLinejoin="round"
                 strokeWidth="2"
-                d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8"
+                d="M15 19l-7-7 7-7"
               />
             </svg>
           </button>
+          <button onClick={() => setIsMenuOpen(!isMenuOpen)}>
+            <svg
+              className="h-6 w-6 text-white"
+              xmlns="http://www.w3.org/2000/svg"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth="2"
+                d="M12 5v.01M12 12v.01M12 19v.01M12 6a1 1 0 110-2 1 1 0 010 2zm0 7a1 1 0 110-2 1 1 0 010 2zm0 7a1 1 0 110-2 1 1 0 010 2z"
+              />
+            </svg>
+          </button>
+          {isMenuOpen && (
+            <div className="absolute top-16 right-4 bg-white rounded-lg shadow-lg p-2">
+              <button
+                onClick={() => {
+                  setIsMenuOpen(false);
+                  setIsReviewModalOpen(true);
+                }}
+                className="block px-4 py-2 text-gray-700 hover:bg-gray-100 w-full text-left"
+              >
+                Post Review
+              </button>
+            </div>
+          )}
+        </div>
+        <div ref={chatContainerRef} className="flex-1 p-4 overflow-y-auto">
+          {messages.map((msg, index) => (
+            <div
+              key={index}
+              className={`max-w-[80%] p-3 rounded-lg mb-2 ${
+                msg.from === "user"
+                  ? "ml-auto bg-gray-200/30 text-white"
+                  : "mr-auto bg-gray-200/30 text-white max-w-72"
+              }`}
+            >
+              {msg.from === "ai" ? (
+                <ReactMarkdown remarkPlugins={[remarkGfm]}>
+                  {msg.text}
+                </ReactMarkdown>
+              ) : (
+                msg.text
+              )}
+            </div>
+          ))}
+          {(isLoading || isSending) && (
+            <div className="flex justify-center">
+              <FaSpinner className="animate-spin h-5 w-5 text-primary" />
+            </div>
+          )}
+        </div>
+        <div className="p-4 bg-transparent">
+          <div className="flex items-center gap-2">
+            <input
+              type="text"
+              value={input}
+              onChange={(e) => setInput(e.target.value)}
+              onKeyPress={(e) => e.key === "Enter" && handleSend()}
+              placeholder="Chat with Annawine"
+              className={`flex-1 p-3 rounded-lg border bg-white/40 focus:outline-none focus:ring-2 focus:ring-primary ${
+                !supportsText ? "bg-gray-200/40 cursor-not-allowed" : ""
+              }`}
+              disabled={isLoading || isSending || !supportsText}
+            />
+            {supportsText && (
+              <button
+                onClick={handleSend}
+                disabled={isLoading || isSending}
+                className="p-3 rounded-lg bg-primary text-white hover:bg-primary-dark disabled:opacity-50"
+                aria-label="Send"
+              >
+                {isSending ? (
+                  <FaSpinner className="animate-spin" />
+                ) : (
+                  <FaPaperPlane />
+                )}
+              </button>
+            )}
+            {supportsAudio && (
+              <button
+                onClick={isRecording ? stopRecording : startRecording}
+                className={`p-3 rounded-lg text-white ${
+                  isRecording ? "bg-red-500" : "bg-gray-500"
+                } hover:${isRecording ? "bg-red-600" : "bg-gray-600"}`}
+                aria-label={isRecording ? "Stop Recording" : "Start Recording"}
+              >
+                {isRecording ? <FaRegStopCircle /> : <FaMicrophone />}
+              </button>
+            )}
+            {supportsVideo && (
+              <button
+                onClick={handleVideoChat}
+                className="p-3 rounded-lg bg-blue-500 text-white hover:bg-blue-600"
+                aria-label="Start Video Chat"
+              >
+                <FaVideo />
+              </button>
+            )}
+          </div>
         </div>
       </div>
       {isReviewModalOpen && (
         <div className="fixed inset-0 bg-black/50 flex items-center justify-center">
           <div className="bg-white p-6 rounded-lg w-full max-w-md">
-            <h3 className="text-xl font-bold mb-4 text-center">Submit Review</h3>
+            <h3 className="text-xl font-bold mb-4 text-center">
+              Submit Review
+            </h3>
             <div className="flex justify-around mb-4">
               {["positive", "neutral", "negative"].map((type) => (
                 <button
@@ -194,10 +352,10 @@ export default function AIScreen() {
               </button>
               <button
                 onClick={handleSubmitReview}
-                disabled={isLoading}
+                disabled={isLoading || isSending}
                 className="px-4 py-2 bg-primary text-white rounded-lg hover:bg-primary-dark disabled:opacity-50"
               >
-                {isLoading ? "Submitting..." : "Submit"}
+                {isLoading || isSending ? "Submitting..." : "Submit"}
               </button>
             </div>
           </div>
