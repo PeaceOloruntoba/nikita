@@ -10,7 +10,7 @@ const useUserStore = create((set) => ({
   getRestaurant: async (restaurantId) => {
     set({ isLoading: true });
     try {
-      const response = await axiosInstance.get(`/restaurants/${restaurantId}`);
+      const response = await axiosInstance.get(`/profile/get/${restaurantId}`);
       set({ restaurantData: response.data.data });
       return response.data.data;
     } catch (error) {
