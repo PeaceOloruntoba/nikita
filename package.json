@@ -28,6 +28,7 @@
     "nikita": "file:",
     "openai": "^4.91.1",
     "pdfjs-dist": "^5.1.91",
+    "qr-scanner": "^1.4.2",
     "qrcode": "^1.5.4",
     "qrcode.react": "^4.2.0",
     "react": "^18.3.1",
