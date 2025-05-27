@@ -20,23 +20,21 @@ export default function QRScanner() {
           if (scanned || isLoading) return;
           setScanned(true);
           const params = new URLSearchParams(result.data);
-          console.log(params)
           const restaurantId = params.get("restaurantId");
           const tableId = params.get("tableId");
           const aiAgentId = params.get("aiAgentId");
-          console.log(restaurantId)
 
           if (restaurantId) {
             try {
-              const userData = await getRestaurant(restaurantId);
-              console.log(userData)
-              if (userData) {
+              const response = await getRestaurant(restaurantId);
+              console.log(response)
+              if (response) {
                 navigate("/ai", {
                   state: {
                     restaurant_id: restaurantId,
                     table_id: tableId,
                     ai_agent_id: aiAgentId,
-                    userData,
+                    response,
                   },
                 });
               } else {
