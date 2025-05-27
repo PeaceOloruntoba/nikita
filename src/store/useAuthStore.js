@@ -32,21 +32,19 @@ const loginUser = async (user, navigate, set, get) => {
       throw new Error("Invalid response from server");
     }
     saveAuthDataToLocalStorage(data.user, data.token);
-    console.log(data.user);
-    if (data.user.role == "superadmin") {
+    if (data.user.role === "superadmin") {
       navigate("/admin/dashboard");
-    } else if (data.user.role == "admin") {
+    } else if (data.user.role === "admin") {
       if (!data.user.onetimePayment) {
         navigate("/make-payment");
+      } else if (data.message === "Please complete your profile setup") {
+        navigate("/update-profile");
+        toast.warning(data?.message);
       } else {
-        if (data.message == "Please complete your profile setup") {
-          navigate("/update-profile");
-          toast.warning(data?.message);
-        }
+        navigate("/interface");
       }
-      navigate("/interface");
     } else {
-      navigate("/");
+      navigate("/scanqr");
     }
     set((state) => ({
       user: data.user,
@@ -76,20 +74,23 @@ const signUpUser = async (user, navigate, set) => {
       isAuthenticated: true,
       isAuthenticating: false,
     }));
-    toast.success(
-      "Restaurant created successfully! Please make a one-time payment to use our system."
-    );
-    navigate("/make-payment");
+    if (user.role === "user") {
+      toast.success("Account created successfully!");
+      navigate("/scanqr");
+    } else {
+      toast.success(
+        "Restaurant created successfully! Please make a one-time payment to use our system."
+      );
+      navigate("/make-payment");
+    }
   } catch (error) {
     handleError(error);
-  } finally {
     set({ isAuthenticating: false });
   }
 };
 
 const updateProfile = async (profileData, navigate, set) => {
   set({ isAuthenticating: true });
-  console.log(profileData);
   try {
     const response = await axiosInstance.put("/profile/update", profileData);
     toast.success("Restaurant profile created successfully!");
@@ -138,12 +139,12 @@ const logoutUser = (navigate, set) => {
 
 // Zustand Store
 const useAuthStore = create((set) => {
-  const { user, token } = loadAuthDataFromLocalStorage(); // Load from localStorage on init
+  const { user, token } = loadAuthDataFromLocalStorage();
 
   return {
     user: user || null,
     token: token || null,
-    isAuthenticated: !!user, // Authenticated if user exists
+    isAuthenticated: !!user,
     isAuthenticating: false,
     profile: {},
 
