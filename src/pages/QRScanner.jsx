@@ -8,8 +8,6 @@ export default function QRScanner() {
   const { getRestaurant, isLoading } = useUserStore();
   const [scanned, setScanned] = useState(false);
 
-  const params = []
-
   useEffect(() => {
     const video = document.getElementById("qr-video");
     if (!video) return;
@@ -21,7 +19,8 @@ export default function QRScanner() {
         async (result) => {
           if (scanned || isLoading) return;
           setScanned(true);
-         params = new URLSearchParams(result.data);
+          const params = new URLSearchParams(result.data);
+          console.log(params)
           const restaurantId = params.get("restaurantId");
           const tableId = params.get("tableId");
           const aiAgentId = params.get("aiAgentId");
@@ -29,6 +28,7 @@ export default function QRScanner() {
           if (restaurantId) {
             try {
               const userData = await getRestaurant(restaurantId);
+              console.log(userData)
               if (userData) {
                 navigate("/ai", {
                   state: {
