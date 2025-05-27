@@ -62,7 +62,6 @@ export default function QRScanner() {
   return (
     <div className="min-h-screen flex flex-col items-center justify-center bg-gray-900 relative">
       <video id="qr-video" className="w-full max-w-md rounded-lg"></video>
-      {params && <p>{params}</p>}
       {isLoading && (
         <div className="absolute inset-0 flex flex-col items-center justify-center bg-black/50">
           <svg
