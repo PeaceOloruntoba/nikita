@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { loginBg } from "../assets";
 import { NavLink, useNavigate } from "react-router";
 import Button from "../components/shared/Button";
@@ -14,14 +14,15 @@ export default function Signup() {
     register,
     handleSubmit,
     watch,
+    setValue,
     formState: { errors },
   } = useForm({
     defaultValues: {
-      role: "admin", // Set the default role
+      role: "admin",
     },
   });
-
-  const password = watch("password"); // Watch password field for comparison
+  const password = watch("password");
+  const [activeTab, setActiveTab] = useState("admin");
 
   async function onSubmit(data) {
     if (data.password !== data.confirm_password) {
@@ -43,10 +44,40 @@ export default function Signup() {
         className="w-screen h-screen object-cover absolute"
       />
       <div className="absolute inset-0 flex items-center justify-center">
-        <div className="backdrop-blur p-8 md:p-12 rounded-2xl shadow-xl flex flex-col w-full max-w-sm md:max-w-md gap-6">
+        <div className="backdrop-blur-md bg-white/30 p-8 md:p-12 rounded-2xl shadow-xl flex flex-col w-full max-w-sm md:max-w-md gap-6">
           <span className="text-primary text-3xl font-bold text-center">
             Signup
           </span>
+          <div className="flex">
+            <button
+              type="button"
+              onClick={() => {
+                setActiveTab("admin");
+                setValue("role", "admin");
+              }}
+              className={`flex-1 py-2 text-center rounded-l-xl ${
+                activeTab === "admin"
+                  ? "bg-primary text-white"
+                  : "bg-white text-gray-700"
+              }`}
+            >
+              Restaurant
+            </button>
+            <button
+              type="button"
+              onClick={() => {
+                setActiveTab("user");
+                setValue("role", "user");
+              }}
+              className={`flex-1 py-2 text-center rounded-r-xl ${
+                activeTab === "user"
+                  ? "bg-primary text-white"
+                  : "bg-white text-gray-700"
+              }`}
+            >
+              Customer
+            </button>
+          </div>
           <form
             className="flex flex-col gap-4"
             onSubmit={handleSubmit(onSubmit)}
@@ -54,7 +85,6 @@ export default function Signup() {
             <div>
               <input
                 type="email"
-                name="email"
                 {...register("email", {
                   required: "Email is required",
                   pattern: {
@@ -62,7 +92,7 @@ export default function Signup() {
                     message: "Invalid email address",
                   },
                 })}
-                className="bg-white outline-none border p-3 rounded-xl w-full"
+                className="bg-white outline-none border p-3 rounded-xl w-full focus:ring-2 focus:ring-primary"
                 placeholder="Enter your email"
               />
               {errors.email && (
@@ -74,7 +104,6 @@ export default function Signup() {
             <div>
               <input
                 type="password"
-                name="password"
                 {...register("password", {
                   required: "Password is required",
                   minLength: {
@@ -82,7 +111,7 @@ export default function Signup() {
                     message: "Password must be at least 6 characters",
                   },
                 })}
-                className="bg-white outline-none border p-3 rounded-xl w-full"
+                className="bg-white outline-none border p-3 rounded-xl w-full focus:ring-2 focus:ring-primary"
                 placeholder="Enter your password"
               />
               {errors.password && (
@@ -94,13 +123,12 @@ export default function Signup() {
             <div>
               <input
                 type="password"
-                name="confirm_password"
                 {...register("confirm_password", {
                   required: "Confirm password is required",
                   validate: (value) =>
                     value === password || "Passwords do not match",
                 })}
-                className="bg-white outline-none border p-3 rounded-xl w-full"
+                className="bg-white outline-none border p-3 rounded-xl w-full focus:ring-2 focus:ring-primary"
                 placeholder="Confirm your password"
               />
               {errors.confirm_password && (
@@ -112,13 +140,12 @@ export default function Signup() {
             <div className="flex items-center gap-2">
               <input
                 type="checkbox"
-                name="terms_accepted"
                 {...register("terms_accepted", {
                   required: "You must agree to the terms and conditions",
                 })}
                 className="w-4 h-4"
               />
-              <span className="text-sm">
+              <span className="text-sm text-white">
                 I agree to the terms and conditions.
               </span>
               {errors.terms_accepted && (
@@ -127,11 +154,10 @@ export default function Signup() {
                 </span>
               )}
             </div>
-            {/* Hidden role input */}
-            <input type="hidden" name="role" {...register("role")} />
-            <div className="text-sm text-secondary font-semibold text-right">
+            <input type="hidden" {...register("role")} />
+            <div className="text-sm text-white font-semibold text-right">
               Already have an account?{" "}
-              <NavLink to="/login" className="text-white">
+              <NavLink to="/login" className="underline">
                 Login
               </NavLink>
             </div>
