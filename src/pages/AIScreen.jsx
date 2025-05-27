@@ -266,6 +266,7 @@ export default function AIScreen() {
             </div>
           )}
         </div>
+        {!supportsText && (<p className="flex items-center justify-center text-white text-3xl font-semibold animate-pulse">AI Chat Not Supported for this restaurant.</p>)}
         <div className="p-4 bg-transparent">
           <div className="flex items-center gap-2">
             <input
