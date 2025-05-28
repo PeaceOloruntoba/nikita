@@ -43,7 +43,7 @@ export default function App() {
           <Route element={<AdminGuard />}>
             <Route element={<RootLayout />}>
               <Route path="interface" element={<Interface />} />
-              <Route path="/" element={<Navigate to={"/interface"} />} />
+              {/* <Route path="/" element={<Navigate to={"/interface"} />} /> */}
               <Route path="update-profile" element={<UpdateProfile />} />
               <Route path="interface/food-menu" element={<FoodMenu />} />
               <Route path="interface/wine-menu" element={<WineMenu />} />
@@ -71,12 +71,13 @@ export default function App() {
             </Route>
           </Route>
           <Route element={<UserGuard />}>
+          </Route>
             <Route path="scanqr" element={<QRScanner />} />
             <Route path="ai" element={<AIScreen />} />
-          </Route>
           <Route path="login" element={<Login />} />
           <Route path="signup" element={<Signup />} />
-          <Route path="/" element={<Navigate to="/login" />} />
+          {/* <Route path="/" element={<Navigate to="/login" />} /> */}
+          <Route path="/" element={<Navigate to="/scanqr" />} />
         </Routes>
       </Elements>
     </>
