@@ -1,11 +1,11 @@
 import React, { useState, useEffect, useRef } from "react";
-import { useLocation, useNavigate } from "react-router";
+import { useLocation, useNavigate } from "react-router-dom";
 import { toast } from "sonner";
 import useUserStore from "../store/useUserStore";
+import useAuthStore from "../store/useAuthStore";
 import { annawine } from "../assets";
 import {
   FaMicrophone,
-  FaMicrophoneSlash,
   FaVideo,
   FaPaperPlane,
   FaRegStopCircle,
@@ -13,6 +13,7 @@ import {
 } from "react-icons/fa";
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
+import axiosInstance from "../utils/axiosConfig";
 
 export default function AIScreen() {
   const navigate = useNavigate();
@@ -20,6 +21,7 @@ export default function AIScreen() {
   const { restaurant_id, table_id, ai_agent_id, userData } =
     location.state || {};
   const { sendChatMessage, postReview, isLoading } = useUserStore();
+  const { isAuthenticated } = useAuthStore();
   const [input, setInput] = useState("");
   const [messages, setMessages] = useState([
     { from: "ai", text: "Welcome! Ask me anything about the restaurant." },
@@ -39,18 +41,16 @@ export default function AIScreen() {
 
   useEffect(() => {
     if (userData?.restaurant) {
-      setSupportsText(
-        userData.restaurant.text_support ||
-          userData.restaurant.audio_support ||
-          userData.restaurant.video_support
-      );
-      setSupportsAudio(
-        userData.restaurant.audio_support || userData.restaurant.video_support
-      );
+      setSupportsText(userData.restaurant.text_support);
+      setSupportsAudio(userData.restaurant.audio_support);
       setSupportsVideo(userData.restaurant.video_support);
     }
-    fetchChatHistory();
-  }, [userData]);
+    if (isAuthenticated) {
+      fetchChatHistory();
+    }
+    // Verify AI chat support
+    checkAISupport();
+  }, [userData, isAuthenticated]);
 
   useEffect(() => {
     if (chatContainerRef.current) {
@@ -59,7 +59,20 @@ export default function AIScreen() {
     }
   }, [messages]);
 
+  const checkAISupport = async () => {
+    try {
+      const resp = await axiosInstance.get(`/restaurants/${restaurant_id}`);
+      if (!resp.data.data.text_support) {
+        setSupportsText(false);
+        toast.error("AI chat is not supported by this restaurant");
+      }
+    } catch (error) {
+      toast.error("Failed to verify AI chat support");
+    }
+  };
+
   const fetchChatHistory = async () => {
+    if (!isAuthenticated) return;
     try {
       const resp = await axiosInstance.get("/ai/messages");
       setMessages(
@@ -87,10 +100,14 @@ export default function AIScreen() {
     setInput("");
     setIsSending(true);
     try {
-      const aiResponse = await sendChatMessage(input, ai_agent_id);
+      const aiResponse = await sendChatMessage(
+        input,
+        ai_agent_id,
+        !isAuthenticated
+      );
       setMessages([...newMessages, { from: "ai", text: aiResponse }]);
     } catch (error) {
-      toast.error("Failed to send message");
+      toast.error(error?.response?.data?.message || "Failed to send message");
       setMessages([
         ...newMessages,
         { from: "ai", text: "Sorry, something went wrong. Try again!" },
@@ -135,6 +152,10 @@ export default function AIScreen() {
   };
 
   const sendAudio = async (audioBlob) => {
+    if (!supportsAudio) {
+      toast.error("Audio chat is not supported by this restaurant");
+      return;
+    }
     setIsSending(true);
     const formData = new FormData();
     formData.append("audio", audioBlob, "audio.wav");
@@ -150,10 +171,16 @@ export default function AIScreen() {
       ];
       setMessages(newMessages);
 
-      const aiResp = await sendChatMessage(transcribedText, ai_agent_id);
+      const aiResp = await sendChatMessage(
+        transcribedText,
+        ai_agent_id,
+        !isAuthenticated
+      );
       setMessages([...newMessages, { from: "ai", text: aiResp }]);
     } catch (error) {
-      toast.error("Failed to transcribe or send audio");
+      toast.error(
+        error?.response?.data?.message || "Failed to transcribe or send audio"
+      );
       setMessages([
         ...messages,
         { from: "ai", text: "Sorry, something went wrong. Try again!" },
@@ -172,6 +199,10 @@ export default function AIScreen() {
   };
 
   const handleSubmitReview = async () => {
+    if (!isAuthenticated) {
+      toast.error("Please log in to submit a review");
+      return;
+    }
     if (!reviewMessage.trim()) {
       toast.error("Please enter a review message");
       return;
@@ -266,7 +297,11 @@ export default function AIScreen() {
             </div>
           )}
         </div>
-        {!supportsText && (<p className="flex items-center justify-center text-white text-3xl font-semibold animate-pulse">AI Chat Not Supported for this restaurant.</p>)}
+        {!supportsText && (
+          <p className="flex items-center justify-center text-white text-3xl font-semibold animate-pulse">
+            AI Chat Not Supported for this restaurant.
+          </p>
+        )}
         <div className="p-4 bg-transparent">
           <div className="flex items-center gap-2">
             <input
