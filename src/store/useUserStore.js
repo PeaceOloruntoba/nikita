@@ -24,7 +24,7 @@ const useUserStore = create((set) => ({
   sendChatMessage: async (message, aiAgentId) => {
     set({ isLoading: true });
     try {
-      const response = await axiosInstance.post("/chat", {
+      const response = await axiosInstance.post("/ai/chat", {
         message,
         ai_agent_id: aiAgentId,
       });
