@@ -40,15 +40,30 @@ export default function AIScreen() {
   const chatContainerRef = useRef(null);
 
   useEffect(() => {
-    if (userData?.restaurant) {
-      setSupportsText(userData.restaurant.text_support);
-      setSupportsAudio(userData.restaurant.audio_support);
-      setSupportsVideo(userData.restaurant.video_support);
-    }
+    const setSupportFlags = (restaurant) => {
+      if (restaurant?.video_support) {
+        setSupportsText(true);
+        setSupportsAudio(true);
+        setSupportsVideo(true);
+      } else if (restaurant?.audio_support) {
+        setSupportsText(true);
+        setSupportsAudio(true);
+        setSupportsVideo(false);
+      } else if (restaurant?.text_support) {
+        setSupportsText(true);
+        setSupportsAudio(false);
+        setSupportsVideo(false);
+      } else {
+        setSupportsText(false);
+        setSupportsAudio(false);
+        setSupportsVideo(false);
+      }
+    };
+
+    setSupportFlags(userData?.restaurant);
     if (isAuthenticated) {
       fetchChatHistory();
     }
-    // Verify AI chat support
     checkAISupport();
   }, [userData, isAuthenticated]);
 
@@ -62,19 +77,43 @@ export default function AIScreen() {
   const checkAISupport = async () => {
     try {
       const resp = await axiosInstance.get(`/profile/get/${restaurant_id}`);
-      console.log(resp);
-      if (!resp.data.restaurant.video_support) {
+      const { text_support, audio_support, video_support } =
+        resp.data.restaurant;
+
+      // Validate mutual exclusivity
+      const supportFlags = [text_support, audio_support, video_support].filter(
+        Boolean
+      );
+      if (supportFlags.length > 1) {
+        throw new Error(
+          "Invalid restaurant configuration: Multiple support flags enabled"
+        );
+      }
+
+      // Set flags based on hierarchy
+      if (video_support) {
+        setSupportsText(true);
+        setSupportsAudio(true);
+        setSupportsVideo(true);
+      } else if (audio_support) {
+        setSupportsText(true);
+        setSupportsAudio(true);
+        setSupportsVideo(false);
+      } else if (text_support) {
+        setSupportsText(true);
+        setSupportsAudio(false);
+        setSupportsVideo(false);
+      } else {
         setSupportsText(false);
-        toast.error("AI chat is not supported by this restaurant");
-      } else if (!resp.data.restaurant.audio_support) {
-        setSupportsText(false);
-        toast.error("AI chat is not supported by this restaurant");
-      } else if (!resp.data.restaurant.text_support) {
-        setSupportsText(false);
+        setSupportsAudio(false);
+        setSupportsVideo(false);
         toast.error("AI chat is not supported by this restaurant");
       }
     } catch (error) {
-      toast.error("Failed to verify AI chat support");
+      setSupportsText(false);
+      setSupportsAudio(false);
+      setSupportsVideo(false);
+      toast.error(error.message || "Failed to verify AI chat support");
     }
   };
 
