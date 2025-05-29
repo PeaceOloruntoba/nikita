@@ -120,7 +120,7 @@ export default function AIScreen() {
   const fetchChatHistory = async () => {
     if (!isAuthenticated) return;
     try {
-      const resp = await axiosInstance.get("/ai/messages");
+      const resp = await axiosInstance.get("/ai/public/messages");
       setMessages(
         resp.data.messages.map((msg) => ({
           from: msg.role,
