@@ -61,8 +61,15 @@ export default function AIScreen() {
 
   const checkAISupport = async () => {
     try {
-      const resp = await axiosInstance.get(`/restaurants/${restaurant_id}`);
-      if (!resp.data.data.text_support) {
+      const resp = await axiosInstance.get(`/profile/get/${restaurant_id}`);
+      console.log(resp);
+      if (!resp.data.restaurant.video_support) {
+        setSupportsText(false);
+        toast.error("AI chat is not supported by this restaurant");
+      } else if (!resp.data.restaurant.audio_support) {
+        setSupportsText(false);
+        toast.error("AI chat is not supported by this restaurant");
+      } else if (!resp.data.restaurant.text_support) {
         setSupportsText(false);
         toast.error("AI chat is not supported by this restaurant");
       }
