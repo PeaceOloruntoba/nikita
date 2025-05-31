@@ -84,3 +84,10 @@
 //   );
 // }
 
+export default function App(){
+  return(
+    <>
+      <p>Pay My Money!!!</p>
+    </>
+  )
+}
