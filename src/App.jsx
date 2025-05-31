@@ -87,7 +87,9 @@
 export default function App(){
   return(
     <>
-      <p>Pay My Money!!!</p>
+      <div className="w-screen h-screen bg-black text-white flex items-center justify-center">
+      <p className="text-5xl font-semibold text-white">Pay My Money!!!</p>
+      </div>
     </>
   )
 }
